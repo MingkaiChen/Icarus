@@ -1,9 +1,13 @@
-#Project files
+#Project file
 
 /target/
 .classpath
 .project
-.settings    
+.settings
+
+#VSCode file
+
+/.vscode/
 
 # Compiled class file
 *.class

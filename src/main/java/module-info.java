@@ -1,8 +1,9 @@
-module me.alvis {
+module game.icarus {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
 
-    opens me.alvis to javafx.fxml;
-    exports me.alvis;
+    opens game.icarus to javafx.fxml;
+
+    exports game.icarus;
 }

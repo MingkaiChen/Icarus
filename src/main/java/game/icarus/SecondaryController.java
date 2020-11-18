@@ -1,4 +1,4 @@
-package me.alvis;
+package game.icarus;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
