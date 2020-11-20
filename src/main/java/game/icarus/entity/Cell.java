@@ -1,28 +1,31 @@
 package game.icarus.entity;
 
+import game.icarus.attribute.CellType;
+import game.icarus.attribute.Color;
+
 public class Cell {
 
     private int cellID;
-    private String cellColor;
-    private String cellType;
-    private String occupiedColor;
+    private Color cellColor;
+    private CellType cellType;
+    private Color occupiedColor;
 
-    public Cell(int ID, String color, String type) {
+    public Cell(int ID, Color color, CellType type) {
         this.cellID = ID;
         this.cellColor = color;
         this.cellType = type;
-        this.occupiedColor = "null";
+        this.occupiedColor = Color.Null;
     }
 
     public boolean isOuccupied() {
-        if (this.occupiedColor == "null") {
+        if (this.occupiedColor == Color.Null) {
             return false;
         } else {
             return true;
         }
     }
 
-    public String getOuccupiedColor() throws Exception {
+    public Color getOuccupiedColor() throws Exception {
         if (this.isOuccupied()) {
             return this.occupiedColor;
         } else {
@@ -34,11 +37,11 @@ public class Cell {
         return this.cellID;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return this.cellColor;
     }
 
-    public String getType() {
+    public CellType getType() {
         return this.cellType;
     }
 
