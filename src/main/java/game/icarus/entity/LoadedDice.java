@@ -1,4 +1,4 @@
-package game.icarus.model;
+package game.icarus.entity;
 
 import java.util.ArrayList;
 
