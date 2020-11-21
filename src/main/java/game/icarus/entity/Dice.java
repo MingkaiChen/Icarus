@@ -1,25 +1,29 @@
 package game.icarus.entity;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Dice {
     private final int amount;
 
-    private LinkedHashSet<Integer> getTwoNumbersAvailableResult(int ta, int tb) {
-        LinkedHashSet<Integer> ans = new LinkedHashSet<>();
+    private HashSet<Integer> getTwoNumbersAvailableResult(int ta, int tb) {
+        HashSet<Integer> ans = new HashSet<>();
         double tmp;
         int a = Math.max(ta, tb);
         int b = Math.min(ta, tb);
         ans.add(a + b);
-        if (a != b) ans.add(a - b);
-        if ((a * b) <= 12) ans.add(a * b);
-        tmp = (double) a / (double) b;
-        if (tmp == Math.floor(tmp)) ans.add(a / b);
+        ans.add(a - b);
+        ans.add(b - a);
+        ans.add(a * b);
+        if(b != 0) {
+            tmp = (double) a / (double) b;
+            if (tmp == Math.floor(tmp)) ans.add(a / b);
+        }
         return ans;
     }
 
-    private LinkedHashSet<Integer> getAllAvailableResult(int[] numbers) {
-        LinkedHashSet<Integer> ans = new LinkedHashSet<>();
+    private HashSet<Integer> getAllAvailableResult(int[] numbers) {
+        HashSet<Integer> ans = new HashSet<>();
         if (amount > 4) { //全排列的和
             for (int i = 1; i <= (1 << amount); i++) {
                 int sum = 0;
@@ -45,7 +49,7 @@ public class Dice {
                     break;
             }
         }
-        return ans;
+        return (HashSet<Integer>) ans.stream().filter(i -> (0<i && i<= getRange())).collect(Collectors.toSet());
     }
 
     public Dice() {

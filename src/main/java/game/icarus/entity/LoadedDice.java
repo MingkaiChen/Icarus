@@ -18,7 +18,7 @@ public class LoadedDice extends Dice {
         for (int i = 0; i < getAmount(); i++) {
             numbers[i] = 6;
         }
-        LinkedHashSet<Integer> l = new LinkedHashSet<>();
+        HashSet<Integer> l = new HashSet<>();
         for (int i = 1; i <= this.getRange(); i++) {
             l.add(i);
         }

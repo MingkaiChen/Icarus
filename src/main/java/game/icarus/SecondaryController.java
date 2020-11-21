@@ -18,7 +18,7 @@ public class SecondaryController {
     }
 
     public void rollDice() {
-        Dice dice = new Dice();
+        Dice dice = new Dice(3);
         StringBuilder s = new StringBuilder();
         Map<String, Object> m = dice.roll();
         for (int i : (int[]) m.get("raw")) {
