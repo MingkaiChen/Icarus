@@ -24,7 +24,7 @@ public class Dice {
 
     private HashSet<Integer> getAllAvailableResult(int[] numbers) {
         HashSet<Integer> ans = new HashSet<>();
-        if (amount > 4) { //全排列的和
+        if (amount >= 4) { //全排列的和
             for (int i = 1; i <= (1 << amount); i++) {
                 int sum = 0;
                 for (int j = 0; j < amount; j++) {
