@@ -1,25 +1,28 @@
 package game.icarus.entity;
 
-import game.icarus.model.ChessColors;
+import game.icarus.attribute.Color;
 
 public class Piece {
-    public final ChessColors color;
+    public final Color color;
     private int pos = -1;
     private Boolean isOut = false;
     private Boolean isWin = false;
-    Piece(ChessColors color) {
+
+    Piece(Color color) {
         this.color = color;
     }
+
     public Boolean isMovable() {
         return (isOut && !isWin);
     }
-    private Boolean move(int newPos) {
+
+    public Boolean move(int newPos) {
         if (!isMovable()) return false;
         pos = newPos;
-        //FIXME: ChessBoard hasn't been implemented yet
-        /*if (pos == getWinningPos(color)) {
-            isWin = true;
-        }*/
         return true;
+    }
+
+    public void win() {
+        isWin = true;
     }
 }

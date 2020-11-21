@@ -17,16 +17,12 @@ public class Cell {
         this.occupiedColor = Color.Null;
     }
 
-    public boolean isOuccupied() {
-        if (this.occupiedColor == Color.Null) {
-            return false;
-        } else {
-            return true;
-        }
+    public boolean isOccupied() {
+        return this.occupiedColor != Color.Null;
     }
 
-    public Color getOuccupiedColor() throws Exception {
-        if (this.isOuccupied()) {
+    public Color getOccupiedColor() throws Exception {
+        if (this.isOccupied()) {
             return this.occupiedColor;
         } else {
             throw new Exception("[ERROR] This Cell is not occupied!");
