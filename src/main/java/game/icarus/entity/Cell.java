@@ -1,35 +1,44 @@
 package game.icarus.entity;
 
-import game.icarus.attribute.CellType;
+import java.util.UUID;
 import game.icarus.attribute.Color;
 
 public class Cell {
 
-    private int cellID;
+    private UUID cellID;
     private Color cellColor;
-    private CellType cellType;
-    private Color occupiedColor;
+    // private CellType cellType;
+    // private Color occupiedColor;
+    private Piece occupiedPiece;
 
-    public Cell(int ID, Color color, CellType type) {
-        this.cellID = ID;
+    public Cell(Color color) {
+        this.cellID = UUID.randomUUID();
         this.cellColor = color;
-        this.cellType = type;
-        this.occupiedColor = Color.Null;
+        // this.cellType = type;
+        this.occupiedPiece = null;
     }
 
     public boolean isOccupied() {
-        return this.occupiedColor != Color.Null;
+        return this.occupiedPiece != null;
     }
 
-    public Color getOccupiedColor() throws Exception {
+    // public Color getOccupiedColor() throws Exception {
+    // if (this.isOccupied()) {
+    // return this.occupiedColor;
+    // } else {
+    // throw new Exception("[ERROR] This Cell is not occupied!");
+    // }
+    // }
+
+    public Piece getOccupied() throws Exception {
         if (this.isOccupied()) {
-            return this.occupiedColor;
+            return this.occupiedPiece;
         } else {
             throw new Exception("[ERROR] This Cell is not occupied!");
         }
     }
 
-    public int getID() {
+    public UUID getID() {
         return this.cellID;
     }
 
@@ -37,8 +46,18 @@ public class Cell {
         return this.cellColor;
     }
 
-    public CellType getType() {
-        return this.cellType;
+    public boolean setOccipied(Piece piece) {
+        this.occupiedPiece = piece;
+        return true;
     }
+
+    public boolean clear() {
+        this.occupiedPiece = null;
+        return true;
+    }
+
+    // public CellType getType() {
+    // return this.cellType;
+    // }
 
 }
