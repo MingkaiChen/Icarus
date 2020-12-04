@@ -65,4 +65,12 @@ public class ChessBoard {
             this.Cells = newBoard;
         }
     }
+
+    public void clear(CellType cellType) {
+        for (int i = 0; i < Cells.length; i++) {
+            if (Cells[i].isOccupied() && Cells[i].getType() == cellType) {
+
+            }
+        }
+    }
 }
