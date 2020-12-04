@@ -1,96 +1,64 @@
 package game.icarus.controller;
-/*
 
-import xyz.chengzi.aeroplanechess.listener.GameStateListener;
-import xyz.chengzi.aeroplanechess.listener.InputListener;
-import xyz.chengzi.aeroplanechess.listener.Listenable;
-import xyz.chengzi.aeroplanechess.model.ChessBoard;
-import xyz.chengzi.aeroplanechess.model.ChessBoardLocation;
-import xyz.chengzi.aeroplanechess.model.ChessPiece;
-import xyz.chengzi.aeroplanechess.util.RandomUtil;
-import xyz.chengzi.aeroplanechess.view.ChessBoardComponent;
-import xyz.chengzi.aeroplanechess.view.ChessComponent;
-import xyz.chengzi.aeroplanechess.view.SquareComponent;
+import game.icarus.attribute.Color;
+import game.icarus.attribute.GameModel;
+import game.icarus.entity.*;
+import game.icarus.map.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-public class GameController implements InputListener, Listenable<GameStateListener> {
-    private final List<GameStateListener> listenerList = new ArrayList<>();
-    private final ChessBoardComponent view;
-    private final ChessBoard model;
-
-    private Integer rolledNumber;
+public class GameController {
+    private final Player[] players;
+    private final ChessBoard chessBoard;
+    private final Piece[] pieces;
+    private final Dice dice;
     private int currentPlayer;
-
-    public GameController(ChessBoardComponent chessBoardComponent, ChessBoard chessBoard) {
-        this.view = chessBoardComponent;
-        this.model = chessBoard;
-
-        view.registerListener(this);
-        model.registerListener(view);
-    }
-
-    public ChessBoardComponent getView() {
-        return view;
-    }
-
-    public ChessBoard getModel() {
-        return model;
-    }
-
-    public int getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public void initializeGame() {
-        model.placeInitialPieces();
-        rolledNumber = null;
-        currentPlayer = 0;
-        listenerList.forEach(listener -> listener.onPlayerStartRound(currentPlayer));
-    }
-
-    public int rollDice() {
-        if (rolledNumber == null) {
-            return rolledNumber = RandomUtil.nextInt(1, 6);
-        } else {
-            return -1;
+    private final Setting settings;
+    private Map<String, Object> diceResult;
+    private boolean walkable = false;
+    public GameController(Setting settings) {
+        this.settings = settings;
+        int playerNumber = settings.getPlayerNumber();
+        players = new Player[playerNumber];
+        for (int i = 0; i < playerNumber; i++) {
+            players[i] = new Player(Color.values()[i]);
         }
-    }
-
-    public int nextPlayer() {
-        rolledNumber = null;
-        return currentPlayer = (currentPlayer + 1) % 4;
-    }
-
-
-    @Override
-    public void onPlayerClickSquare(ChessBoardLocation location, SquareComponent component) {
-        System.out.println("clicked " + location.getColor() + "," + location.getIndex());
-    }
-
-    @Override
-    public void onPlayerClickChessPiece(ChessBoardLocation location, ChessComponent component) {
-        if (rolledNumber != null) {
-            ChessPiece piece = model.getChessPieceAt(location);
-            if (piece.getPlayer() == currentPlayer) {
-                model.moveChessPiece(location, rolledNumber);
-                listenerList.forEach(listener -> listener.onPlayerEndRound(currentPlayer));
-                nextPlayer();
-                listenerList.forEach(listener -> listener.onPlayerStartRound(currentPlayer));
+        chessBoard = new ChessBoard(players);
+        pieces = new Piece[playerNumber * 4];
+        for (int i = 0; i < playerNumber; i++) {
+            for (int j = 0; j < 4; j++) {
+                pieces[i*4+j] = new Piece(Color.values()[i]);
             }
         }
+
+        dice = new Dice();
+    }
+    public Save saveGame() {
+        Save s;
+        if (walkable) s = new Save(pieces, players, currentPlayer, diceResult);
+        else s = new Save(pieces, players, currentPlayer);
+        return s;
+    }
+    public void initializeGame() {
+        currentPlayer = 0;
+        //model.placeInitialPieces();
     }
 
-    @Override
-    public void registerListener(GameStateListener listener) {
-        listenerList.add(listener);
+    public void nextPlayer() {
+        currentPlayer = (currentPlayer + 1) % settings.getPlayerNumber();
     }
 
-    @Override
-    public void unregisterListener(GameStateListener listener) {
-        listenerList.remove(listener);
+    public ChessBoard getChessBoard() {
+        return chessBoard;
     }
+
+    public boolean selectPiece() {
+        //TODO: select a cell and judge if a piece can be select
+        return true;
+    }
+    public void rollDice() {
+        diceResult = dice.roll();
+        walkable = true;
+    }
+
 }
-
-*/

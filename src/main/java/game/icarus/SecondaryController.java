@@ -3,12 +3,17 @@ package game.icarus;
 import java.io.IOException;
 import java.util.Map;
 
+import game.icarus.controller.GameController;
+import game.icarus.controller.GameSaver;
 import game.icarus.entity.Dice;
+import game.icarus.entity.Setting;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 public class SecondaryController {
-
+    GameController c;
+    GameSaver saver;
     @FXML
     private Label secondaryText;
 
@@ -27,5 +32,13 @@ public class SecondaryController {
         s.append("\n");
         s.append(m.get("result").toString());
         secondaryText.setText(s.toString());
+    }
+
+    public void startGame() {
+        c = new GameController(new Setting());
+    }
+
+    public void saveGame() {
+        GameSaver.saveGame(c.saveGame(), "./save1.json");
     }
 }

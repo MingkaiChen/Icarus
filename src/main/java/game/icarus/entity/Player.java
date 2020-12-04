@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import game.icarus.attribute.Color;
 
-public abstract class Player {
+public class Player {
     private UUID playerID;
     private Color playerColor;
 

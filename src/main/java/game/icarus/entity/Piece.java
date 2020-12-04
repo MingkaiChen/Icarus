@@ -8,7 +8,7 @@ public class Piece {
     private Boolean isOut = false;
     private Boolean isWin = false;
 
-    Piece(Color color) {
+    public Piece(Color color) {
         this.color = color;
     }
 
@@ -29,5 +29,9 @@ public class Piece {
 
     public Color getColor() {
         return this.color;
+    }
+
+    public int getPos() {
+        return pos;
     }
 }

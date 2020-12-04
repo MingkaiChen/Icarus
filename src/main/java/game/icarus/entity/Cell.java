@@ -30,12 +30,11 @@ public class Cell {
     // }
     // }
 
-    public Piece getOccupied() throws Exception {
+    public Piece getOccupied() {
         if (this.isOccupied()) {
             return this.occupiedPiece;
-        } else {
-            throw new Exception("[ERROR] This Cell is not occupied!");
         }
+        return null;
     }
 
     public UUID getID() {
