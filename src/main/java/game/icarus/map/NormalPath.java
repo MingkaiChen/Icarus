@@ -26,4 +26,5 @@ public class NormalPath extends Block {
             normalPath.Cells[i].clear();
         return true;
     }
+
 }
