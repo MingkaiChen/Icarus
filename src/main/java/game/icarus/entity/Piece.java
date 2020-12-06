@@ -3,7 +3,7 @@ package game.icarus.entity;
 import game.icarus.attribute.Color;
 
 public class Piece {
-    private Color color;
+    private final Color color;
     private int pos = -1;
     private Boolean isOut = false;
     private Boolean isWin = false;
@@ -14,6 +14,13 @@ public class Piece {
 
     public Boolean isMovable() {
         return (isOut && !isWin);
+    }
+
+    public void out(int newPos) {
+        if (!isOut) {
+            pos = newPos;
+            isOut = true;
+        }
     }
 
     public Boolean move(int newPos) {
@@ -34,4 +41,5 @@ public class Piece {
     public int getPos() {
         return pos;
     }
+    public boolean hasWin() { return isWin; }
 }

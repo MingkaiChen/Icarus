@@ -39,6 +39,6 @@ public class SecondaryController {
     }
 
     public void saveGame() {
-        GameSaver.saveGame(c.saveGame(), "./save1.json");
+        GameSaver.saveGame(c.saveGame("saveaaa"), "./save1.json");
     }
 }

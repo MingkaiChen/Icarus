@@ -5,8 +5,8 @@ import java.util.UUID;
 import game.icarus.attribute.Color;
 
 public class Player {
-    private UUID playerID;
-    private Color playerColor;
+    private final UUID playerID;
+    private final Color playerColor;
 
     public Player(Color color) {
         this.playerID = UUID.randomUUID();

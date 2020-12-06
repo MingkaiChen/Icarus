@@ -6,7 +6,7 @@ public abstract class Block {
 
     public static boolean initialize(Block block) {
         return false;
-    };
+    }
 
     public static boolean clear(Block block) {
         for (int i = 0; i < block.Cells.length; i++)
