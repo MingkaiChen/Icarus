@@ -14,11 +14,11 @@ public abstract class Block {
         return true;
     }
 
-    public Player getOwner() throws Exception {
+    public Player getOwner() {
         if (this.owner != null) {
             return this.owner;
         } else {
-            throw new Exception("[ERROR] This block has no owner!");
+            return null;
         }
     }
 }

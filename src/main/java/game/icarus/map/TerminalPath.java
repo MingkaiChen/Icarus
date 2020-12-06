@@ -19,7 +19,7 @@ public class TerminalPath extends Block {
         return true;
     }
 
-    public static Piece checkEnd(TerminalPath terminalPath) throws Exception {
+    public static Piece checkEnd(TerminalPath terminalPath) {
         if (terminalPath.Cells[terminalPath.Cells.length - 1].isOccupied()) {
             return terminalPath.Cells[terminalPath.Cells.length - 1].getOccupied();
         } else {
