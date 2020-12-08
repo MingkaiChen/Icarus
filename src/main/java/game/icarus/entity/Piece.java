@@ -3,30 +3,37 @@ package game.icarus.entity;
 import game.icarus.attribute.Color;
 
 public class Piece {
-    private final Color color;
-    private int pos = -1;
+    private final Player owner;
+    private Cell position;
     private Boolean isOut = false;
     private Boolean isWin = false;
 
-    public Piece(Color color) {
-        this.color = color;
+    public Piece(Player owner) {
+        this.owner = owner;
     }
 
     public Boolean isMovable() {
         return (isOut && !isWin);
     }
 
-    public void out(int newPos) {
-        if (!isOut) {
-            pos = newPos;
-            isOut = true;
-        }
-    }
+    // public void out(int newPos) {
+    // if (!isOut) {
+    // pos = newPos;
+    // isOut = true;
+    // }
+    // }
 
-    public Boolean move(int newPos) {
-        if (!isMovable())
-            return false;
-        pos = newPos;
+    // public Boolean move(int newPos) {
+    // if (!isMovable())
+    // return false;
+    // pos = newPos;
+    // return true;
+    // }
+
+    public boolean move(Cell destination) {
+        this.position.clear();
+        this.position = destination;
+        destination.setOccipied(this);
         return true;
     }
 
@@ -35,11 +42,14 @@ public class Piece {
     }
 
     public Color getColor() {
-        return this.color;
+        return this.owner.getColor();
     }
 
-    public int getPos() {
-        return pos;
+    public Cell getPosition() {
+        return position;
     }
-    public boolean hasWin() { return isWin; }
+
+    public boolean hasWin() {
+        return isWin;
+    }
 }

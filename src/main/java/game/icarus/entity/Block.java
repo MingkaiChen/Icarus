@@ -1,7 +1,7 @@
 package game.icarus.entity;
 
 public abstract class Block {
-    protected Cell[] Cells;
+    protected Cell[] cells;
     protected Player owner;
 
     public static boolean initialize(Block block) {
@@ -9,8 +9,8 @@ public abstract class Block {
     }
 
     public static boolean clear(Block block) {
-        for (int i = 0; i < block.Cells.length; i++)
-            block.Cells[i].clear();
+        for (int i = 0; i < block.cells.length; i++)
+            block.cells[i].clear();
         return true;
     }
 

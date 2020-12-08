@@ -8,20 +8,20 @@ import game.icarus.entity.Player;
 public class TerminalPath extends Block {
     public TerminalPath(Player owner) {
         this.owner = owner;
-        this.Cells = new Cell[6];
-        for (int i = 0; i < this.Cells.length; i++)
-            this.Cells[i] = new Cell(owner.getColor());
+        this.cells = new Cell[6];
+        for (int i = 0; i < this.cells.length; i++)
+            this.cells[i] = new Cell(owner.getColor());
     }
 
     public static boolean initialize(TerminalPath terminalPath) {
-        for (int i = 0; i < terminalPath.Cells.length; i++)
-            terminalPath.Cells[i].clear();
+        for (int i = 0; i < terminalPath.cells.length; i++)
+            terminalPath.cells[i].clear();
         return true;
     }
 
     public static Piece checkEnd(TerminalPath terminalPath) {
-        if (terminalPath.Cells[terminalPath.Cells.length - 1].isOccupied()) {
-            return terminalPath.Cells[terminalPath.Cells.length - 1].getOccupied();
+        if (terminalPath.cells[terminalPath.cells.length - 1].isOccupied()) {
+            return terminalPath.cells[terminalPath.cells.length - 1].getOccupied();
         } else {
             return null;
         }

@@ -6,24 +6,24 @@ import game.icarus.entity.Cell;
 
 public class NormalPath extends Block {
     public NormalPath() {
-        this.Cells = new Cell[52];
-        for (int i = 0; i < this.Cells.length; i++) {
+        this.cells = new Cell[52];
+        for (int i = 0; i < this.cells.length; i++) {
             switch (i % 4) {
                 case 0:
-                    this.Cells[i] = new Cell(Color.Red);
+                    this.cells[i] = new Cell(Color.Red);
                 case 1:
-                    this.Cells[i] = new Cell(Color.Yellow);
+                    this.cells[i] = new Cell(Color.Yellow);
                 case 2:
-                    this.Cells[i] = new Cell(Color.Blue);
+                    this.cells[i] = new Cell(Color.Blue);
                 case 3:
-                    this.Cells[i] = new Cell(Color.Green);
+                    this.cells[i] = new Cell(Color.Green);
             }
         }
     }
 
     public static boolean initialize(NormalPath normalPath) {
-        for (int i = 0; i < normalPath.Cells.length; i++)
-            normalPath.Cells[i].clear();
+        for (int i = 0; i < normalPath.cells.length; i++)
+            normalPath.cells[i].clear();
         return true;
     }
 

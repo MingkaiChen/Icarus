@@ -23,13 +23,8 @@ public class ChessBoard {
 
     public static boolean initialize(ChessBoard chessBoard) {
         NormalPath.initialize(chessBoard.normalPath);
-        for (int i = 0; i < chessBoard.parkingAprons.length; i++) {
-            Piece[] pieces = new Piece[4];
-            for (int j = 0; j < pieces.length; j++) {
-                pieces[j] = new Piece(chessBoard.parkingAprons[i].getOwner().getColor());
-            }
-            ParkingApron.initialize(chessBoard.parkingAprons[i], pieces);
-        }
+        for (int i = 0; i < chessBoard.parkingAprons.length; i++)
+            ParkingApron.initialize(chessBoard.parkingAprons[i]);
         for (int i = 0; i < chessBoard.takeoffs.length; i++)
             Takeoff.initialize(chessBoard.takeoffs[i]);
         for (int i = 0; i < chessBoard.terminalPaths.length; i++)
