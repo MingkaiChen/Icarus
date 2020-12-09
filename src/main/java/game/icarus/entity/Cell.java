@@ -63,8 +63,8 @@ public class Cell {
         return this.nextCell;
     }
 
-    public Cell nextStepsCell(int steps) {
-        return this.nextCell.nextStepsCell(steps - 1);
+    public Cell nextCell(int steps) {
+        return this.nextCell.nextCell(steps - 1);
     }
 
     // public CellType getType() {
