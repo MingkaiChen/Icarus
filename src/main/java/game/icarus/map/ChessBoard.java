@@ -1,5 +1,7 @@
 package game.icarus.map;
 
+import java.util.ArrayList;
+
 import game.icarus.entity.Piece;
 import game.icarus.entity.Player;
 
@@ -32,14 +34,14 @@ public class ChessBoard {
         return true;
     }
 
-    public static Piece checkEnd(ChessBoard chessBoard) {
+    public static ArrayList<Piece> checkEnd(ChessBoard chessBoard) {
         // Caution! This method only return one piece! Please avoid use this method when
         // there would be more than one piece get to the end.
         for (int i = 0; i < chessBoard.terminalPaths.length; i++) {
             if (TerminalPath.checkEnd(chessBoard.terminalPaths[i]) != null)
                 return TerminalPath.checkEnd(chessBoard.terminalPaths[i]);
         }
-        return null;
+        return new ArrayList<Piece>();
     }
 
 }

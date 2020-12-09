@@ -1,5 +1,7 @@
 package game.icarus.map;
 
+import java.util.ArrayList;
+
 import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
@@ -19,7 +21,7 @@ public class TerminalPath extends Block {
         return true;
     }
 
-    public static Piece checkEnd(TerminalPath terminalPath) {
+    public static ArrayList<Piece> checkEnd(TerminalPath terminalPath) {
         if (terminalPath.cells[terminalPath.cells.length - 1].isOccupied()) {
             return terminalPath.cells[terminalPath.cells.length - 1].getOccupied();
         } else {

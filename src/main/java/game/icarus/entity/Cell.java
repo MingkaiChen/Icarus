@@ -1,5 +1,6 @@
 package game.icarus.entity;
 
+import java.util.ArrayList;
 import java.util.UUID;
 import game.icarus.attribute.Color;
 
@@ -9,17 +10,17 @@ public class Cell {
     private Color cellColor;
     // private CellType cellType;
     // private Color occupiedColor;
-    private Piece occupiedPiece;
+    private ArrayList<Piece> occupiedPieces;
 
     public Cell(Color color) {
         this.cellID = UUID.randomUUID();
         this.cellColor = color;
         // this.cellType = type;
-        this.occupiedPiece = null;
+        this.occupiedPieces = new ArrayList<Piece>();
     }
 
     public boolean isOccupied() {
-        return this.occupiedPiece != null;
+        return !this.occupiedPieces.isEmpty();
     }
 
     // public Color getOccupiedColor() throws Exception {
@@ -30,9 +31,9 @@ public class Cell {
     // }
     // }
 
-    public Piece getOccupied() {
+    public ArrayList<Piece> getOccupied() {
         if (this.isOccupied()) {
-            return this.occupiedPiece;
+            return this.occupiedPieces;
         }
         return null;
     }
@@ -46,12 +47,12 @@ public class Cell {
     }
 
     public boolean setOccipied(Piece piece) {
-        this.occupiedPiece = piece;
+        this.occupiedPieces.add(piece);
         return true;
     }
 
     public boolean clear() {
-        this.occupiedPiece = null;
+        this.occupiedPieces.clear();
         return true;
     }
 
