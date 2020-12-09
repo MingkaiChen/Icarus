@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="game.icarus.view.SettingController">
+    <children>
+        <GridPane>
+            <GridPane layoutX="113.0" layoutY="91.0" prefHeight="24.0" prefWidth="326.0" GridPane.rowIndex="0">
+                <children>
+                    <Label prefHeight="24.0" prefWidth="128.0" text="Music"/>
+                    <Slider value="50" fx:id="musicVolume" prefHeight="21.0" prefWidth="200.0" GridPane.columnIndex="1"/>
+                </children>
+            </GridPane>
+            <GridPane layoutX="113.0" layoutY="91.0" prefHeight="24.0" prefWidth="326.0" GridPane.rowIndex="1">
+                <children>
+                    <Label prefHeight="24.0" prefWidth="128.0" text="Sound Effect"/>
+                    <Slider value="50" fx:id="soundVolume" prefHeight="21.0" prefWidth="200.0" GridPane.columnIndex="1"/>
+                </children>
+            </GridPane>
+            <CheckBox fx:id="debugMode" mnemonicParsing="false" text="Debug Mode" GridPane.rowIndex="2"/>
+        </GridPane>
+        <Button text="Back" fx:id="backToMain" onAction="#back"/>
+    </children>
+</AnchorPane>

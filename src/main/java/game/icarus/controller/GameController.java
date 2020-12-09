@@ -4,6 +4,7 @@ import game.icarus.attribute.Color;
 import game.icarus.entity.*;
 import game.icarus.map.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class GameController {
     private final ChessBoard chessBoard;
     private final Piece[] pieces;
     private final ArrayList<Integer> highlightedCells;
-    private Piece selectedPiece;
+    private ArrayList<Piece> selectedPieces;
     private final Dice dice;
     private int currentPlayer;
     private final Setting settings;
@@ -56,7 +57,7 @@ public class GameController {
         pieces = new Piece[playerNumber * 4];
         for (int i = 0; i < playerNumber; i++) {
             for (int j = 0; j < 4; j++) {
-                pieces[i*4+j] = new Piece(Color.values()[i]);
+                pieces[i*4+j] = new Piece(players[i]);
             }
         }
         highlightedCells = new ArrayList<>();
@@ -70,11 +71,12 @@ public class GameController {
     }
 
     @SuppressWarnings("unchecked")
-    public boolean selectPiece(Piece piece) {
-        if (walkable && piece.isMovable() && piece.getColor().equals(players[currentPlayer].getColor())) {
-            selectedPiece = piece;
+    public boolean selectPiece(Cell cell) {
+        ArrayList<Piece> pieces = cell.getOccupied();
+        if (walkable && pieces.get(0).isMovable() && pieces.get(0).getColor().equals(players[currentPlayer].getColor())) {
+            selectedPieces = pieces;
             for (int i : (HashSet<Integer>)diceResult.get("result")) {
-                highlightedCells.add(piece.getPos() + i);
+                //highlightedCells.add();
             }
             return true;
         }
@@ -88,8 +90,39 @@ public class GameController {
         return true;
     }
 
-    public boolean movePiece(int newPos) {
-        selectedPiece.move(newPos);
+    public boolean movePiece(Cell newPos) {
+        if (newPos.isOccupied() && newPos.getOccupied().get(0).getColor() != selectedPieces.get(0).getColor()) {
+            if (settings.isBattle()) {
+                ArrayList<Piece> removed1 = new ArrayList<>();
+                for (Piece p : selectedPieces) {
+                    ArrayList<Piece> removed2 = new ArrayList<>();
+                    int next = 0;
+                    for (Piece pp : newPos.getOccupied()) {
+                        if (dice.rollOnce() > dice.rollOnce()) {
+                            removed2.add(pp);
+                        } else {
+                            removed1.add(p);
+                            break;
+                        }
+                    }
+                    for (Piece pp : removed2) {
+                        selectedPieces.remove(pp);
+                        pp.returnParking();
+                    }
+                }
+                for (Piece p : removed1) {
+                    selectedPieces.remove(p);
+                    p.returnParking();
+                }
+                if (selectedPieces.size() == 0) {
+                    return true;
+                }
+            }
+            //FIXME: I'm toooooooooooooooooooooooooo lazy now
+
+
+        }
+        //selectedPiece.move(newPos);
         if (isWin()) {
             isGameEnded = true;
             return true;
@@ -107,7 +140,7 @@ public class GameController {
 
     public void nextPlayer() {
         currentPlayer = (currentPlayer + 1) % settings.getPlayerNumber();
-        selectedPiece = null;
+        selectedPieces = null;
         highlightedCells.clear();
         diceResult.clear();
     }

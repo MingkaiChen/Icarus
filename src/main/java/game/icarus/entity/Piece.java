@@ -29,11 +29,15 @@ public class Piece {
     // pos = newPos;
     // return true;
     // }
+    public void returnParking() {
+        this.position.clear();
+        //FIXME: idk how to return it to parking
+    }
 
     public boolean move(Cell destination) {
         this.position.clear();
         this.position = destination;
-        destination.setOccipied(this);
+        destination.setOccupied(this);
         return true;
     }
 

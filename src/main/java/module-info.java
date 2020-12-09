@@ -6,6 +6,7 @@ module game.icarus {
     requires java.sql;
 
     opens game.icarus to fastjson, javafx.fxml;
+    opens game.icarus.view to javafx.fxml;
     opens game.icarus.entity to fastjson;
     opens game.icarus.map to fastjson;
 
@@ -13,4 +14,5 @@ module game.icarus {
     exports game.icarus.entity;
     exports game.icarus.map;
     exports game.icarus.attribute;
+    exports game.icarus.view;
 }

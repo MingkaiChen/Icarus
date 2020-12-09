@@ -1,8 +1,9 @@
-package game.icarus;
+package game.icarus.view;
 
 import java.io.IOException;
 import java.util.Map;
 
+import game.icarus.App;
 import game.icarus.controller.GameController;
 import game.icarus.controller.GameSaver;
 import game.icarus.entity.Dice;

@@ -14,6 +14,9 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+    public static double musicVolume = 50.0;
+    public static double soundVolume = 50.0;
+    public static boolean isDebug = false;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -22,7 +25,7 @@ public class App extends Application {
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
@@ -34,5 +37,4 @@ public class App extends Application {
     public static void main(String[] args) {
         launch();
     }
-
 }

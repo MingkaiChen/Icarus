@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 public class Dice {
     private final int amount;
+    private Random random;
 
     private HashSet<Integer> getTwoNumbersAvailableResult(int ta, int tb) {
         HashSet<Integer> ans = new HashSet<>();
@@ -57,19 +58,24 @@ public class Dice {
     }
 
     public Dice(int amount) {
+        this.random = new Random();
         this.amount = amount;
     }
 
     public Map<String, Object> roll() {
         int[] numbers = new int[amount];
         Map<String, Object> ans = new HashMap<>();
-        Random random = new Random();
+
         for (int i = 0; i < amount; i++) {
             numbers[i] = random.nextInt(6) + 1;
         }
         ans.put("raw", numbers);
         ans.put("result", getAllAvailableResult(numbers));
         return ans;
+    }
+
+    public int rollOnce() {
+        return random.nextInt(6) + 1;
     }
 
     public int getAmount() {

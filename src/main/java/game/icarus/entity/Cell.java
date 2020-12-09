@@ -49,7 +49,7 @@ public class Cell {
         return this.cellColor;
     }
 
-    public boolean setOccipied(Piece piece) {
+    public boolean setOccupied(Piece piece) {
         this.occupiedPieces.add(piece);
         return true;
     }
