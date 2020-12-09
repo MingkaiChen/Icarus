@@ -11,6 +11,7 @@ public class Cell {
     // private CellType cellType;
     // private Color occupiedColor;
     private ArrayList<Piece> occupiedPieces;
+    private Cell nextCell;
 
     public Cell(Color color) {
         this.cellID = UUID.randomUUID();
@@ -21,6 +22,11 @@ public class Cell {
 
     public boolean isOccupied() {
         return !this.occupiedPieces.isEmpty();
+    }
+
+    public boolean setNextCell(Cell nextCell) {
+        this.nextCell = nextCell;
+        return true;
     }
 
     // public Color getOccupiedColor() throws Exception {
@@ -51,6 +57,14 @@ public class Cell {
     public boolean clear() {
         this.occupiedPieces.clear();
         return true;
+    }
+
+    public Cell nextCell() {
+        return this.nextCell;
+    }
+
+    public Cell nextStepsCell(int steps) {
+        return this.nextCell.nextStepsCell(steps - 1);
     }
 
     // public CellType getType() {
