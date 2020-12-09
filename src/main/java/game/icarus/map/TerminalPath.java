@@ -22,10 +22,6 @@ public class TerminalPath extends Block {
     }
 
     public static ArrayList<Piece> checkEnd(TerminalPath terminalPath) {
-        if (terminalPath.cells[terminalPath.cells.length - 1].isOccupied()) {
-            return terminalPath.cells[terminalPath.cells.length - 1].getOccupied();
-        } else {
-            return null;
-        }
+        return terminalPath.cells[terminalPath.cells.length - 1].getOccupied();
     }
 }

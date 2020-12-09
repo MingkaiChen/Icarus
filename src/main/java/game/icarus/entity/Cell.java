@@ -32,10 +32,7 @@ public class Cell {
     // }
 
     public ArrayList<Piece> getOccupied() {
-        if (this.isOccupied()) {
-            return this.occupiedPieces;
-        }
-        return null;
+        return this.occupiedPieces;
     }
 
     public UUID getID() {

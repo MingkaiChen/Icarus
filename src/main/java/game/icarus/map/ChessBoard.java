@@ -35,13 +35,10 @@ public class ChessBoard {
     }
 
     public static ArrayList<Piece> checkEnd(ChessBoard chessBoard) {
-        // Caution! This method only return one piece! Please avoid use this method when
-        // there would be more than one piece get to the end.
-        for (int i = 0; i < chessBoard.terminalPaths.length; i++) {
-            if (TerminalPath.checkEnd(chessBoard.terminalPaths[i]) != null)
-                return TerminalPath.checkEnd(chessBoard.terminalPaths[i]);
-        }
-        return new ArrayList<Piece>();
+        ArrayList<Piece> getEnd = new ArrayList<Piece>();
+        for (int i = 0; i < chessBoard.terminalPaths.length; i++) 
+            getEnd.addAll(TerminalPath.checkEnd(chessBoard.terminalPaths[i]));
+        return getEnd;
     }
 
 }
