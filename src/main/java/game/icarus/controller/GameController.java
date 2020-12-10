@@ -4,7 +4,6 @@ import game.icarus.attribute.Color;
 import game.icarus.entity.*;
 import game.icarus.map.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,11 +30,13 @@ public class GameController implements Cloneable {
     private Map<String, Object> diceResult;
     private boolean walkable = false;
     private boolean isGameEnded = false;
+    private boolean canTakeOff = false;
 
     public GameController(Save s) {
         settings = s.getSetting();
         players = s.getPlayers();
         chessBoard = new ChessBoard(players);
+        //FIXME: add cell details
         pieces = s.getPieces();
         currentPlayer = s.getCurrentPlayer();
         walkable = s.getHasDiceResult();
@@ -73,6 +74,9 @@ public class GameController implements Cloneable {
     @SuppressWarnings("unchecked")
     public boolean selectPiece(Cell cell) {
         ArrayList<Piece> pieces = cell.getOccupied();
+        if (!pieces.get(0).isOut()) {
+            //highlightedCells.add(pieces.get(0).getOwner().);
+        }
         if (walkable && pieces.get(0).isMovable() && pieces.get(0).getColor().equals(players[currentPlayer].getColor())) {
             selectedPieces = pieces;
             for (int i : (HashSet<Integer>)diceResult.get("result")) {
@@ -89,6 +93,9 @@ public class GameController implements Cloneable {
         }
         return true;
     }
+    public void movePieceOut() {
+        //selectedPieces.get(0).move();
+    }
 
     public boolean movePiece(Cell newPos) {
         if (newPos.isOccupied() && newPos.getOccupied().get(0).getColor() != selectedPieces.get(0).getColor()) {
@@ -96,7 +103,6 @@ public class GameController implements Cloneable {
                 ArrayList<Piece> removed1 = new ArrayList<>();
                 for (Piece p : selectedPieces) {
                     ArrayList<Piece> removed2 = new ArrayList<>();
-                    int next = 0;
                     for (Piece pp : newPos.getOccupied()) {
                         if (dice.rollOnce() > dice.rollOnce()) {
                             removed2.add(pp);
@@ -115,14 +121,14 @@ public class GameController implements Cloneable {
                     p.returnParking();
                 }
                 if (selectedPieces.size() == 0) {
+                    nextPlayer();
                     return true;
                 }
+            } else {
+                for (Piece p : newPos.getOccupied()) p.returnParking();
             }
-            //FIXME: I'm toooooooooooooooooooooooooo lazy now
-
-
         }
-        //selectedPiece.move(newPos);
+        for (Piece p : selectedPieces) p.move(newPos);
         if (isWin()) {
             isGameEnded = true;
             return true;

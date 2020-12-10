@@ -11,8 +11,10 @@ public class TerminalPath extends Block {
     public TerminalPath(Player owner) {
         this.owner = owner;
         this.cells = new Cell[6];
-        for (int i = 0; i < this.cells.length; i++){
+        for (int i = 0; i < this.cells.length; i++) {
             this.cells[i] = new Cell(owner.getColor());
+        }
+        for (int i = 0; i < this.cells.length; i++){
             if (i != 0) {
                 this.cells[i - 1].setNextCell(this.cells[i]);
             }
