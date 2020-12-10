@@ -65,12 +65,14 @@ public class Dice {
     public Map<String, Object> roll() {
         int[] numbers = new int[amount];
         Map<String, Object> ans = new HashMap<>();
-
+        int sum = 0;
         for (int i = 0; i < amount; i++) {
             numbers[i] = random.nextInt(6) + 1;
+            sum += numbers[i];
         }
         ans.put("raw", numbers);
         ans.put("result", getAllAvailableResult(numbers));
+        ans.put("canTakeOff", sum >= amount*5);
         return ans;
     }
 

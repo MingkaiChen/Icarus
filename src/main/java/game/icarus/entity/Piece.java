@@ -45,6 +45,10 @@ public class Piece {
         isWin = true;
     }
 
+    public Boolean isOut() {
+        return isOut;
+    }
+
     public Color getColor() {
         return this.owner.getColor();
     }
@@ -55,5 +59,9 @@ public class Piece {
 
     public boolean hasWin() {
         return isWin;
+    }
+
+    public Player getOwner() {
+        return owner;
     }
 }
