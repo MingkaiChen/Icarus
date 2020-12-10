@@ -2,6 +2,7 @@ package game.icarus.map;
 
 import java.util.ArrayList;
 
+import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
 import game.icarus.entity.Player;
 
@@ -36,9 +37,17 @@ public class ChessBoard {
 
     public static ArrayList<Piece> checkEnd(ChessBoard chessBoard) {
         ArrayList<Piece> getEnd = new ArrayList<Piece>();
-        for (int i = 0; i < chessBoard.terminalPaths.length; i++) 
+        for (int i = 0; i < chessBoard.terminalPaths.length; i++)
             getEnd.addAll(TerminalPath.checkEnd(chessBoard.terminalPaths[i]));
         return getEnd;
+    }
+
+    public static Cell getTakeoffCell(ChessBoard chessBoard, Player player) {
+        for (int i = 0; i < chessBoard.takeoffs.length; i++) {
+            if (chessBoard.takeoffs[i].getOwner().equals(player))
+                return chessBoard.takeoffs[i].getCell(0);
+        }
+        return null;
     }
 
 }

@@ -21,4 +21,8 @@ public abstract class Block {
             return null;
         }
     }
+
+    public Cell getCell(int index){
+        return this.cells[index];
+    }
 }
