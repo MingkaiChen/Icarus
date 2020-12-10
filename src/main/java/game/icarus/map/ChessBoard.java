@@ -50,4 +50,12 @@ public class ChessBoard {
         return null;
     }
 
+    public static Cell getEndCell(ChessBoard chessBoard, Player player) {
+        for (int i = 0; i < chessBoard.terminalPaths.length; i++) {
+            if (chessBoard.terminalPaths[i].getOwner().equals(player))
+                return chessBoard.terminalPaths[i].getCell(chessBoard.terminalPaths.length - 1);
+        }
+        return null;
+    }
+
 }

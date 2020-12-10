@@ -2,9 +2,9 @@ package game.icarus.machine.MonteCarloTreeSearch;
 
 import java.util.ArrayList;
 
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable.UnaryOp.Sqrt;
-
+import game.icarus.controller.GameController;
 import game.icarus.entity.Player;
+import game.icarus.entity.Save;
 import game.icarus.map.ChessBoard;
 
 public class Node {
@@ -14,11 +14,12 @@ public class Node {
     private Node parentNode;
     private Player owner;
     private ChessBoard chessBoard;
+    private GameController gameController;
     private double weight;
 
-    public Node(Node parentNode, ChessBoard chessBoard{
+    public Node(Node parentNode, Save tempSave){
         this.parentNode = parentNode;
-        this.chessBoard = chessBoard;
+        this.gameController = new GameController(tempSave);
         parentNode.addChild(this);
         this.nValue = 0;
         this.qValue = 0;
@@ -52,8 +53,8 @@ public class Node {
         return this.owner;
     }
 
-    public ChessBoard getChessBoard() {
-        return this.chessBoard;
+    public GameController getGameController() {
+        return this.gameController;
     }
 
     public boolean calculateWeight() {

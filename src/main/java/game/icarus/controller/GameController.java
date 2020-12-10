@@ -19,11 +19,11 @@ import java.util.Map;
  */
 
 
-public class GameController {
+public class GameController implements Cloneable {
     private final Player[] players;
     private final ChessBoard chessBoard;
     private final Piece[] pieces;
-    private final ArrayList<Integer> highlightedCells;
+    private final ArrayList<Cell> highlightedCells;
     private ArrayList<Piece> selectedPieces;
     private final Dice dice;
     private int currentPlayer;
@@ -149,7 +149,7 @@ public class GameController {
         return chessBoard;
     }
 
-    public ArrayList<Integer> getHighlightedCells() {
+    public ArrayList<Cell> getHighlightedCells() {
         return highlightedCells;
     }
 
