@@ -1,9 +1,11 @@
 package game.icarus;
 
+import game.icarus.entity.Setting;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,14 +16,24 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
-    public static double musicVolume = 50.0;
-    public static double soundVolume = 50.0;
+    public static int musicVolume = 50;
+    public static int soundVolume = 50;
     public static boolean isDebug = false;
+    private static Setting setting;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        setting = new Setting();
+        Font.loadFont(getClass().getResourceAsStream("game/icarus/fonts/airstrikeb3d.ttf"), -1);
+        scene = new Scene(loadFXML("primary"), 600, 400);
         stage.setScene(scene);
+        stage.showingProperty().addListener((observable, oldValue, showing) -> {
+            if(showing) {
+                stage.setMinHeight(stage.getHeight());
+                stage.setMinWidth(stage.getWidth());
+                //stage.setTitle("My mininal size is: W"+ stage.getMinWidth()+" H"+stage.getMinHeight());
+            }
+        });
         stage.show();
     }
 
@@ -36,5 +48,9 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
+    }
+
+    public static Setting getSetting() {
+        return setting;
     }
 }

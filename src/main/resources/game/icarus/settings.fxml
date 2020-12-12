@@ -7,24 +7,48 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="game.icarus.view.SettingController">
-    <children>
-        <GridPane>
-            <GridPane layoutX="113.0" layoutY="91.0" prefHeight="24.0" prefWidth="326.0" GridPane.rowIndex="0">
-                <children>
-                    <Label prefHeight="24.0" prefWidth="128.0" text="Music"/>
-                    <Slider value="50" fx:id="musicVolume" prefHeight="21.0" prefWidth="200.0" GridPane.columnIndex="1"/>
-                </children>
-            </GridPane>
-            <GridPane layoutX="113.0" layoutY="91.0" prefHeight="24.0" prefWidth="326.0" GridPane.rowIndex="1">
-                <children>
-                    <Label prefHeight="24.0" prefWidth="128.0" text="Sound Effect"/>
-                    <Slider value="50" fx:id="soundVolume" prefHeight="21.0" prefWidth="200.0" GridPane.columnIndex="1"/>
-                </children>
-            </GridPane>
-            <CheckBox fx:id="debugMode" mnemonicParsing="false" text="Debug Mode" GridPane.rowIndex="2"/>
-        </GridPane>
-        <Button text="Back" fx:id="backToMain" onAction="#back"/>
-    </children>
-</AnchorPane>
+    <center>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <GridPane layoutX="113.0" layoutY="91.0" prefHeight="24.0" prefWidth="326.0" GridPane.rowIndex="0">
+                    <children>
+                        <Label prefHeight="24.0" prefWidth="128.0" text="Music"/>
+                        <Slider fx:id="musicVolume" prefHeight="21.0" prefWidth="200.0" value="50"
+                                GridPane.columnIndex="1"/>
+                        <Label fx:id="musicValue" prefHeight="24.0" prefWidth="128.0" text="50" GridPane.columnIndex="2"/>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+                <GridPane layoutX="113.0" layoutY="91.0" prefHeight="24.0" prefWidth="326.0" GridPane.rowIndex="1">
+                    <children>
+                        <Label prefHeight="24.0" prefWidth="128.0" text="Sound Effect"/>
+                        <Slider fx:id="soundVolume" prefHeight="21.0" prefWidth="200.0" value="50"
+                                GridPane.columnIndex="1"/>
+                        <Label fx:id="soundValue" prefHeight="24.0" prefWidth="128.0" text="50" GridPane.columnIndex="2"/>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+                <CheckBox fx:id="debugMode" mnemonicParsing="false" text="Debug Mode" GridPane.rowIndex="2"/>
+            </children>
+        </VBox>
+    </center>
+    <bottom>
+        <Button fx:id="backToMain" onAction="#back" text="Back" BorderPane.alignment="CENTER"/>
+    </bottom>
+</BorderPane>

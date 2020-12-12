@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.icarus.view.BoardController">
+    <center>
+        <GridPane gridLinesVisible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+            <children>
+                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER" GridPane.rowIndex="2">
+                    <children>
+                        <Label fx:id="co" layoutX="14.0" layoutY="9.0" text="co" />
+                        <Label fx:id="rgb" layoutX="144.0" layoutY="13.0" text="RGB" />
+                        <Label fx:id="zoom" layoutX="245.0" layoutY="9.0" text="zoom" />
+                    </children>
+                </AnchorPane>
+                <Pane fx:id="board" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" BorderPane.alignment="CENTER" GridPane.rowIndex="1" />
+                <ToolBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="200.0">
+                    <items>
+                        <Button mnemonicParsing="false" onAction="#drawRectangle" text="draw" />
+                    </items>
+                </ToolBar>
+            </children>
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" percentWidth="100" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="12.5" />
+                <RowConstraints percentHeight="75.0" />
+                <RowConstraints percentHeight="12.5" />
+            </rowConstraints>
+        </GridPane>
+    </center>
+</BorderPane>

@@ -11,9 +11,12 @@ public class Player {
     private final Piece[] playerPieces;
     private final Cell toTerminalPath;
     private final Cell toShortcut;
-    private final Cell End;
+    private final Cell end;
 
     public Player(Color color) {
+        toShortcut = null;
+        toTerminalPath = null;
+        end = null;
         this.playerID = UUID.randomUUID();
         this.playerColor = color;
         this.playerPieces = new Piece[4];
@@ -27,7 +30,7 @@ public class Player {
         this.playerPieces = anotherPlayer.playerPieces.clone();
         this.toTerminalPath = anotherPlayer.toTerminalPath;
         this.toShortcut = anotherPlayer.toShortcut;
-        this.End = anotherPlayer.End;
+        this.end = anotherPlayer.end;
     }
 
     public static boolean initParkingApron(Player player, ParkingApron parkingApron) {
@@ -53,6 +56,6 @@ public class Player {
     }
 
     public Cell getEnd() {
-        return this.End;
+        return this.end;
     }
 }

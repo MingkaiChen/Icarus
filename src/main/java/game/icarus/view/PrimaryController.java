@@ -3,14 +3,23 @@ package game.icarus.view;
 import java.io.IOException;
 
 import game.icarus.App;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 
 public class PrimaryController {
 
     @FXML
+    Label title;
+
+
+    @FXML
     public void startGame() throws IOException {
-        App.setRoot("secondary");
+        //App.setRoot("secondary");
+        App.setRoot("board");
+
     }
 
     @FXML
@@ -22,5 +31,6 @@ public class PrimaryController {
     }
 
     public void exit() {
+        Platform.exit();
     }
 }
