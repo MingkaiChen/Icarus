@@ -11,6 +11,11 @@ public class Takeoff extends Block {
         cells[0] = new Cell(owner.getColor());
     }
 
+    public Takeoff(Takeoff anotherTakeoff){
+        this.cells = anotherTakeoff.cells.clone();
+        this.owner = anotherTakeoff.owner;
+    }
+
     public static boolean initialize(Takeoff takeoff) {
         takeoff.cells[0].clear();
         return true;

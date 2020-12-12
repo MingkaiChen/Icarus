@@ -20,6 +20,13 @@ public class Cell {
         this.occupiedPieces = new ArrayList<Piece>();
     }
 
+    public Cell(Cell anotherCell) {
+        this.cellID = anotherCell.cellID;
+        this.cellColor = anotherCell.cellColor;
+        this.occupiedPieces = (ArrayList<Piece>) anotherCell.occupiedPieces.clone();
+        this.nextCell = new Cell(anotherCell.nextCell);
+    }
+
     public boolean isOccupied() {
         return !this.occupiedPieces.isEmpty();
     }

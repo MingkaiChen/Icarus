@@ -1,8 +1,11 @@
 package game.icarus.machine.Greedy;
 
 import java.util.ArrayList;
+import java.util.Map;
 
+import game.icarus.controller.GameController;
 import game.icarus.entity.Player;
+import game.icarus.entity.Save;
 import game.icarus.map.ChessBoard;
 
 public class Status {
@@ -10,9 +13,18 @@ public class Status {
     private ChessBoard chessBoard;
     private int value;
     private Player[] opponents;
+    private Map<String, Object>  rollResult;
 
-    public Status(ChessBoard chessBoard, Player owner, Player[] opponents) {
-        this.chessBoard = chessBoard;
+    public Status(Save gameSave, Player owner, Player[] opponents, Map<String, Object> rollResult) {
+        this.chessBoard = new GameController(gameSave).getChessBoard();
+        this.owner = owner;
+        this.opponents = opponents;
+        this.value = Status.calculateValue(this);
+        this.rollResult = rollResult;
+    }
+
+    public Status(Save gameSave, Player owner, Player[] opponents) {
+        this.chessBoard = new GameController(gameSave).getChessBoard();
         this.owner = owner;
         this.opponents = opponents;
         this.value = Status.calculateValue(this);
@@ -25,11 +37,12 @@ public class Status {
             while (true) {
                 if (status.owner.getPieces()[i].getPosition().nextCell() == null) {
                     break;
-                } else if (status.owner.getPieces()[i].getPosition().nextCell(j).equals(status.owner.getEnd())) {
+                } else if (status.owner.getPieces()[i].getPosition().nextCell(j).getID()
+                        .equals(status.owner.getEnd().getID())) {
                     value += 56 - j;
                     break;
-                } else if (status.owner.getPieces()[i].getPosition().nextCell(j)
-                        .equals(status.owner.getToTerminalPath())) {
+                } else if (status.owner.getPieces()[i].getPosition().nextCell(j).getID()
+                        .equals(status.owner.getToTerminalPath().getID())) {
                     value += 50 - j;
                     break;
                 }
@@ -43,12 +56,12 @@ public class Status {
                     if (status.opponents[i].getPieces()[j].getPosition().nextCell() == null) {
                         value += 56;
                         break;
-                    } else if (status.opponents[i].getPieces()[j].getPosition().nextCell(k)
-                            .equals(status.opponents[i].getEnd())) {
+                    } else if (status.opponents[i].getPieces()[j].getPosition().nextCell(k).getID()
+                            .equals(status.opponents[i].getEnd().getID())) {
                         value += k;
                         break;
-                    } else if (status.opponents[i].getPieces()[j].getPosition().nextCell(k)
-                            .equals(status.opponents[i].getToTerminalPath())) {
+                    } else if (status.opponents[i].getPieces()[j].getPosition().nextCell(k).getID()
+                            .equals(status.opponents[i].getToTerminalPath().getID())) {
                         value += 6 + k;
                         break;
                     }

@@ -159,6 +159,34 @@ public class GameController implements Cloneable {
         return highlightedCells;
     }
 
+    public static ArrayList<Action> getAvailabelActions(ChessBoard chessBoard, Player player, Map<String, Object> result) {
+        ArrayList<Action> availableActions = new ArrayList<Action>();
+
+        //FIX ME ASAP!!!
+
+        // for (int i = 0; i < player.getPieces().length; i++) {
+        //     ArrayList<Cell> availableCells = new ArrayList<Cell>();
+        //     node.getGameController().selectPiece(node.getOwner().getPieces()[i].getPosition());
+        //     availableCells.addAll(node.getGameController().getHighlightedCells());
+        //     for (int j = 0; j < availableCells.size(); j++) {
+        //         if (availableCells.get(i)
+        //                 .equals(ChessBoard.getTakeoffCell(node.getGameController().getChessBoard(), node.getOwner()))) {
+        //             availableActions
+        //                     .add(new Action(node.getOwner().getPieces()[i], availableCells.get(j), ActionType.Takeoff));
+        //         } else if (availableCells.get(i)
+        //                 .equals(ChessBoard.getEndCell(node.getGameController().getChessBoard(), node.getOwner()))) {
+        //             availableActions
+        //                     .add(new Action(node.getOwner().getPieces()[i], availableCells.get(j), ActionType.Win));
+        //         } else {
+        //             availableActions
+        //                     .add(new Action(node.getOwner().getPieces()[i], availableCells.get(j), ActionType.NormalMove));
+        //         }
+        //     }
+        // }
+        
+        return availableActions;
+    }
+
     public boolean hasGameEnded() {
         return isGameEnded;
     }

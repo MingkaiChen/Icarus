@@ -12,6 +12,11 @@ public class ParkingApron extends Block {
             this.cells[i] = new Cell(owner.getColor());
     }
 
+    public ParkingApron(ParkingApron anotherParkingApron){
+        this.cells = anotherParkingApron.cells.clone();
+        this.owner = anotherParkingApron.owner;
+    }
+
     public static boolean initialize(ParkingApron parkingApron) {
         Player.initParkingApron(parkingApron.getOwner(), parkingApron);
         return true;

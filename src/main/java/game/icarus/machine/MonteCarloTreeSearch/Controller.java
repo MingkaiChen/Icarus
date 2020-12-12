@@ -3,6 +3,7 @@ package game.icarus.machine.MonteCarloTreeSearch;
 import java.util.ArrayList;
 
 import game.icarus.attribute.ActionType;
+import game.icarus.entity.Action;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Player;
 import game.icarus.map.ChessBoard;

@@ -2,6 +2,7 @@ package game.icarus.map;
 
 import java.util.ArrayList;
 
+import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
 import game.icarus.entity.Player;
@@ -58,24 +59,29 @@ public class ChessBoard {
         return null;
     }
 
-    public ParkingApron getParkingApron(Player owner){
-        for(int i = 0; i < this.parkingAprons.length; i++){
-            if(this.parkingAprons[i].getOwner().equals(owner))
-                return this.parkingAprons[i];
-        }
-        return null;
-    }
+    // public static Block getPieceLocation(ChessBoard chessBoard, Piece piece) {
+    //     for (int i = 0; i < 4; i++) {
+    //         if(chessBoard.getParkingApron(piece.getOwner()).getCell(i).getOccupied().get(0).equals(piece))
+    //             return chessBoard.getParkingApron(piece.getOwner());
+    //     }
 
-    public NormalPath getNormalPath(){
-        return this.normalPath;
-    }
+    //     return null;
+    // }
 
-    public TerminalPath getTerminalPath(Player owner){
-        for(int i = 0; i < this.terminalPaths.length; i++){
-            if(this.terminalPaths[i].getOwner().equals(owner))
-                return this.terminalPaths[i];
-        }
-        return null;
-    }
+    // private ParkingApron getParkingApron(Player owner) {
+    //     for (int i = 0; i < this.parkingAprons.length; i++) {
+    //         if (this.parkingAprons[i].getOwner().equals(owner))
+    //             return this.parkingAprons[i];
+    //     }
+    //     return null;
+    // }
+
+    // private TerminalPath getTerminalPath(Player owner) {
+    //     for (int i = 0; i < this.terminalPaths.length; i++) {
+    //         if (this.terminalPaths[i].getOwner().equals(owner))
+    //             return this.terminalPaths[i];
+    //     }
+    //     return null;
+    // }
 
 }

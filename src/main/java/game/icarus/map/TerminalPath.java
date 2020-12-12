@@ -22,6 +22,11 @@ public class TerminalPath extends Block {
         }
     }
 
+    public TerminalPath(TerminalPath anotherTerminalPath){
+        this.cells = anotherTerminalPath.cells.clone();
+        this.owner = anotherTerminalPath.owner;
+    }
+
     public static boolean initialize(TerminalPath terminalPath) {
         for (int i = 0; i < terminalPath.cells.length; i++)
             terminalPath.cells[i].clear();

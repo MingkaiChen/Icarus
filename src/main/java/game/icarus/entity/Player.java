@@ -21,6 +21,15 @@ public class Player {
             this.playerPieces[i] = new Piece(this);
     }
 
+    public Player(Player anotherPlayer){
+        this.playerID = anotherPlayer.playerID;
+        this.playerColor = anotherPlayer.playerColor;
+        this.playerPieces = anotherPlayer.playerPieces.clone();
+        this.toTerminalPath = anotherPlayer.toTerminalPath;
+        this.toShortcut = anotherPlayer.toShortcut;
+        this.End = anotherPlayer.End;
+    }
+
     public static boolean initParkingApron(Player player, ParkingApron parkingApron) {
         for (int i = 0; i < player.playerPieces.length; i++)
             player.getPieces()[i].move(parkingApron.cells[i]);
