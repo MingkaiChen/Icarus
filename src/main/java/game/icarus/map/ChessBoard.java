@@ -58,4 +58,24 @@ public class ChessBoard {
         return null;
     }
 
+    public ParkingApron getParkingApron(Player owner){
+        for(int i = 0; i < this.parkingAprons.length; i++){
+            if(this.parkingAprons[i].getOwner().equals(owner))
+                return this.parkingAprons[i];
+        }
+        return null;
+    }
+
+    public NormalPath getNormalPath(){
+        return this.normalPath;
+    }
+
+    public TerminalPath getTerminalPath(Player owner){
+        for(int i = 0; i < this.terminalPaths.length; i++){
+            if(this.terminalPaths[i].getOwner().equals(owner))
+                return this.terminalPaths[i];
+        }
+        return null;
+    }
+
 }

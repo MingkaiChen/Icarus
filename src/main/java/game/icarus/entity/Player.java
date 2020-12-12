@@ -9,6 +9,9 @@ public class Player {
     private final UUID playerID;
     private final Color playerColor;
     private final Piece[] playerPieces;
+    private final Cell toTerminalPath;
+    private final Cell toShortcut;
+    private final Cell End;
 
     public Player(Color color) {
         this.playerID = UUID.randomUUID();
@@ -34,5 +37,13 @@ public class Player {
 
     public Color getColor() {
         return this.playerColor;
+    }
+
+    public Cell getToTerminalPath() {
+        return this.toTerminalPath;
+    }
+
+    public Cell getEnd() {
+        return this.End;
     }
 }
