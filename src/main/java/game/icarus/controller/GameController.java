@@ -18,7 +18,7 @@ import java.util.Map;
  */
 
 
-public class GameController implements Cloneable {
+public class GameController {
     private final Player[] players;
     private final ChessBoard chessBoard;
     private final Piece[] pieces;
