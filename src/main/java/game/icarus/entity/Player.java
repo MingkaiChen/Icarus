@@ -3,25 +3,36 @@ package game.icarus.entity;
 import java.util.UUID;
 
 import game.icarus.attribute.Color;
+import game.icarus.map.ChessBoard;
 import game.icarus.map.ParkingApron;
 
 public class Player {
     private final UUID playerID;
     private final Color playerColor;
     private final Piece[] playerPieces;
-    private final Cell toTerminalPath;
-    private final Cell toShortcut;
-    private final Cell end;
+    private Cell toTerminalPath;
+    private Cell toShortcut;
+    private Cell end;
 
     public Player(Color color) {
-        toShortcut = null;
-        toTerminalPath = null;
-        end = null;
+        // toShortcut = null;
+        // toTerminalPath = null;
+        // end = null;
         this.playerID = UUID.randomUUID();
         this.playerColor = color;
         this.playerPieces = new Piece[4];
         for (int i = 0; i < this.playerPieces.length; i++)
             this.playerPieces[i] = new Piece(this);
+    }
+
+    public boolean setCells(ChessBoard chessBoard) {
+        switch (this.playerColor) {
+            case Yellow:
+                this.toShortcut = chessBoard.getNormalPath().getCell(9);
+                this.toTerminalPath = chessBoard.getNormalPath().getCell(41);
+                this.end = ChessBoard.getEndCell(chessBoard, this);
+        }
+        return false;
     }
 
     public Player(Player anotherPlayer){

@@ -155,7 +155,14 @@ public class GameController {
         return chessBoard;
     }
 
-    public ArrayList<Cell> getHighlightedCells() {
+    public static ArrayList<Cell> getHighlightedCells(ChessBoard chessBoard, Piece piece, Map<String, Object> result) {
+        ArrayList<Cell> highlightedCells = new ArrayList<>();
+        if(!piece.isOut()){
+            if((boolean)result.get("canTakeOff")){
+                highlightedCells.add(ChessBoard.getTakeoffCell(chessBoard, piece.getOwner()));
+                return highlightedCells;
+            }
+        }
         return highlightedCells;
     }
 
