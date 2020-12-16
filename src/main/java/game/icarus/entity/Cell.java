@@ -45,6 +45,10 @@ public class Cell {
         return this.forkCell;
     }
 
+    public Cell getBelongsto() {
+        return this.belongsTo;
+    }
+
     public boolean isOccupied() {
         return !this.occupiedPieces.isEmpty();
     }
