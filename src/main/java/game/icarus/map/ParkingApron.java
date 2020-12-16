@@ -1,15 +1,18 @@
 package game.icarus.map;
 
+import game.icarus.attribute.CellType;
 import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Player;
 
 public class ParkingApron extends Block {
-    public ParkingApron(Player owner) {
+    public ParkingApron(Player owner, Takeoff takeoff) {
         this.owner = owner;
         this.cells = new Cell[4];
-        for (int i = 0; i < 4; i++)
-            this.cells[i] = new Cell(owner.getColor());
+        for (int i = 0; i < 4; i++){
+            this.cells[i] = new Cell(owner.getColor(), CellType.ParkingApron);
+            this.cells[i].setNextCell(takeoff.getCell(0));
+        }
     }
 
     public ParkingApron(ParkingApron anotherParkingApron){

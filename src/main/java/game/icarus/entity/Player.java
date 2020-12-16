@@ -26,12 +26,12 @@ public class Player {
     }
 
     public boolean setCells(ChessBoard chessBoard) {
-        switch (this.playerColor) {
-            case Yellow:
-                this.toShortcut = chessBoard.getNormalPath().getCell(9);
-                this.toTerminalPath = chessBoard.getNormalPath().getCell(41);
-                this.end = ChessBoard.getEndCell(chessBoard, this);
-        }
+        // switch (this.playerColor) {
+        //     case Yellow:
+        //         this.toShortcut = chessBoard.getNormalPath().getCell(9);
+        //         this.toTerminalPath = chessBoard.getNormalPath().getCell(41);
+        //         this.end = ChessBoard.getEndCell(chessBoard, this);
+        // }
         return false;
     }
 

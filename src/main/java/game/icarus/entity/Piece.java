@@ -1,5 +1,6 @@
 package game.icarus.entity;
 
+import game.icarus.attribute.CellType;
 import game.icarus.attribute.Color;
 
 public class Piece {
@@ -9,7 +10,7 @@ public class Piece {
     private Boolean isWin = false;
 
     public Piece(Player owner) {
-        this.position = new Cell(Color.Null);
+        this.position = null;
         this.owner = owner;
     }
 

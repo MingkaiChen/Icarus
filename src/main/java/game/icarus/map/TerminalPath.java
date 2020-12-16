@@ -2,6 +2,7 @@ package game.icarus.map;
 
 import java.util.ArrayList;
 
+import game.icarus.attribute.CellType;
 import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
@@ -12,9 +13,9 @@ public class TerminalPath extends Block {
         this.owner = owner;
         this.cells = new Cell[6];
         for (int i = 0; i < this.cells.length; i++) {
-            this.cells[i] = new Cell(owner.getColor());
+            this.cells[i] = new Cell(owner.getColor(), CellType.TerminalPath);
         }
-        for (int i = 0; i < this.cells.length; i++){
+        for (int i = 0; i < this.cells.length; i++) {
             if (i != 0) {
                 this.cells[i - 1].setNextCell(this.cells[i]);
             }
@@ -22,7 +23,7 @@ public class TerminalPath extends Block {
         }
     }
 
-    public TerminalPath(TerminalPath anotherTerminalPath){
+    public TerminalPath(TerminalPath anotherTerminalPath) {
         this.cells = anotherTerminalPath.cells.clone();
         this.owner = anotherTerminalPath.owner;
     }

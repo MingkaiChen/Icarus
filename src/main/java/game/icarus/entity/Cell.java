@@ -2,6 +2,8 @@ package game.icarus.entity;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
+import game.icarus.attribute.CellType;
 import game.icarus.attribute.Color;
 
 public class Cell {
@@ -12,12 +14,15 @@ public class Cell {
     // private Color occupiedColor;
     private ArrayList<Piece> occupiedPieces;
     private Cell nextCell;
+    private Cell forkCell;
+    private CellType belongsTo;
 
-    public Cell(Color color) {
+    public Cell(Color color, CellType cellType) {
         this.cellID = UUID.randomUUID();
         this.cellColor = color;
         // this.cellType = type;
         this.occupiedPieces = new ArrayList<Piece>();
+        this.belongsTo = cellType;
     }
 
     public Cell(Cell anotherCell) {
@@ -25,6 +30,19 @@ public class Cell {
         this.cellColor = anotherCell.cellColor;
         this.occupiedPieces = (ArrayList<Piece>) anotherCell.occupiedPieces.clone();
         this.nextCell = new Cell(anotherCell.nextCell);
+        this.forkCell = new Cell(anotherCell.forkCell);
+    }
+
+    public boolean isForkAvailable() {
+        return this.getOccupied().get(0).getOwner().getColor().equals(this.forkCell.cellColor);
+    }
+
+    public boolean hasFork() {
+        return this.forkCell!=null;
+    }
+
+    public Cell getFork() {
+        return this.forkCell;
     }
 
     public boolean isOccupied() {
@@ -33,6 +51,11 @@ public class Cell {
 
     public boolean setNextCell(Cell nextCell) {
         this.nextCell = nextCell;
+        return true;
+    }
+
+    public boolean setForkCell(Cell forkCell) {
+        this.forkCell = forkCell;
         return true;
     }
 
