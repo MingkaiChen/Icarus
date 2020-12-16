@@ -15,9 +15,9 @@ public class Cell {
     private ArrayList<Piece> occupiedPieces;
     private Cell nextCell;
     private Cell forkCell;
-    private CellType belongsTo;
+    private Block belongsTo;
 
-    public Cell(Color color, CellType cellType) {
+    public Cell(Color color, Block cellType) {
         this.cellID = UUID.randomUUID();
         this.cellColor = color;
         // this.cellType = type;
@@ -45,7 +45,7 @@ public class Cell {
         return this.forkCell;
     }
 
-    public Cell getBelongsto() {
+    public Block getBelongsto() {
         return this.belongsTo;
     }
 

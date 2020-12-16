@@ -3,14 +3,12 @@ package game.icarus.map;
 import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Player;
-import game.icarus.attribute.CellType;
-import game.icarus.attribute.Color;
 
 public class Takeoff extends Block {
     public Takeoff(Player owner, NormalPath target) {
         this.owner = owner;
         this.cells = new Cell[1];
-        cells[0] = new Cell(owner.getColor(), CellType.Takeoff);
+        cells[0] = new Cell(owner.getColor(), this);
         switch(owner.getColor()){
             case Blue:
                 this.cells[0].setNextCell(target.getCell(5));

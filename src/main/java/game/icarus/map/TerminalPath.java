@@ -13,7 +13,7 @@ public class TerminalPath extends Block {
         this.owner = owner;
         this.cells = new Cell[6];
         for (int i = 0; i < this.cells.length; i++) {
-            this.cells[i] = new Cell(owner.getColor(), CellType.TerminalPath);
+            this.cells[i] = new Cell(owner.getColor(), this);
         }
         for (int i = 0; i < this.cells.length; i++) {
             if (i != 0) {
