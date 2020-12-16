@@ -2,6 +2,9 @@ package game.icarus.view;
 
 import game.icarus.App;
 import game.icarus.controller.GameController;
+import game.icarus.entity.Block;
+import game.icarus.entity.Cell;
+import game.icarus.entity.Piece;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,17 +16,32 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class BoardController implements Initializable {
 
     public final static double MAGIC_NUMBER = 1.0;
 
+    private Map<UUID, Rectangle> rectangleMap = new HashMap<>();
+    private List<Rectangle> rectangles = new ArrayList<>();
+
+    private static Color HIGHLIGHTED_COLOR = new Color(1.0f, 0.84313726f, 0.0f, 0.2f);
+
     public final static int[] CELL_INTERVAL = {2, 3, 3, 2};
     @FXML
-    public Pane board;
+    private Pane board;
+    @FXML
+    private GridPane parkingOne;
+    @FXML
+    private GridPane parkingTwo;
+    @FXML
+    private GridPane parkingThree;
+    @FXML
+    private GridPane parkingFour;
+
+    GridPane[] parkingAprons;
 
     private GameController controller;
 
@@ -34,22 +52,7 @@ public class BoardController implements Initializable {
 
     private double cellLength;
 
-    /*private void drawMap() {
-        int count = 0;
-        int angle = 0;
-        double length = min(canvas.getHeight(), canvas.getWidth()) * MAGIC_NUMBER;
-        double startX = 0.0;
-        double startY = 0.0;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                Rectangle r = new Rectangle(startX, startY, length, length);
-
-                for (int k = 0; k < CELL_INTERVAL[j]; k++) {
-                    
-                }
-            }
-        }
-    }*/
+    private Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN};
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -59,19 +62,44 @@ public class BoardController implements Initializable {
                         BackgroundRepeat.NO_REPEAT,
                         BackgroundPosition.CENTER, new BackgroundSize(1.0, 1.0, true, true, false, false))));
         controller = new GameController(App.getSetting());
+        parkingAprons = new GridPane[]{parkingOne, parkingTwo, parkingThree, parkingFour};
         resize();
-        Circle c = new Circle(board.getHeight() / 2, board.getWidth() / 2, 1, Color.RED);
-        board.getChildren().add(c);
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
                 resize();
         root.heightProperty().addListener(stageSizeListener);
         root.widthProperty().addListener(stageSizeListener);
+    }
 
+    public void cellHandler(Cell cell) {
+        System.out.println(cell.getColor());
+        if (cell.isOccupied()) {
+            System.out.println("occupied");
+            controller.selectPiece(cell);
+            highlightCells();
+            return;
+        }
+        for (Cell c : controller.getHighlightedCells()) {
+            if (cell.equals(c)) {
+                controller.movePiece(cell);
+                return;
+            }
+        }
+        System.out.println("Do nothing");
+    }
+
+    public void highlightCells() {
+        for (Rectangle r : rectangles) {
+            //r.setFill(Color.TRANSPARENT);
+        }
+        for (Cell c : controller.getHighlightedCells()) {
+            Rectangle r = rectangleMap.get(c.getID());
+            r.setFill(HIGHLIGHTED_COLOR);
+        }
     }
 
     public void resize() {
-        length = Math.min(root.getHeight() * 0.75, root.getWidth());
-        cellLength = length / (10 * Math.sqrt(2));
+        length = Math.min(root.getHeight() * 0.85, root.getWidth());
+        cellLength = length / (11 * Math.sqrt(2));
         board.setPrefHeight(length);
         board.setPrefWidth(length);
         System.out.println(length);
@@ -79,119 +107,122 @@ public class BoardController implements Initializable {
         for (Node n : board.getChildren()) {
             if (n instanceof Rectangle) {
                 removeList.add(n);
-            } else if (n instanceof Circle) {
-                ((Circle) n).setCenterX(length / 2);
-                ((Circle) n).setCenterY(length / 2);
+            }
+        }
+        for (GridPane pane : parkingAprons) {
+            for (Node n : pane.getChildren()) {
+                System.out.println(n);
+                if (n instanceof Rectangle) removeList.add(n);
             }
         }
         for (Node n : removeList) {
+            for (GridPane pane : parkingAprons) pane.getChildren().remove(n);
             board.getChildren().remove(n);
         }
         drawBoard();
+        drawParkingAprons();
+    }
+
+    private int[] turnVector(int[] v, int pos) {
+        int tmp = v[0] * pos;
+        v[0] = -v[1] * pos;
+        v[1] = tmp;
+        return v;
+    }
+
+    private Rectangle drawCell(double x, double y, Color color, Block block, int index) {
+        Rectangle r = new Rectangle(x, y, cellLength, cellLength);
+        r.setRotate(45);
+        r.setFill(color);
+        r.setOnMouseClicked(mouseEvent -> {
+            cellHandler(block.getCell(index));
+        });
+        if (block.getCell(index).isOccupied()) {
+            //drawPiece(x, y, block.getCell(index).getOccupied());
+        }
+        //rectangleMap.put(block.getCell(index).getID(), r);
+        //rectangles.add(r);
+        return r;
+    }
+    private Point2D drawWhite(Point2D start, int[] vector) {
+        Rectangle r = new Rectangle(start.getX(), start.getY(), cellLength, cellLength);
+        r.setRotate(45);
+        r.setFill(Color.WHITE);
+        board.getChildren().add(r);
+        return start.add(cellLength / Math.sqrt(2) * vector[0],
+                cellLength / Math.sqrt(2) * vector[1]);
+    }
+
+    private Point2D drawCells(int num, Point2D start, int index, int[] vector) {
+        for (int i = 0; i < num; i++) {
+            board.getChildren().add(drawCell(start.getX(),
+                    start.getY(),
+                    colors[index % 4],
+                    controller.getChessBoard().getNormalPath(),
+                    index));
+            start = start.add(cellLength / Math.sqrt(2) * vector[0],
+                    cellLength / Math.sqrt(2) * vector[1]);
+            index++;
+        }
+        return start;
     }
 
     private void drawBoard() {
         // [  0 1 ] right (x, y) -> (-y, x)
         // [ -1 0 ]
-        Point2D[] endCoordinates = new Point2D[4];
-        for (int i = 0; i < 4; i++) {
-            endCoordinates[i] = new Point2D(length / 2, length / 2);
+        //NormalPath
+        int[] vector = {-1, -1};
+        Point2D start = new Point2D(length / 2, length / 2);
+        start = start.add(-cellLength * 6 / Math.sqrt(2), cellLength * 8 / Math.sqrt(2));
+        Rectangle r = new Rectangle(
+                start.getX() - cellLength / 2,
+                start.getY() - cellLength / 2,
+                cellLength,
+                cellLength);
+        r.setRotate(45);
+        r.setFill(Color.RED);
+        board.getChildren().add(r);
+        int index = 0;
+        start = drawCells(5, start, index, vector);
+        index += 5;
+        turnVector(vector, 1);
+        start = drawCells(4, start, index, vector);
+        turnVector(vector, -1);
+        index += 4;
+        start = drawWhite(start, vector);
+        for (int i = 0; i < 3; i++) {
+            start = drawCells(3, start, index, vector);
+            turnVector(vector, 1);
+            index += 3;
+            start = drawCells(6, start, index, vector);
+            turnVector(vector, 1);
+            index += 6;
+            start = drawCells(4, start, index, vector);
+            turnVector(vector, -1);
+            index += 4;
+            start = drawWhite(start, vector);
         }
-        Color[] colors = {Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE};
-        int[][] factors = {{-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
+        drawCells(4, start, index, vector);
+
+        //TermainalPath
+    }
+
+    private void drawParkingAprons() {
         for (int i = 0; i < 4; i++) {
-            //draw TerminalPath
-            for (int j = 0; j < 7; j++) {
-                endCoordinates[i] = endCoordinates[i].add(cellLength / Math.sqrt(2) * factors[i][0],
-                        cellLength / Math.sqrt(2) * factors[i][1]);
-                Rectangle r = new Rectangle(
-                        endCoordinates[i].getX() - cellLength / 2,
-                        endCoordinates[i].getY() - cellLength / 2,
-                        cellLength,
-                        cellLength);
-                r.setFill(colors[i]);
-                r.setRotate(45);
-                board.getChildren().add(r);
-            }
-            //draw NormalPath
-            int tmp = factors[i][0];
-            factors[i][0] = -factors[i][1];
-            factors[i][1] = tmp;
-            int count = (i + 1) % 4;
-            for (int j = 0; j < 3; j++) {
-                endCoordinates[i] = endCoordinates[i].add(cellLength / Math.sqrt(2) * factors[i][0],
-                        cellLength / Math.sqrt(2) * factors[i][1]);
-                Rectangle r = new Rectangle(
-                        endCoordinates[i].getX() - cellLength / 2,
-                        endCoordinates[i].getY() - cellLength / 2,
-                        cellLength,
-                        cellLength);
-                r.setFill(colors[count]);
-                count = (count + 1) % 4;
-                r.setRotate(45);
-                board.getChildren().add(r);
-            }
-            tmp = factors[i][0];
-            factors[i][0] = -factors[i][1];
-            factors[i][1] = tmp;
-            for (int j = 0; j < 3; j++) {
-                endCoordinates[i] = endCoordinates[i].add(cellLength / Math.sqrt(2) * factors[i][0],
-                        cellLength / Math.sqrt(2) * factors[i][1]);
-                Rectangle r = new Rectangle(
-                        endCoordinates[i].getX() - cellLength / 2,
-                        endCoordinates[i].getY() - cellLength / 2,
-                        cellLength,
-                        cellLength);
-                r.setFill(colors[count]);
-                count = (count + 1) % 4;
-                r.setRotate(45);
-                board.getChildren().add(r);
-            }
-            for (int j = 0; j < 1; j++) {
-                endCoordinates[i] = endCoordinates[i].add(cellLength / Math.sqrt(2) * factors[i][0],
-                        cellLength / Math.sqrt(2) * factors[i][1]);
-                Rectangle r = new Rectangle(
-                        endCoordinates[i].getX() - cellLength / 2,
-                        endCoordinates[i].getY() - cellLength / 2,
-                        cellLength,
-                        cellLength);
-                r.setFill(Color.WHITE);
-                r.setRotate(45);
-                board.getChildren().add(r);
-            }
-            tmp = -factors[i][0];
-            factors[i][0] = factors[i][1];
-            factors[i][1] = tmp;
-            for (int j = 0; j < 4; j++) {
-                endCoordinates[i] = endCoordinates[i].add(cellLength / Math.sqrt(2) * factors[i][0],
-                        cellLength / Math.sqrt(2) * factors[i][1]);
-                Rectangle r = new Rectangle(
-                        endCoordinates[i].getX() - cellLength / 2,
-                        endCoordinates[i].getY() - cellLength / 2,
-                        cellLength,
-                        cellLength);
-                r.setFill(colors[count]);
-                count = (count + 1) % 4;
-                r.setRotate(45);
-                board.getChildren().add(r);
-            }
-            tmp = factors[i][0];
-            factors[i][0] = -factors[i][1];
-            factors[i][1] = tmp;
             for (int j = 0; j < 2; j++) {
-                endCoordinates[i] = endCoordinates[i].add(cellLength / Math.sqrt(2) * factors[i][0],
-                        cellLength / Math.sqrt(2) * factors[i][1]);
-                Rectangle r = new Rectangle(
-                        endCoordinates[i].getX() - cellLength / 2,
-                        endCoordinates[i].getY() - cellLength / 2,
-                        cellLength,
-                        cellLength);
-                r.setFill(colors[count]);
-                count = (count + 1) % 4;
-                r.setRotate(45);
-                board.getChildren().add(r);
+                for (int k = 0; k < 2; k++) {
+                    Rectangle r = drawCell(0, 0, colors[i], controller.getChessBoard().getParkingAprons()[i], j * 2 + k);
+                    parkingAprons[i].add(r, j, k);
+                }
             }
+
         }
+    }
+
+
+    private void drawPiece(double x, double y, ArrayList<Piece> pieces) {
+        Circle c = new Circle(x, y, cellLength / 4);
+        board.getChildren().add(c);
     }
 
     public void drawRectangle(ActionEvent actionEvent) {

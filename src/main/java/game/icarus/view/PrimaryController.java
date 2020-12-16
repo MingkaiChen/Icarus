@@ -17,9 +17,7 @@ public class PrimaryController {
 
     @FXML
     public void startGame() throws IOException {
-        //App.setRoot("secondary");
-        App.setRoot("board");
-
+        App.setRoot("room");
     }
 
     @FXML

@@ -2,7 +2,6 @@ package game.icarus.map;
 
 import java.util.ArrayList;
 
-import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
 import game.icarus.entity.Player;
@@ -25,6 +24,14 @@ public class ChessBoard {
         }
     }
 
+    public TerminalPath[] getTerminalPaths() {
+        return terminalPaths;
+    }
+
+    public ParkingApron[] getParkingAprons() {
+        return parkingAprons;
+    }
+
     public static boolean initialize(ChessBoard chessBoard) {
         NormalPath.initialize(chessBoard.normalPath);
         for (int i = 0; i < chessBoard.parkingAprons.length; i++)
@@ -37,7 +44,7 @@ public class ChessBoard {
     }
 
     public static ArrayList<Piece> checkEnd(ChessBoard chessBoard) {
-        ArrayList<Piece> getEnd = new ArrayList<Piece>();
+        ArrayList<Piece> getEnd = new ArrayList<>();
         for (int i = 0; i < chessBoard.terminalPaths.length; i++)
             getEnd.addAll(TerminalPath.checkEnd(chessBoard.terminalPaths[i]));
         return getEnd;

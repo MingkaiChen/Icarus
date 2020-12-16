@@ -30,12 +30,19 @@ class tt {
 
 public class Test {
     public static void main(String[] args) {
-        GameController[] a = new GameController[100000];
-        for (int i = 0; i < 100000; i++) {
-            a[i] = new GameController(new Setting());
+        Dice d = new Dice(1);
+        int[] r = new int[6];
+        for (int i = 0; i < 6; i++) {
+            r[i] = 0;
         }
-        Scanner s = new Scanner(System.in);
-        s.nextLine();
+        for (int i = 0; i < 10000000; i++) {
+            for (int j : (HashSet<Integer>)d.roll().get("result")) {
+                r[j-1] ++;
+            }
+        }
+        for (int i = 0; i < 6; i++) {
+            System.out.printf("%d: %f\n", i+1, r[i]/10000000.0);
+        }
     }
 
 }

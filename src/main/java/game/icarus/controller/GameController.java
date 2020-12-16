@@ -55,6 +55,7 @@ public class GameController {
             players[i] = new Player(Color.values()[i]);
         }
         chessBoard = new ChessBoard(players);
+        ChessBoard.initialize(chessBoard);
         pieces = new Piece[playerNumber * 4];
         for (int i = 0; i < playerNumber; i++) {
             for (int j = 0; j < 4; j++) {
@@ -155,6 +156,10 @@ public class GameController {
         return chessBoard;
     }
 
+    public ArrayList<Cell> getHighlightedCells() {
+        return highlightedCells;
+    }
+
     public static ArrayList<Cell> getHighlightedCells(ChessBoard chessBoard, Piece piece, Map<String, Object> result) {
         ArrayList<Cell> highlightedCells = new ArrayList<>();
         if(!piece.isOut()){
@@ -166,8 +171,9 @@ public class GameController {
         return highlightedCells;
     }
 
-    public static ArrayList<Action> getAvailabelActions(ChessBoard chessBoard, Player player, Map<String, Object> result) {
-        ArrayList<Action> availableActions = new ArrayList<Action>();
+
+    public static ArrayList<Action> getAvailableActions(ChessBoard chessBoard, Player player, Map<String, Object> result) {
+        ArrayList<Action> availableActions = new ArrayList<>();
 
         //FIX ME ASAP!!!
 

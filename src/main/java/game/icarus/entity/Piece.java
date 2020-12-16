@@ -9,6 +9,7 @@ public class Piece {
     private Boolean isWin = false;
 
     public Piece(Player owner) {
+        this.position = new Cell(Color.Null);
         this.owner = owner;
     }
 

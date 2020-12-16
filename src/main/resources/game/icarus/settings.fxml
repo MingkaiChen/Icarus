@@ -44,7 +44,8 @@
                         <RowConstraints/>
                     </rowConstraints>
                 </GridPane>
-                <CheckBox fx:id="debugMode" mnemonicParsing="false" text="Debug Mode" GridPane.rowIndex="2"/>
+                <CheckBox fx:id="debugMode" mnemonicParsing="false" text="Debug Mode"/>
+                <CheckBox fx:id="fullscreen" mnemonicParsing="false" text="Fullscreen"/>
             </children>
         </VBox>
     </center>
