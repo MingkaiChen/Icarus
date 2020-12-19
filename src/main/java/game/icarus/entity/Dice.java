@@ -71,7 +71,7 @@ public class Dice {
             sum += numbers[i];
         }
         ans.put("raw", numbers);
-        ans.put("result", getAllAvailableResult(numbers));
+        ans.put("result", new ArrayList<Integer>(getAllAvailableResult(numbers)));
         ans.put("canTakeOff", sum >= amount*5);
         return ans;
     }

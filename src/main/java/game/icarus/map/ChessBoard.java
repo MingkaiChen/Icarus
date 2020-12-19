@@ -26,11 +26,11 @@ public class ChessBoard {
     }
 
     public TerminalPath[] getTerminalPaths() {
-        return terminalPaths;
+        return this.terminalPaths;
     }
 
     public ParkingApron[] getParkingAprons() {
-        return parkingAprons;
+        return this.parkingAprons;
     }
 
     public static boolean initialize(ChessBoard chessBoard) {
@@ -112,7 +112,7 @@ public class ChessBoard {
     // return null;
     // }
 
-    private TerminalPath getTerminalPath(Player owner) {
+    public TerminalPath getTerminalPath(Player owner) {
         for (int i = 0; i < this.terminalPaths.length; i++) {
             if (this.terminalPaths[i].getOwner().equals(owner))
                 return this.terminalPaths[i];

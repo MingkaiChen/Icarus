@@ -1,5 +1,7 @@
 package game.icarus.entity;
 
+import java.util.UUID;
+
 public abstract class Block {
     protected Cell[] cells;
     protected Player owner;
@@ -24,5 +26,13 @@ public abstract class Block {
 
     public Cell getCell(int index){
         return this.cells[index];
+    }
+
+    public Cell getCell(UUID uuid){
+        for(int i = 0; i <= this.cells.length; i++){
+            if(this.cells[i].getID().equals(uuid))
+                return this.cells[i];
+        }
+        return null;
     }
 }

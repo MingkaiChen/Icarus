@@ -66,6 +66,10 @@ public class Player {
         return this.toTerminalPath;
     }
 
+    public Cell getToShortcut() {
+        return this.toShortcut;
+    }
+
     public Cell getEnd() {
         return this.end;
     }

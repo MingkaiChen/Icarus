@@ -4,7 +4,9 @@ import game.icarus.attribute.Color;
 import game.icarus.entity.*;
 import game.icarus.map.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 
 /* process:
@@ -15,7 +17,6 @@ import java.util.Map;
     5. next player
 
  */
-
 
 public class GameController {
     private final Player[] players;
@@ -35,7 +36,7 @@ public class GameController {
         settings = s.getSetting();
         players = s.getPlayers();
         chessBoard = new ChessBoard(players);
-        //FIXME: add cell details
+        // FIXME: add cell details
         pieces = s.getPieces();
         currentPlayer = s.getCurrentPlayer();
         walkable = s.getHasDiceResult();
@@ -58,7 +59,7 @@ public class GameController {
         pieces = new Piece[playerNumber * 4];
         for (int i = 0; i < playerNumber; i++) {
             for (int j = 0; j < 4; j++) {
-                pieces[i*4+j] = new Piece(players[i]);
+                pieces[i * 4 + j] = new Piece(players[i]);
             }
         }
         highlightedCells = new ArrayList<>();
@@ -66,7 +67,7 @@ public class GameController {
     }
 
     public void rollDice() {
-        //if (walkable) return;
+        // if (walkable) return;
         diceResult = dice.roll();
         walkable = true;
     }
@@ -75,27 +76,30 @@ public class GameController {
     public boolean selectPiece(Cell cell) {
         highlightedCells.clear();
         ArrayList<Piece> pieces = cell.getOccupied();
-        if (pieces.get(0).getColor() != players[currentPlayer].getColor()) return false;
+        if (pieces.get(0).getColor() != players[currentPlayer].getColor())
+            return false;
         selectedPieces = pieces;
         isSelected = true;
         highlightedCells.addAll(getHighlightedCells(chessBoard, pieces.get(0), diceResult));
         return true;
-        /*if (walkable && pieces.get(0).isMovable() && pieces.get(0).getColor().equals(players[currentPlayer].getColor())) {
-            selectedPieces = pieces;
-            for (int i : (HashSet<Integer>)diceResult.get("result")) {
-                //highlightedCells.add();
-            }
-        }*/
+        /*
+         * if (walkable && pieces.get(0).isMovable() &&
+         * pieces.get(0).getColor().equals(players[currentPlayer].getColor())) {
+         * selectedPieces = pieces; for (int i :
+         * (HashSet<Integer>)diceResult.get("result")) { //highlightedCells.add(); } }
+         */
     }
 
     private boolean isWin() {
         for (int i = 0; i < 4; i++) {
-            if (!pieces[currentPlayer*4+i].hasWin()) return false;
+            if (!pieces[currentPlayer * 4 + i].hasWin())
+                return false;
         }
         return true;
     }
+
     public void movePieceOut() {
-        //selectedPieces.get(0).move();
+        // selectedPieces.get(0).move();
     }
 
     public void movePiece(Cell newPos) {
@@ -126,11 +130,13 @@ public class GameController {
                     return;
                 }
             } else {
-                for (Piece p : newPos.getOccupied()) p.returnParking();
+                for (Piece p : newPos.getOccupied())
+                    p.returnParking();
             }
         }
         ArrayList<Piece> tmp = new ArrayList<>(selectedPieces);
-        for (Piece p : tmp) p.move(newPos);
+        for (Piece p : tmp)
+            p.move(newPos);
         if (isWin()) {
             isGameEnded = true;
             return;
@@ -141,8 +147,10 @@ public class GameController {
 
     public Save saveGame(String name) {
         Save s;
-        if (walkable) s = new Save(name, pieces, players, currentPlayer, diceResult);
-        else s = new Save(name, pieces, players, currentPlayer);
+        if (walkable)
+            s = new Save(name, pieces, players, currentPlayer, diceResult);
+        else
+            s = new Save(name, pieces, players, currentPlayer);
         return s;
     }
 
@@ -161,43 +169,77 @@ public class GameController {
         return highlightedCells;
     }
 
-    public static ArrayList<Cell> getHighlightedCells(ChessBoard chessBoard, Piece piece, Map<String, Object> result) {
-        ArrayList<Cell> highlightedCells = new ArrayList<>();
-        if(!piece.isOut()){
-            if((boolean)result.get("canTakeOff")){
+    public static HashSet<Cell> getHighlightedCells(ChessBoard chessBoard, Piece piece, Map<String, Object> result) {
+        HashSet<Cell> highlightedCells = new HashSet<Cell>();
+        if (!piece.isOut()) {
+            if ((boolean) result.get("canTakeOff")) {
                 highlightedCells.add(ChessBoard.getTakeoffCell(chessBoard, piece.getOwner()));
                 return highlightedCells;
+            } else
+                return null;
+        } else {
+            for (int i = 0; i < ((ArrayList<Integer>) result.get("result")).size(); i++) {
+                Cell highlightedCell = piece.getPosition();
+                for (int j = 0; j < ((ArrayList<Integer>) result.get("result")).get(i); j++) {
+                    if (highlightedCell.equals(piece.getOwner().getToTerminalPath())) {
+                        TerminalPath terminalPath = chessBoard.getTerminalPath(piece.getOwner());
+                        highlightedCell = terminalPath.getCell(0);
+                        int remain = ((ArrayList<Integer>) result.get("result")).get(i) - j;
+                        if (remain > 6) {
+                            highlightedCell = terminalPath.getCell(6 - (remain - 6));
+                            break;
+                        } else {
+                            highlightedCell = terminalPath.getCell(remain);
+                            break;
+                        }
+                    } else if (j == ((ArrayList<Integer>) result.get("result")).get(i) - 1) {
+                        if (highlightedCell.nextCell().equals(piece.getOwner().getToShortcut())) {
+                            highlightedCells.add(highlightedCell.nextCell(13));
+                        } else if (highlightedCell.nextCell().getColor().equals(piece.getColor())
+                                && !highlightedCell.nextCell().equals(piece.getOwner().getToTerminalPath())) {
+                            highlightedCells.add(highlightedCell.nextCell(5));
+                        }
+                        continue;
+                    }
+                    highlightedCell = highlightedCell.nextCell();
+                }
+                highlightedCells.add(highlightedCell);
             }
         }
         return highlightedCells;
     }
 
-
-    public static ArrayList<Action> getAvailableActions(ChessBoard chessBoard, Player player, Map<String, Object> result) {
+    public static ArrayList<Action> getAvailableActions(ChessBoard chessBoard, Player player,
+            Map<String, Object> result) {
         ArrayList<Action> availableActions = new ArrayList<>();
 
-        //FIX ME ASAP!!!
+        // FIX ME ASAP!!!
 
         // for (int i = 0; i < player.getPieces().length; i++) {
-        //     ArrayList<Cell> availableCells = new ArrayList<Cell>();
-        //     node.getGameController().selectPiece(node.getOwner().getPieces()[i].getPosition());
-        //     availableCells.addAll(node.getGameController().getHighlightedCells());
-        //     for (int j = 0; j < availableCells.size(); j++) {
-        //         if (availableCells.get(i)
-        //                 .equals(ChessBoard.getTakeoffCell(node.getGameController().getChessBoard(), node.getOwner()))) {
-        //             availableActions
-        //                     .add(new Action(node.getOwner().getPieces()[i], availableCells.get(j), ActionType.Takeoff));
-        //         } else if (availableCells.get(i)
-        //                 .equals(ChessBoard.getEndCell(node.getGameController().getChessBoard(), node.getOwner()))) {
-        //             availableActions
-        //                     .add(new Action(node.getOwner().getPieces()[i], availableCells.get(j), ActionType.Win));
-        //         } else {
-        //             availableActions
-        //                     .add(new Action(node.getOwner().getPieces()[i], availableCells.get(j), ActionType.NormalMove));
-        //         }
-        //     }
+        // ArrayList<Cell> availableCells = new ArrayList<Cell>();
+        // node.getGameController().selectPiece(node.getOwner().getPieces()[i].getPosition());
+        // availableCells.addAll(node.getGameController().getHighlightedCells());
+        // for (int j = 0; j < availableCells.size(); j++) {
+        // if (availableCells.get(i)
+        // .equals(ChessBoard.getTakeoffCell(node.getGameController().getChessBoard(),
+        // node.getOwner()))) {
+        // availableActions
+        // .add(new Action(node.getOwner().getPieces()[i], availableCells.get(j),
+        // ActionType.Takeoff));
+        // } else if (availableCells.get(i)
+        // .equals(ChessBoard.getEndCell(node.getGameController().getChessBoard(),
+        // node.getOwner()))) {
+        // availableActions
+        // .add(new Action(node.getOwner().getPieces()[i], availableCells.get(j),
+        // ActionType.Win));
+        // } else {
+        // availableActions
+        // .add(new Action(node.getOwner().getPieces()[i], availableCells.get(j),
+        // ActionType.NormalMove));
         // }
-        
+        // }
+        // }
+
         return availableActions;
     }
 

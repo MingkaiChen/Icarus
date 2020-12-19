@@ -2,7 +2,6 @@ package game.icarus.map;
 
 import java.util.ArrayList;
 
-import game.icarus.attribute.CellType;
 import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
