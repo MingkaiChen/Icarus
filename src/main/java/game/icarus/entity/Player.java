@@ -66,6 +66,21 @@ public class Player {
         return this.toTerminalPath;
     }
 
+    public boolean setToTerminalPath(Cell cell){
+        this.toTerminalPath = cell;
+        return true;
+    }
+
+    public boolean setToShortcut(Cell cell){
+        this.toShortcut = cell;
+        return true;
+    }
+
+    public boolean setEnd(Cell cell){
+        this.end = cell;
+        return true;
+    }
+
     public Cell getToShortcut() {
         return this.toShortcut;
     }
