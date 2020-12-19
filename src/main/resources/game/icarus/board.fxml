@@ -21,7 +21,7 @@
                 </AnchorPane>
                 <ToolBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="200.0">
                     <items>
-                        <Button mnemonicParsing="false" onAction="#drawRectangle" text="draw" />
+                        <Button mnemonicParsing="false" onAction="#roll" text="Roll!" />
                     </items>
                 </ToolBar>
                 <GridPane GridPane.rowIndex="1">

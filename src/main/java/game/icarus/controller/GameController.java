@@ -5,7 +5,6 @@ import game.icarus.entity.*;
 import game.icarus.map.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Map;
 
 /* process:
@@ -24,13 +23,13 @@ public class GameController {
     private final Piece[] pieces;
     private final ArrayList<Cell> highlightedCells;
     private ArrayList<Piece> selectedPieces;
+    private boolean isSelected = false;
     private final Dice dice;
     private int currentPlayer;
     private final Setting settings;
     private Map<String, Object> diceResult;
     private boolean walkable = false;
     private boolean isGameEnded = false;
-    private boolean canTakeOff = false;
 
     public GameController(Save s) {
         settings = s.getSetting();
@@ -67,25 +66,26 @@ public class GameController {
     }
 
     public void rollDice() {
-        if (walkable) return;
+        //if (walkable) return;
         diceResult = dice.roll();
         walkable = true;
     }
 
     @SuppressWarnings("unchecked")
     public boolean selectPiece(Cell cell) {
+        highlightedCells.clear();
         ArrayList<Piece> pieces = cell.getOccupied();
-        if (!pieces.get(0).isOut()) {
-            //highlightedCells.add(pieces.get(0).getOwner().);
-        }
-        if (walkable && pieces.get(0).isMovable() && pieces.get(0).getColor().equals(players[currentPlayer].getColor())) {
+        if (pieces.get(0).getColor() != players[currentPlayer].getColor()) return false;
+        selectedPieces = pieces;
+        isSelected = true;
+        highlightedCells.addAll(getHighlightedCells(chessBoard, pieces.get(0), diceResult));
+        return true;
+        /*if (walkable && pieces.get(0).isMovable() && pieces.get(0).getColor().equals(players[currentPlayer].getColor())) {
             selectedPieces = pieces;
             for (int i : (HashSet<Integer>)diceResult.get("result")) {
                 //highlightedCells.add();
             }
-            return true;
-        }
-        return false;
+        }*/
     }
 
     private boolean isWin() {
@@ -98,7 +98,7 @@ public class GameController {
         //selectedPieces.get(0).move();
     }
 
-    public boolean movePiece(Cell newPos) {
+    public void movePiece(Cell newPos) {
         if (newPos.isOccupied() && newPos.getOccupied().get(0).getColor() != selectedPieces.get(0).getColor()) {
             if (settings.isBattle()) {
                 ArrayList<Piece> removed1 = new ArrayList<>();
@@ -123,19 +123,20 @@ public class GameController {
                 }
                 if (selectedPieces.size() == 0) {
                     nextPlayer();
-                    return true;
+                    return;
                 }
             } else {
                 for (Piece p : newPos.getOccupied()) p.returnParking();
             }
         }
-        for (Piece p : selectedPieces) p.move(newPos);
+        ArrayList<Piece> tmp = new ArrayList<>(selectedPieces);
+        for (Piece p : tmp) p.move(newPos);
         if (isWin()) {
             isGameEnded = true;
-            return true;
+            return;
         }
         nextPlayer();
-        return true;
+        walkable = false;
     }
 
     public Save saveGame(String name) {
@@ -200,7 +201,23 @@ public class GameController {
         return availableActions;
     }
 
+    public Map<String, Object> getDiceResult() {
+        return diceResult;
+    }
+
     public boolean hasGameEnded() {
         return isGameEnded;
+    }
+
+    public boolean isWalkable() {
+        return walkable;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public Player getCurrentPlayer() {
+        return players[currentPlayer];
     }
 }

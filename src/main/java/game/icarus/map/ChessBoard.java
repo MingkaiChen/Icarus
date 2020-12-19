@@ -120,4 +120,7 @@ public class ChessBoard {
         return null;
     }
 
+    public Takeoff[] getTakeoffs() {
+        return takeoffs;
+    }
 }

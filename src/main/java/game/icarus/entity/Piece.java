@@ -37,7 +37,7 @@ public class Piece {
     }
 
     public boolean move(Cell destination) {
-        this.position.clear();
+        if (this.position != null) this.position.clear();
         this.position = destination;
         destination.setOccupied(this);
         return true;

@@ -13,7 +13,7 @@ public class Status {
     private ChessBoard chessBoard;
     private int value;
     private Player[] opponents;
-    private Map<String, Object>  rollResult;
+    private Map<String, Object> rollResult;
 
     public Status(Save gameSave, Player owner, Player[] opponents, Map<String, Object> rollResult) {
         this.chessBoard = new GameController(gameSave).getChessBoard();

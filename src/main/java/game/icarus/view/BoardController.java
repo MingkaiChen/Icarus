@@ -5,6 +5,7 @@ import game.icarus.controller.GameController;
 import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
+import game.icarus.map.Takeoff;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,20 +17,23 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import java.net.URL;
 import java.util.*;
 
+
 public class BoardController implements Initializable {
 
-    public final static double MAGIC_NUMBER = 1.0;
+    interface AddToPaneOperation {
+        void add(Shape s);
+    }
 
-    private Map<UUID, Rectangle> rectangleMap = new HashMap<>();
-    private List<Rectangle> rectangles = new ArrayList<>();
+    private final Map<UUID, Rectangle> rectangleMap = new HashMap<>();
+    private final List<Rectangle> rectangles = new ArrayList<>();
 
-    private static Color HIGHLIGHTED_COLOR = new Color(1.0f, 0.84313726f, 0.0f, 0.2f);
+    private static final Color HIGHLIGHTED_COLOR = new Color(1.0f, 0.84313726f, 0.0f, 0.2f);
 
-    public final static int[] CELL_INTERVAL = {2, 3, 3, 2};
     @FXML
     private Pane board;
     @FXML
@@ -52,7 +56,7 @@ public class BoardController implements Initializable {
 
     private double cellLength;
 
-    private Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN};
+    private final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN};
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -71,19 +75,21 @@ public class BoardController implements Initializable {
     }
 
     public void cellHandler(Cell cell) {
-        System.out.println(cell.getColor());
+        if (!controller.isWalkable()) return;
         if (cell.isOccupied()) {
             System.out.println("occupied");
-            controller.selectPiece(cell);
-            highlightCells();
+            boolean tmp = controller.selectPiece(cell);
+            if (tmp) highlightCells();
             return;
         }
-        for (Cell c : controller.getHighlightedCells()) {
-            if (cell.equals(c)) {
-                controller.movePiece(cell);
-                return;
+        if (controller.isSelected())
+            for (Cell c : controller.getHighlightedCells()) {
+                if (cell.equals(c)) {
+                    controller.movePiece(cell);
+                    resize();
+                    return;
+                }
             }
-        }
         System.out.println("Do nothing");
     }
 
@@ -92,6 +98,7 @@ public class BoardController implements Initializable {
             //r.setFill(Color.TRANSPARENT);
         }
         for (Cell c : controller.getHighlightedCells()) {
+            System.out.println(c.getBelongsto());
             Rectangle r = rectangleMap.get(c.getID());
             r.setFill(HIGHLIGHTED_COLOR);
         }
@@ -111,7 +118,6 @@ public class BoardController implements Initializable {
         }
         for (GridPane pane : parkingAprons) {
             for (Node n : pane.getChildren()) {
-                System.out.println(n);
                 if (n instanceof Rectangle) removeList.add(n);
             }
         }
@@ -123,29 +129,28 @@ public class BoardController implements Initializable {
         drawParkingAprons();
     }
 
-    private int[] turnVector(int[] v, int pos) {
+    private void turnVector(int[] v, int pos) {
         int tmp = v[0] * pos;
         v[0] = -v[1] * pos;
         v[1] = tmp;
-        return v;
     }
 
-    private Rectangle drawCell(double x, double y, Color color, Block block, int index) {
-        Rectangle r = new Rectangle(x, y, cellLength, cellLength);
+    private void drawCell(double x, double y, Color color, Block block, int index, AddToPaneOperation add) {
+        MyRect r = new MyRect(x, y, cellLength, cellLength);
         r.setRotate(45);
         r.setFill(color);
-        r.setOnMouseClicked(mouseEvent -> {
-            cellHandler(block.getCell(index));
-        });
+        r.setOnMouseClicked(mouseEvent -> cellHandler(block.getCell(index)));
+        add.add(r);
         if (block.getCell(index).isOccupied()) {
-            //drawPiece(x, y, block.getCell(index).getOccupied());
+            add.add(drawPiece(x, y, block.getCell(index).getOccupied()));
         }
-        //rectangleMap.put(block.getCell(index).getID(), r);
-        //rectangles.add(r);
-        return r;
+        r.setCell(block.getCell(index));
+        rectangleMap.put(block.getCell(index).getID(), r);
+        rectangles.add(r);
     }
+
     private Point2D drawWhite(Point2D start, int[] vector) {
-        Rectangle r = new Rectangle(start.getX(), start.getY(), cellLength, cellLength);
+        MyRect r = new MyRect(start.getX(), start.getY(), cellLength, cellLength);
         r.setRotate(45);
         r.setFill(Color.WHITE);
         board.getChildren().add(r);
@@ -153,18 +158,32 @@ public class BoardController implements Initializable {
                 cellLength / Math.sqrt(2) * vector[1]);
     }
 
-    private Point2D drawCells(int num, Point2D start, int index, int[] vector) {
+    private Point2D drawNormalPathsCells(int num, Point2D start, int index, int[] vector) {
         for (int i = 0; i < num; i++) {
-            board.getChildren().add(drawCell(start.getX(),
+            drawCell(start.getX(),
                     start.getY(),
                     colors[index % 4],
                     controller.getChessBoard().getNormalPath(),
-                    index));
+                    index,
+                    (r) -> board.getChildren().add(r));
             start = start.add(cellLength / Math.sqrt(2) * vector[0],
                     cellLength / Math.sqrt(2) * vector[1]);
             index++;
         }
         return start;
+    }
+    private void drawTerminalPathsCells(int num, Point2D start, int index, int[] vector, int j) {
+        for (int i = 0; i < num; i++) {
+            start = start.add(cellLength / Math.sqrt(2) * vector[0],
+                    cellLength / Math.sqrt(2) * vector[1]);
+            drawCell(start.getX(),
+                    start.getY(),
+                    colors[j],
+                    controller.getChessBoard().getTerminalPaths()[j],
+                    index,
+                    (r) -> board.getChildren().add(r));
+            index++;
+        }
     }
 
     private void drawBoard() {
@@ -173,46 +192,61 @@ public class BoardController implements Initializable {
         //NormalPath
         int[] vector = {-1, -1};
         Point2D start = new Point2D(length / 2, length / 2);
-        start = start.add(-cellLength * 6 / Math.sqrt(2), cellLength * 8 / Math.sqrt(2));
-        Rectangle r = new Rectangle(
-                start.getX() - cellLength / 2,
-                start.getY() - cellLength / 2,
-                cellLength,
-                cellLength);
-        r.setRotate(45);
-        r.setFill(Color.RED);
-        board.getChildren().add(r);
+        start = start.add(-cellLength * 5 / Math.sqrt(2), cellLength * 9 / Math.sqrt(2));
         int index = 0;
-        start = drawCells(5, start, index, vector);
+        start = drawNormalPathsCells(6, start, index, vector);
         index += 5;
         turnVector(vector, 1);
-        start = drawCells(4, start, index, vector);
+        start = drawNormalPathsCells(4, start, index, vector);
         turnVector(vector, -1);
         index += 4;
         start = drawWhite(start, vector);
         for (int i = 0; i < 3; i++) {
-            start = drawCells(3, start, index, vector);
+            start = drawNormalPathsCells(3, start, index, vector);
             turnVector(vector, 1);
             index += 3;
-            start = drawCells(6, start, index, vector);
+            start = drawNormalPathsCells(6, start, index, vector);
             turnVector(vector, 1);
             index += 6;
-            start = drawCells(4, start, index, vector);
+            start = drawNormalPathsCells(4, start, index, vector);
             turnVector(vector, -1);
             index += 4;
             start = drawWhite(start, vector);
         }
-        drawCells(4, start, index, vector);
+        drawNormalPathsCells(4, start, index, vector);
 
-        //TermainalPath
+        //TerminalPath
+        start = new Point2D(length / 2, length / 2);
+        vector = new int[]{-1, -1};
+        drawTerminalPathsCells(6, start, 0, vector, 0);
+
+        //Takeoff
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                drawCell(length / 2 - cellLength * 2 * Math.pow(-1, i) * j,
+                        length / 2 - cellLength * 2 * Math.pow(-1, j) * i,
+                        colors[i * 2 + j],
+                        controller.getChessBoard().getTakeoffs()[i * 2 + j],
+                        0,
+                        (r) -> board.getChildren().add(r)
+                );
+            }
+        }
     }
 
     private void drawParkingAprons() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 2; j++) {
                 for (int k = 0; k < 2; k++) {
-                    Rectangle r = drawCell(0, 0, colors[i], controller.getChessBoard().getParkingAprons()[i], j * 2 + k);
-                    parkingAprons[i].add(r, j, k);
+                    int finalI = i;
+                    int finalJ = j;
+                    int finalK = k;
+                    drawCell(0, 0,
+                            colors[i],
+                            controller.getChessBoard().getParkingAprons()[i],
+                            j * 2 + k,
+                            s -> parkingAprons[finalI].add(s, finalJ, finalK)
+                    );
                 }
             }
 
@@ -220,16 +254,16 @@ public class BoardController implements Initializable {
     }
 
 
-    private void drawPiece(double x, double y, ArrayList<Piece> pieces) {
+    private Circle drawPiece(double x, double y, ArrayList<Piece> pieces) {
         Circle c = new Circle(x, y, cellLength / 4);
-        board.getChildren().add(c);
+        return c;
     }
 
-    public void drawRectangle(ActionEvent actionEvent) {
-        Rectangle r = new Rectangle(length / 2 - cellLength / 2, length / 2 - cellLength / 2, cellLength, cellLength);
-        //Rectangle rr = new Rectangle(length/2,length/2, cellLength, cellLength);
-        r.setRotate(45);
-        board.getChildren().add(r);
-        //board.getChildren().add(rr);
+    public void roll() {
+        controller.rollDice();
+        System.out.println("Now: " + controller.getCurrentPlayer().getColor());
+        System.out.println("Raw: " + controller.getDiceResult().get("raw"));
+        System.out.println("Result: " + controller.getDiceResult().get("result"));
+        System.out.println(controller.getDiceResult().get("canTakeOff"));
     }
 }
