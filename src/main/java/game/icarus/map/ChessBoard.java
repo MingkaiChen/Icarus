@@ -21,9 +21,9 @@ public class ChessBoard {
             takeoffs[i] = new Takeoff(players[i], normalPath);
             parkingAprons[i] = new ParkingApron(players[i], takeoffs[i]);
             terminalPaths[i] = new TerminalPath(players[i]);
-            players[i].setToTerminalPath(terminalPaths[i].getCell(0));
+            players[i].setToTerminalPath(takeoffs[i].getCell(0).nextCell(50));
             players[i].setToShortcut(takeoffs[i].getCell(0).nextCell(18));
-            players[i].setEnd(terminalPaths[i].getCell(6));
+            players[i].setEnd(terminalPaths[i].getCell(5));
             this.setForks(players[i]);
         }
     }

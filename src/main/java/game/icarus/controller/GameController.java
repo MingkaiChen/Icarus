@@ -144,7 +144,7 @@ public class GameController {
             isGameEnded = true;
             return;
         }
-        //nextPlayer();
+        // nextPlayer();
         walkable = false;
     }
 
@@ -189,7 +189,10 @@ public class GameController {
                         highlightedCell = terminalPath.getCell(0);
                         int remain = ((ArrayList<Integer>) result.get("result")).get(i) - j;
                         if (remain > 6) {
-                            highlightedCell = terminalPath.getCell(6 - (remain - 6));
+                            if(remain <= 12)
+                                highlightedCell = terminalPath.getCell(6 - (remain - 6) -1);
+                            else
+                                highlightedCell = ChessBoard.getTakeoffCell(chessBoard, piece.getOwner()).nextCell(50-(remain-12));
                             break;
                         } else {
                             highlightedCell = terminalPath.getCell(remain);
