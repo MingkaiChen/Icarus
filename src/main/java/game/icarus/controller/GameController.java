@@ -202,7 +202,6 @@ public class GameController {
                                 && !highlightedCell.nextCell().equals(piece.getOwner().getToTerminalPath())) {
                             highlightedCells.add(highlightedCell.nextCell(5));
                         }
-                        continue;
                     }
                     highlightedCell = highlightedCell.nextCell();
                 }
