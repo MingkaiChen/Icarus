@@ -98,7 +98,11 @@ public class Cell {
     }
 
     public Cell nextCell(int steps) {
-        return this.nextCell.nextCell(steps - 1);
+        Cell nextCell = this;
+        for(int i = 0; i < steps; i++){
+            nextCell = nextCell.nextCell();
+        }
+        return nextCell;
     }
 
     // public CellType getType() {
