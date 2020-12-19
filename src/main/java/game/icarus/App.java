@@ -26,7 +26,8 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         App.stage = stage;
         setting = new Setting();
-        scene = new Scene(loadFXML("primary"), 600, 400);
+        //scene = new Scene(loadFXML("primary"), 600, 400);
+        scene = new Scene(loadFXML("board"), 600, 400);
         stage.setScene(scene);
         stage.showingProperty().addListener((observable, oldValue, showing) -> {
             if (showing) {

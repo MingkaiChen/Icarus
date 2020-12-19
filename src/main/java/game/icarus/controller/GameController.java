@@ -135,13 +135,16 @@ public class GameController {
             }
         }
         ArrayList<Piece> tmp = new ArrayList<>(selectedPieces);
-        for (Piece p : tmp)
+        for (Piece p : tmp) {
             p.move(newPos);
+            if (!p.isOut())
+                p.out();
+        }
         if (isWin()) {
             isGameEnded = true;
             return;
         }
-        nextPlayer();
+        //nextPlayer();
         walkable = false;
     }
 

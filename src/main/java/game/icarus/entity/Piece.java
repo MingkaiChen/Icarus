@@ -18,12 +18,9 @@ public class Piece {
         return (isOut && !isWin);
     }
 
-    // public void out(int newPos) {
-    // if (!isOut) {
-    // pos = newPos;
-    // isOut = true;
-    // }
-    // }
+     public void out() {
+         isOut = true;
+     }
 
     // public Boolean move(int newPos) {
     // if (!isMovable())
