@@ -2,6 +2,7 @@ package game.icarus.map;
 
 import java.util.ArrayList;
 
+import game.icarus.attribute.Color;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
 import game.icarus.entity.Player;
@@ -17,7 +18,7 @@ public class ChessBoard {
         parkingAprons = new ParkingApron[4];
         takeoffs = new Takeoff[4];
         terminalPaths = new TerminalPath[4];
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < players.length; i++) {
             takeoffs[i] = new Takeoff(players[i], normalPath);
             parkingAprons[i] = new ParkingApron(players[i], takeoffs[i]);
             terminalPaths[i] = new TerminalPath(players[i]);
@@ -89,13 +90,20 @@ public class ChessBoard {
     public static Cell getEndCell(ChessBoard chessBoard, Player player) {
         for (int i = 0; i < chessBoard.terminalPaths.length; i++) {
             if (chessBoard.terminalPaths[i].getOwner().equals(player))
-                return chessBoard.terminalPaths[i].getCell(chessBoard.terminalPaths.length - 1);
+                return chessBoard.terminalPaths[i].getEndCell();
         }
         return null;
     }
 
     public NormalPath getNormalPath() {
         return this.normalPath;
+    }
+
+    public ParkingApron getParkingApronByPlayer(Player player) {
+        for (ParkingApron p : parkingAprons) {
+            if (p.getOwner().equals(player)) return p;
+        }
+        return null;
     }
 
     // public static Block getPieceLocation(ChessBoard chessBoard, Piece piece) {

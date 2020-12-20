@@ -17,7 +17,13 @@ public class PrimaryController {
 
     @FXML
     public void startGame() throws IOException {
+        App.isLoad = false;
         App.setRoot("room");
+    }
+
+    public void loadGame() throws IOException {
+        App.isLoad = true;
+        App.setRoot("board");
     }
 
     @FXML
@@ -25,10 +31,9 @@ public class PrimaryController {
         App.setRoot("Settings");
     }
 
-    public void openAddition() {
-    }
-
     public void exit() {
         Platform.exit();
     }
+
+
 }

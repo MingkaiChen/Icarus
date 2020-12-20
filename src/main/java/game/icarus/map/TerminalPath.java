@@ -37,4 +37,8 @@ public class TerminalPath extends Block {
         return terminalPath.cells[terminalPath.cells.length - 1].getOccupied();
     }
 
+    public Cell getEndCell() {
+        return cells[cells.length-1];
+    }
+
 }

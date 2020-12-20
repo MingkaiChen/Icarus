@@ -1,7 +1,8 @@
 package game.icarus.entity;
 
-import game.icarus.attribute.CellType;
 import game.icarus.attribute.Color;
+import game.icarus.map.ChessBoard;
+import game.icarus.map.ParkingApron;
 
 public class Piece {
     private final Player owner;
@@ -22,22 +23,14 @@ public class Piece {
          isOut = true;
      }
 
-    // public Boolean move(int newPos) {
-    // if (!isMovable())
-    // return false;
-    // pos = newPos;
-    // return true;
-    // }
-    public void returnParking() {
-        this.position.clear();
-        //FIXME: idk how to return it to parking
-    }
-
-    public boolean move(Cell destination) {
-        if (this.position != null) this.position.clear();
+    public void move(Cell destination) {
+        if (this.position != null) {
+            this.position.removePiece(this);
+            if (this.position.getBelongsto() instanceof ParkingApron) isOut = true;
+        }
         this.position = destination;
         destination.setOccupied(this);
-        return true;
+        if (destination.getBelongsto() instanceof ParkingApron) isOut = false;
     }
 
     public void win() {
@@ -46,6 +39,10 @@ public class Piece {
 
     public Boolean isOut() {
         return isOut;
+    }
+
+    public Boolean isWin() {
+        return isWin;
     }
 
     public Color getColor() {

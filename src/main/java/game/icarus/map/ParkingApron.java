@@ -14,6 +14,13 @@ public class ParkingApron extends Block {
         }
     }
 
+    public Cell getAvailableCell() {
+        for (Cell c : cells) {
+            if (!c.isOccupied()) return c;
+        }
+        return null;
+    }
+
     public ParkingApron(ParkingApron anotherParkingApron){
         this.cells = anotherParkingApron.cells.clone();
         this.owner = anotherParkingApron.owner;

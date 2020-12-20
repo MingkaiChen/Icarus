@@ -88,4 +88,11 @@ public class Player {
     public Cell getEnd() {
         return this.end;
     }
+
+    public boolean isWin() {
+        for (Piece p : playerPieces) {
+            if (!p.isWin()) return false;
+        }
+        return true;
+    }
 }

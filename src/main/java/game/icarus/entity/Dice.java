@@ -25,6 +25,9 @@ public class Dice {
 
     private HashSet<Integer> getAllAvailableResult(int[] numbers) {
         HashSet<Integer> ans = new HashSet<>();
+        for (int i = 1; i <= 12; i++) {
+            ans.add(i);
+        }
         if (amount >= 4) {
             for (int i = 1; i <= (1 << amount); i++) {
                 int sum = 0;

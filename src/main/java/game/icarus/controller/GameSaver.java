@@ -27,7 +27,7 @@ public class GameSaver {
         return slots;
     }
 
-    public static boolean saveGame(Save s, String file) {
+    public static void saveGame(Save s, String file) {
         String json = JSON.toJSONString(s);
         System.out.println(json);
         try {
@@ -36,9 +36,7 @@ public class GameSaver {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     public static Save loadSave(String file) throws FileNotFoundException {

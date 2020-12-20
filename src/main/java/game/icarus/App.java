@@ -21,13 +21,14 @@ public class App extends Application {
     public static boolean isDebug = false;
     public static boolean isFullscreen = false;
     private static Setting setting;
+    public static boolean isLoad = false;
 
     @Override
     public void start(Stage stage) throws IOException {
         App.stage = stage;
-        setting = new Setting();
-        //scene = new Scene(loadFXML("primary"), 600, 400);
-        scene = new Scene(loadFXML("board"), 600, 400);
+        setting = new Setting(4, 3, true, true);
+        scene = new Scene(loadFXML("primary"), 600, 400);
+        //scene = new Scene(loadFXML("board"), 600, 400);
         stage.setScene(scene);
         stage.showingProperty().addListener((observable, oldValue, showing) -> {
             if (showing) {

@@ -88,6 +88,10 @@ public class Cell {
         return true;
     }
 
+    public void removePiece(Piece piece) {
+        this.occupiedPieces.remove(piece);
+    }
+
     public boolean clear() {
         this.occupiedPieces.clear();
         return true;

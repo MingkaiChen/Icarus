@@ -2,10 +2,13 @@ package game.icarus.view;
 
 import game.icarus.App;
 import game.icarus.controller.GameController;
+import game.icarus.controller.GameSaver;
 import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
+import game.icarus.map.ChessBoard;
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -17,6 +20,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.*;
 
@@ -65,7 +69,13 @@ public class BoardController implements Initializable {
                         BackgroundRepeat.NO_REPEAT,
                         BackgroundRepeat.NO_REPEAT,
                         BackgroundPosition.CENTER, new BackgroundSize(1.0, 1.0, true, true, false, false))));
-        controller = new GameController(App.getSetting());
+        if (App.isLoad) {
+            try {
+                controller = new GameController(GameSaver.loadSave("./save1.json"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else controller = new GameController(App.getSetting());
         parkingAprons = new GridPane[]{parkingOne, parkingTwo, parkingThree, parkingFour};
         resize();
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
@@ -74,22 +84,35 @@ public class BoardController implements Initializable {
         root.widthProperty().addListener(stageSizeListener);
     }
 
+    public void saveGame() {
+        GameSaver.saveGame(controller.saveGame("Game1"), "./save1.json");
+    }
+
+
+    public void endGame() {
+
+    }
+
     public void cellHandler(Cell cell) {
         if (!controller.isWalkable()) return;
-        if (cell.isOccupied()) {
-            boolean tmp = controller.selectPiece(cell);
-            if (tmp) highlightCells();
-            return;
-        }
         if (controller.isSelected())
             for (Cell c : controller.getHighlightedCells()) {
                 if (cell.equals(c)) {
                     controller.movePiece(cell);
                     resize();
+                    if (controller.hasGameEnded()) {
+                        endGame();
+                    }
                     return;
                 }
             }
-        System.out.println("Do nothing");
+        if (cell.isOccupied()) {
+            boolean tmp = controller.selectPiece(cell);
+            if (tmp) highlightCells();
+            return;
+        }
+        controller.cancelSelection();
+        resize();
     }
 
     public void highlightCells() {
@@ -106,7 +129,7 @@ public class BoardController implements Initializable {
 
     public void resize() {
         length = Math.min(root.getHeight() * 0.85, root.getWidth());
-        cellLength = length / (13 * Math.sqrt(2));
+        cellLength = length / (11 * Math.sqrt(2));
         board.setPrefHeight(length);
         board.setPrefWidth(length);
         midPoint = new Point2D(length / 2, length / 2);
@@ -144,7 +167,11 @@ public class BoardController implements Initializable {
         r.setOnMouseClicked(mouseEvent -> cellHandler(block.getCell(index)));
         add.add(r);
         if (block.getCell(index).isOccupied()) {
-            add.add(drawPiece(x, y, block.getCell(index).getOccupied()));
+            for (MyPiece p : drawPiece(x, y, block.getCell(index).getOccupied())) {
+                add.add(p);
+                p.toFront();
+            }
+
         }
         r.setCell(block.getCell(index));
         rectangleMap.put(block.getCell(index).getID(), r);
@@ -183,7 +210,7 @@ public class BoardController implements Initializable {
                     controller.getChessBoard().getTerminalPaths()[j],
                     index,
                     (r) -> board.getChildren().add(r));
-            index++;
+            index--;
         }
     }
 
@@ -208,7 +235,7 @@ public class BoardController implements Initializable {
             turnVector(vector, 1);
             index += 3;
             start = drawNormalPathsCells(6, start, index, vector);
-            drawParkingAprons(start, vector, (i+3)%4);
+            drawParkingAprons(start, vector, (i + 3) % 4);
             turnVector(vector, 1);
             index += 6;
             start = drawNormalPathsCells(4, start, index, vector);
@@ -223,7 +250,7 @@ public class BoardController implements Initializable {
         drawWhite(start, vector);
         vector = new int[]{1, -1};
         for (int i = 0; i < 4; i++) {
-            drawTerminalPathsCells(6, start, 0, vector, i);
+            drawTerminalPathsCells(6, start, 5, vector, i);
             turnVector(vector, 1);
         }
     }
@@ -252,9 +279,29 @@ public class BoardController implements Initializable {
     }
 
 
-    private Circle drawPiece(double x, double y, ArrayList<Piece> pieces) {
-        Circle c = new Circle(x, y, cellLength / 4);
-        return c;
+    private ArrayList<MyPiece> drawPiece(double x, double y, ArrayList<Piece> pieces) {
+        ArrayList<MyPiece> myPieces = new ArrayList<>();
+        switch (pieces.size()) {
+            case 1:
+                myPieces.add(new MyPiece(x, y, 5, pieces.get(0)));
+                break;
+            case 2:
+                myPieces.add(new MyPiece(x - 5, y, 5, pieces.get(0)));
+                myPieces.add(new MyPiece(x + 5, y, 5, pieces.get(0)));
+                break;
+            case 3:
+                myPieces.add(new MyPiece(x - 5, y - 5, 5, pieces.get(0)));
+                myPieces.add(new MyPiece(x + 5, y - 5, 5, pieces.get(0)));
+                myPieces.add(new MyPiece(x, y + 5, 5, pieces.get(0)));
+                break;
+            case 4:
+                myPieces.add(new MyPiece(x - 5, y - 5, 5, pieces.get(0)));
+                myPieces.add(new MyPiece(x - 5, y + 5, 5, pieces.get(0)));
+                myPieces.add(new MyPiece(x + 5, y - 5, 5, pieces.get(0)));
+                myPieces.add(new MyPiece(x + 5, y + 5, 5, pieces.get(0)));
+                break;
+        }
+        return myPieces;
     }
 
     public void roll() {

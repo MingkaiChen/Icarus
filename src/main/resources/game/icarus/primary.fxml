@@ -29,8 +29,8 @@
          </children>
       </Pane>
        <Button fx:id="startGame" onAction="#startGame" text="Start" />
+       <Button fx:id="load" onAction="#loadGame" text="Load" />
        <Button fx:id="settings" onAction="#openSettings" text="Settings" />
-       <Button fx:id="addition" onAction="#openAddition" text="DLC &amp; Mods" />
        <Button fx:id="exit" onAction="#exit" text="Exit" />
    </children>
 </VBox>
