@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,13 +24,14 @@ public class App extends Application {
     public static boolean isFullscreen = false;
     private static Setting setting;
     public static boolean isLoad = false;
+    public static MediaPlayer bgmPlayer = new MediaPlayer(new Media(App.class.getResource("/game/icarus/sound/Machiavellian Bach.mp3").toExternalForm()));
 
     @Override
     public void start(Stage stage) throws IOException {
         App.stage = stage;
         setting = new Setting(4, 3, true, true);
-        scene = new Scene(loadFXML("primary"), 600, 400);
-        //scene = new Scene(loadFXML("board"), 600, 400);
+        scene = new Scene(loadFXML("primary"), 640, 480);
+        //scene = new Scene(loadFXML("board"), 640, 480);
         stage.setScene(scene);
         stage.showingProperty().addListener((observable, oldValue, showing) -> {
             if (showing) {
@@ -36,6 +39,7 @@ public class App extends Application {
                 stage.setMinWidth(stage.getWidth());
             }
         });
+        bgmPlayer.play();
         stage.show();
     }
 

@@ -6,26 +6,82 @@ import game.icarus.controller.GameSaver;
 import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
-import game.icarus.map.ChessBoard;
+import game.icarus.entity.Player;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
 
 public class BoardController implements Initializable {
+
+    @FXML
+    public StackPane settingPane;
+    public Slider musicVolume;
+    public Label musicValue;
+    public Slider soundVolume;
+    public Label soundValue;
+    public CheckBox fullscreen;
+    public CheckBox debugMove;
+    public CheckBox debugTakeOff;
+    public CheckBox debugLucky;
+    public StackPane endPane;
+    public Button debugEndGame;
+    public VBox winnerId;
+
+    public void settings() {
+        if (!App.isDebug) {
+            debugMove.setVisible(false);
+            debugTakeOff.setVisible(false);
+            debugLucky.setVisible(false);
+            debugEndGame.setVisible(false);
+        }
+        if (settingPane.isVisible()) {
+            settingPane.setVisible(false);
+            board.setEffect(null);
+        } else {
+            settingPane.setVisible(true);
+            setBoardBlur();
+        }
+
+    }
+
+    public void setBoardBlur() {
+        ColorAdjust adj = new ColorAdjust(0, 0, 0, -0.5);
+        GaussianBlur blur = new GaussianBlur(25); // 55 is just to show edge effect more clearly.
+        adj.setInput(blur);
+        board.setEffect(adj);
+    }
+
+    public void quit() throws IOException {
+        App.setRoot("primary");
+    }
+
+    public void endGameButtonHandler() {
+        debugEnd = true;
+        settings();
+        endGame();
+    }
 
     interface AddToPaneOperation {
         void add(Shape s);
@@ -36,27 +92,21 @@ public class BoardController implements Initializable {
 
     private Point2D midPoint;
 
+    private boolean debugEnd = false;
+
+    AudioClip click = new AudioClip(this.getClass().getResource("/game/icarus/sound/click.mp3").toExternalForm());
+
+    private final List<MyPiece> pieces = new ArrayList<>();
+
     private static final Color HIGHLIGHTED_COLOR = new Color(1.0f, 0.84313726f, 0.0f, 0.2f);
 
     @FXML
     private Pane board;
-    @FXML
-    private GridPane parkingOne;
-    @FXML
-    private GridPane parkingTwo;
-    @FXML
-    private GridPane parkingThree;
-    @FXML
-    private GridPane parkingFour;
-
-    GridPane[] parkingAprons;
 
     private GameController controller;
 
     @FXML
     private BorderPane root;
-
-    private double length;
 
     private double cellLength;
 
@@ -64,6 +114,7 @@ public class BoardController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //FIXME: ADD DICE NUMBER SELECTION
         board.setBackground(new Background(new BackgroundImage
                 (new Image("file:src/main/resources/game/icarus/timg.jfif"),
                         BackgroundRepeat.NO_REPEAT,
@@ -76,12 +127,35 @@ public class BoardController implements Initializable {
                 e.printStackTrace();
             }
         } else controller = new GameController(App.getSetting());
-        parkingAprons = new GridPane[]{parkingOne, parkingTwo, parkingThree, parkingFour};
+        System.out.println(App.getSetting().getPlayerNumber());
         resize();
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
                 resize();
         root.heightProperty().addListener(stageSizeListener);
         root.widthProperty().addListener(stageSizeListener);
+
+        //Settings
+        musicVolume.adjustValue(App.musicVolume);
+        soundVolume.adjustValue(App.soundVolume);
+        musicValue.setText(String.valueOf(App.musicVolume));
+        soundValue.setText(String.valueOf(App.soundVolume));
+        fullscreen.setSelected(App.isFullscreen);
+        musicVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
+            App.musicVolume = newValue.intValue();
+            musicValue.setText(String.valueOf(newValue.intValue()));
+            App.bgmPlayer.setVolume(newValue.doubleValue());
+        });
+        soundVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
+            App.soundVolume = newValue.intValue();
+            soundValue.setText(String.valueOf(newValue.intValue()));
+        });
+        fullscreen.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            App.isFullscreen = newValue;
+            App.fullscreen(newValue);
+        });
+        debugMove.selectedProperty().addListener((observable, oldValue, newValue) -> controller.getDice().setDebugMove(newValue));
+        debugTakeOff.selectedProperty().addListener((observable, oldValue, newValue) -> controller.getDice().setDebugTakeOver(newValue));
+        debugLucky.selectedProperty().addListener((observable, oldValue, newValue) -> controller.getDice().setDebugLucky(newValue));
     }
 
     public void saveGame() {
@@ -90,15 +164,49 @@ public class BoardController implements Initializable {
 
 
     public void endGame() {
+        endPane.setVisible(true);
+        setBoardBlur();
+        ArrayList<Player> winningPlayers = new ArrayList<>();
+        if (debugEnd) {
+            for (int i = 0; i < App.getSetting().getPlayerNumber(); i++) {
+                winningPlayers.add(controller.getPlayers()[i]);
+            }
+        } else winningPlayers = controller.getWinningPlayers();
+        for (int i = 0; i < winningPlayers.size(); i++) {
+            String prefix = Integer.toString(i+1);
+            switch (i+1) {
+                case 1:
+                    prefix += "st";
+                    break;
+                case 2:
+                    prefix += "nd";
+                    break;
+                case 3:
+                    prefix += "rd";
+                    break;
+                case 4:
+                    prefix += "th";
+                    break;
+            }
+            Label l = new Label(prefix + ": " + winningPlayers.get(i).toString());
+            l.setFont(new Font(32));
+            winnerId.getChildren().add(l);
+        }
+    }
 
+    public void changePlayer() {
+        System.out.println("Now: " + controller.getCurrentPlayer().getColor());
     }
 
     public void cellHandler(Cell cell) {
         if (!controller.isWalkable()) return;
+        click.setVolume(App.soundVolume);
+        click.play();
         if (controller.isSelected())
             for (Cell c : controller.getHighlightedCells()) {
                 if (cell.equals(c)) {
                     controller.movePiece(cell);
+                    changePlayer();
                     resize();
                     if (controller.hasGameEnded()) {
                         endGame();
@@ -107,6 +215,7 @@ public class BoardController implements Initializable {
                 }
             }
         if (cell.isOccupied()) {
+            resize();
             boolean tmp = controller.selectPiece(cell);
             if (tmp) highlightCells();
             return;
@@ -118,38 +227,35 @@ public class BoardController implements Initializable {
     public void highlightCells() {
         for (Rectangle r : rectangles) {
             //r.setFill(Color.TRANSPARENT);
+            //FIXME: Waiting for pictures
         }
         for (Cell c : controller.getHighlightedCells()) {
-            System.out.println(c);
-            System.out.println(c.getBelongsto());
             Rectangle r = rectangleMap.get(c.getID());
             r.setFill(HIGHLIGHTED_COLOR);
         }
     }
 
     public void resize() {
-        length = Math.min(root.getHeight() * 0.85, root.getWidth());
-        cellLength = length / (11 * Math.sqrt(2));
+        double maxHeight = Math.max(root.getHeight() * 0.875, root.getHeight() - 70);
+        double length = Math.min(maxHeight, root.getWidth());
+        settingPane.setPrefWidth(length);
+        cellLength = length / (13 * Math.sqrt(2));
         board.setPrefHeight(length);
         board.setPrefWidth(length);
         midPoint = new Point2D(length / 2, length / 2);
-        System.out.println(length);
-        ArrayList<Node> removeList = new ArrayList<>();
-        for (Node n : board.getChildren()) {
-            if (n instanceof Rectangle) {
-                removeList.add(n);
-            }
-        }
-        for (GridPane pane : parkingAprons) {
-            for (Node n : pane.getChildren()) {
-                if (n instanceof Rectangle) removeList.add(n);
-            }
-        }
+        ArrayList<Node> removeList = new ArrayList<>(board.getChildren());
         for (Node n : removeList) {
-            for (GridPane pane : parkingAprons) pane.getChildren().remove(n);
             board.getChildren().remove(n);
         }
+        pieces.clear();
         drawBoard();
+        addAllPieces();
+    }
+
+    private void addAllPieces() {
+        for (MyPiece p : pieces) {
+            board.getChildren().add(p);
+        }
     }
 
     private void turnVector(int[] v, int pos) {
@@ -167,11 +273,7 @@ public class BoardController implements Initializable {
         r.setOnMouseClicked(mouseEvent -> cellHandler(block.getCell(index)));
         add.add(r);
         if (block.getCell(index).isOccupied()) {
-            for (MyPiece p : drawPiece(x, y, block.getCell(index).getOccupied())) {
-                add.add(p);
-                p.toFront();
-            }
-
+            pieces.addAll(drawPiece(x, y, block.getCell(index).getOccupied()));
         }
         r.setCell(block.getCell(index));
         rectangleMap.put(block.getCell(index).getID(), r);
@@ -201,8 +303,9 @@ public class BoardController implements Initializable {
         return start;
     }
 
-    private void drawTerminalPathsCells(int num, Point2D start, int index, int[] vector, int j) {
-        for (int i = 0; i < num; i++) {
+    private void drawTerminalPathsCells(Point2D start, int[] vector, int j) {
+        int index = 5;
+        for (int i = 0; i < 6; i++) {
             start = start.add(cellLength / Math.sqrt(2) * vector[0],
                     cellLength / Math.sqrt(2) * vector[1]);
             drawCell(start,
@@ -250,7 +353,7 @@ public class BoardController implements Initializable {
         drawWhite(start, vector);
         vector = new int[]{1, -1};
         for (int i = 0; i < 4; i++) {
-            drawTerminalPathsCells(6, start, 5, vector, i);
+            drawTerminalPathsCells(start, vector, i);
             turnVector(vector, 1);
         }
     }
@@ -280,6 +383,7 @@ public class BoardController implements Initializable {
 
 
     private ArrayList<MyPiece> drawPiece(double x, double y, ArrayList<Piece> pieces) {
+        //FIXME: Waiting for pieces
         ArrayList<MyPiece> myPieces = new ArrayList<>();
         switch (pieces.size()) {
             case 1:
@@ -305,10 +409,10 @@ public class BoardController implements Initializable {
     }
 
     public void roll() {
-        controller.rollDice();
-        System.out.println("Now: " + controller.getCurrentPlayer().getColor());
-        System.out.println("Raw: " + controller.getDiceResult().get("raw"));
-        System.out.println("Result: " + controller.getDiceResult().get("result"));
-        System.out.println(controller.getDiceResult().get("canTakeOff"));
+        if (controller.hasGameEnded()) return;
+        if (controller.isWalkable()) return;
+        if (!controller.rollDice()) changePlayer();
+        System.out.println(controller.getDiceResult().getResult().toString());
+        System.out.println(controller.getDiceResult().canTakeOff());
     }
 }

@@ -7,14 +7,13 @@ import game.icarus.App;
 import game.icarus.controller.GameController;
 import game.icarus.controller.GameSaver;
 import game.icarus.entity.Dice;
+import game.icarus.entity.DiceResult;
 import game.icarus.entity.Setting;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 public class SecondaryController {
     GameController c;
-    GameSaver saver;
     @FXML
     private Label secondaryText;
 
@@ -26,12 +25,12 @@ public class SecondaryController {
     public void rollDice() {
         Dice dice = new Dice(3);
         StringBuilder s = new StringBuilder();
-        Map<String, Object> m = dice.roll();
-        for (int i : (int[]) m.get("raw")) {
+        DiceResult m = dice.roll();
+        for (int i : (int[]) m.getRaw()) {
             s.append(i).append(" ");
         }
         s.append("\n");
-        s.append(m.get("result").toString());
+        s.append(m.getResult().toString());
         secondaryText.setText(s.toString());
     }
 

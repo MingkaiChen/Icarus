@@ -5,7 +5,10 @@ import java.util.stream.Collectors;
 
 public class Dice {
     private final int amount;
-    private Random random;
+    private final Random random;
+    private boolean debugMove = false;
+    private boolean debugTakeOver = false;
+    private boolean debugLucky = false;
 
     private HashSet<Integer> getTwoNumbersAvailableResult(int ta, int tb) {
         HashSet<Integer> ans = new HashSet<>();
@@ -16,7 +19,7 @@ public class Dice {
         ans.add(a - b);
         ans.add(b - a);
         ans.add(a * b);
-        if(b != 0) {
+        if (b != 0) {
             tmp = (double) a / (double) b;
             if (tmp == Math.floor(tmp)) ans.add(a / b);
         }
@@ -25,9 +28,12 @@ public class Dice {
 
     private HashSet<Integer> getAllAvailableResult(int[] numbers) {
         HashSet<Integer> ans = new HashSet<>();
-        for (int i = 1; i <= 12; i++) {
-            ans.add(i);
+        if (debugMove) {
+            for (int i = 1; i <= amount * 6; i++) {
+                ans.add(i);
+            }
         }
+
         if (amount >= 4) {
             for (int i = 1; i <= (1 << amount); i++) {
                 int sum = 0;
@@ -53,7 +59,7 @@ public class Dice {
                     break;
             }
         }
-        return (HashSet<Integer>) ans.stream().filter(i -> (0<i && i<= getRange())).collect(Collectors.toSet());
+        return (HashSet<Integer>) ans.stream().filter(i -> (0 < i && i <= getRange())).collect(Collectors.toSet());
     }
 
     public Dice() {
@@ -65,19 +71,20 @@ public class Dice {
         this.amount = amount;
     }
 
-    public Map<String, Object> roll() {
+    public DiceResult roll() {
         int[] numbers = new int[amount];
-        Map<String, Object> ans = new HashMap<>();
         int sum = 0;
+        boolean flag = false;
         for (int i = 0; i < amount; i++) {
             numbers[i] = random.nextInt(6) + 1;
             sum += numbers[i];
+            if (numbers[i] == 6) flag = true;
         }
-        ans.put("raw", numbers);
-        ans.put("result", new ArrayList<Integer>(getAllAvailableResult(numbers)));
-        //ans.put("canTakeOff", sum >= amount*5);
-        ans.put("canTakeOff", true);
-        return ans;
+        return new DiceResult(numbers,
+                new ArrayList<Integer>(getAllAvailableResult(numbers)),
+                flag || debugTakeOver,
+                sum >= amount * 5 || debugLucky
+        );
     }
 
     public int rollOnce() {
@@ -90,5 +97,17 @@ public class Dice {
 
     public int getRange() {
         return this.amount * 6;
+    }
+
+    public void setDebugLucky(boolean debugLucky) {
+        this.debugLucky = debugLucky;
+    }
+
+    public void setDebugMove(boolean debugMove) {
+        this.debugMove = debugMove;
+    }
+
+    public void setDebugTakeOver(boolean debugTakeOver) {
+        this.debugTakeOver = debugTakeOver;
     }
 }

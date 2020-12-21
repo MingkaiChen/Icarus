@@ -18,7 +18,7 @@ public class Setting {
         this();
         this.isBattle = isBattle;
         this.isStack = isStack;
-        if (playerNumber > 8) throw new IllegalArgumentException("Maximum player number is 8.");
+        if (playerNumber > 4) throw new IllegalArgumentException("Maximum player number is 4.");
         if (playerNumber < 2) throw new IllegalArgumentException("Minimum player number is 2.");
         this.playerNumber = playerNumber;
         this.diceNumber = diceNumber;
@@ -26,6 +26,10 @@ public class Setting {
 
     public int getPlayerNumber() {
         return playerNumber;
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
     }
 
     public int getDiceNumber() { return diceNumber; }

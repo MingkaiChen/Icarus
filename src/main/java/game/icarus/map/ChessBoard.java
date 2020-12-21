@@ -2,7 +2,6 @@ package game.icarus.map;
 
 import java.util.ArrayList;
 
-import game.icarus.attribute.Color;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
 import game.icarus.entity.Player;
@@ -124,9 +123,9 @@ public class ChessBoard {
     // }
 
     public TerminalPath getTerminalPath(Player owner) {
-        for (int i = 0; i < this.terminalPaths.length; i++) {
-            if (this.terminalPaths[i].getOwner().equals(owner))
-                return this.terminalPaths[i];
+        for (TerminalPath terminalPath : terminalPaths) {
+            if (terminalPath.getOwner().equals(owner))
+                return terminalPath;
         }
         return null;
     }

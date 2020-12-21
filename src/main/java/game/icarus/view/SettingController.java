@@ -38,6 +38,7 @@ public class SettingController implements Initializable {
         musicVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
             App.musicVolume = newValue.intValue();
             musicValue.setText(String.valueOf(newValue.intValue()));
+            App.bgmPlayer.setVolume(newValue.doubleValue());
         });
         soundVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
             App.soundVolume = newValue.intValue();

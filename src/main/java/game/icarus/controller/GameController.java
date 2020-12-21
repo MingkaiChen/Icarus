@@ -23,14 +23,18 @@ public class GameController {
     private final ChessBoard chessBoard;
     private final Piece[] pieces;
     private final ArrayList<Cell> highlightedCells;
-    private ArrayList<Piece> selectedPieces;
+    private ArrayList<Piece> selectedPieces = new ArrayList<>();
     private boolean isSelected = false;
     private final Dice dice;
     private int currentPlayer;
     private final Setting settings;
-    private Map<String, Object> diceResult;
+    private DiceResult diceResult;
     private boolean walkable = false;
     private boolean isGameEnded = false;
+    private int playerNumber;
+    private int luckyCount = 0;
+    private final HashSet<Piece> movedPieces = new HashSet<>();
+    private final ArrayList<Player> winningPlayers = new ArrayList<>();
 
     public GameController(Save s) {
         settings = s.getSetting();
@@ -52,30 +56,35 @@ public class GameController {
 
     public GameController(Setting settings) {
         this.settings = settings;
-        int playerNumber = settings.getPlayerNumber();
-        players = new Player[playerNumber];
-        for (int i = 0; i < playerNumber; i++) {
+        this.playerNumber = settings.getPlayerNumber();
+        players = new Player[4];
+        for (int i = 0; i < 4; i++) {
             players[i] = new Player(Color.values()[i]);
         }
         chessBoard = new ChessBoard(players);
         ChessBoard.initialize(chessBoard);
-        pieces = new Piece[playerNumber * 4];
-        for (int i = 0; i < playerNumber; i++) {
+        pieces = new Piece[4 * 4];
+        for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 pieces[i * 4 + j] = new Piece(players[i]);
             }
         }
         highlightedCells = new ArrayList<>();
-        dice = new Dice();
+        dice = new Dice(settings.getDiceNumber());
     }
 
-    public void rollDice() {
-        // if (walkable) return;
+    public boolean rollDice() {
         diceResult = dice.roll();
-        walkable = true;
+        for (Piece p : getCurrentPlayer().getPieces()) {
+            if (p.isMovable() || (!p.isOut() && diceResult.canTakeOff())) {
+                walkable = true;
+                return true;
+            }
+        }
+        nextPlayer();
+        return false;
     }
 
-    @SuppressWarnings("unchecked")
     public boolean selectPiece(Cell cell) {
         highlightedCells.clear();
         ArrayList<Piece> pieces = cell.getOccupied();
@@ -90,7 +99,7 @@ public class GameController {
 
     public void cancelSelection() {
         highlightedCells.clear();
-        selectedPieces = null;
+        //selectedPieces.clear();
         isSelected = false;
     }
 
@@ -117,8 +126,8 @@ public class GameController {
                         }
                     }
                     for (Piece pp : removed2) {
-                        selectedPieces.remove(pp);
-                        pp.move(chessBoard.getParkingApronByPlayer(p.getOwner()).getAvailableCell());
+                        newPos.getOccupied().remove(pp);
+                        pp.move(chessBoard.getParkingApronByPlayer(pp.getOwner()).getAvailableCell());
                     }
                 }
                 for (Piece p : removed1) {
@@ -140,10 +149,30 @@ public class GameController {
             p.move(newPos);
             if (newPos.equals(ChessBoard.getEndCell(chessBoard, p.getOwner()))) {
                 p.win();
-                System.out.println("win");
+                if (p.getOwner().isWin() && !winningPlayers.contains(p.getOwner())) {
+                    winningPlayers.add(p.getOwner());
+                }
             }
         }
-        nextPlayer();
+        if (diceResult.isLucky()) {
+            if (luckyCount < 3) {
+                luckyCount++;
+                movedPieces.addAll(selectedPieces);
+            }
+            else {
+                //FIXME: LUCKY COUNT IS IN PRACTICE && PIECES WONT RETURN TO PARKING
+                luckyCount = 0;
+                for (Piece p : movedPieces)
+                    p.move(chessBoard.getParkingApronByPlayer(p.getOwner()).getAvailableCell());
+                movedPieces.clear();
+                nextPlayer();
+            }
+        } else {
+            luckyCount = 0;
+            movedPieces.clear();
+            nextPlayer();
+        }
+        selectedPieces.clear();
         isSelected = false;
         walkable = false;
     }
@@ -162,14 +191,13 @@ public class GameController {
         for (Player p : players) {
             if (p.isWin()) count++;
         }
-        if (count == 3) {
+        if (count == playerNumber-1) {
             isGameEnded = true;
             return;
         }
-        currentPlayer = (currentPlayer + 1) % settings.getPlayerNumber();
-        selectedPieces = null;
+        currentPlayer = (currentPlayer + 1) % playerNumber;
+        selectedPieces.clear();
         highlightedCells.clear();
-        diceResult.clear();
         if (getCurrentPlayer().isWin()) nextPlayer();
     }
 
@@ -181,22 +209,21 @@ public class GameController {
         return highlightedCells;
     }
 
-    public static HashSet<Cell> getHighlightedCells(ChessBoard chessBoard, Piece piece, Map<String, Object> result) {
+    public static HashSet<Cell> getHighlightedCells(ChessBoard chessBoard, Piece piece, DiceResult result) {
         HashSet<Cell> highlightedCells = new HashSet<Cell>();
         if (!piece.isOut()) {
-            if ((boolean) result.get("canTakeOff")) {
+            if (result.canTakeOff()) {
                 highlightedCells.add(ChessBoard.getTakeoffCell(chessBoard, piece.getOwner()));
-                return highlightedCells;
-            } else
-                return null;
+            }
+            return highlightedCells;
         } else {
-            for (int i = 0; i < ((ArrayList<Integer>) result.get("result")).size(); i++) {
+            for (int i = 0; i < result.getResult().size(); i++) {
                 Cell highlightedCell = piece.getPosition();
-                for (int j = 0; j < ((ArrayList<Integer>) result.get("result")).get(i); j++) {
+                for (int j = 0; j < result.getResult().get(i); j++) {
                     if (highlightedCell.equals(piece.getOwner().getToTerminalPath())) {
                         TerminalPath terminalPath = chessBoard.getTerminalPath(piece.getOwner());
                         highlightedCell = terminalPath.getCell(0);
-                        int remain = ((ArrayList<Integer>) result.get("result")).get(i) - j;
+                        int remain = result.getResult().get(i) - j;
                         if (remain > 6) {
                             if(remain <= 12)
                                 highlightedCell = terminalPath.getCell(6 - (remain - 6));
@@ -207,7 +234,7 @@ public class GameController {
                             highlightedCell = terminalPath.getCell(remain - 1);
                             break;
                         }
-                    } else if (j == ((ArrayList<Integer>) result.get("result")).get(i) - 1) {
+                    } else if (j == result.getResult().get(i) - 1) {
                         if (highlightedCell.nextCell().equals(piece.getOwner().getToShortcut())) {
                             highlightedCells.add(highlightedCell.nextCell(13));
                         } else if (highlightedCell.nextCell().getColor().equals(piece.getColor())
@@ -257,11 +284,19 @@ public class GameController {
         return availableActions;
     }
 
-    public Map<String, Object> getDiceResult() {
+    public DiceResult getDiceResult() {
         return diceResult;
     }
 
     public boolean hasGameEnded() {
+        if (isGameEnded) {
+            for (Player p : players) {
+                if (!winningPlayers.contains(p)) {
+                    winningPlayers.add(p);
+                    break;
+                }
+            }
+        }
         return isGameEnded;
     }
 
@@ -275,5 +310,17 @@ public class GameController {
 
     public Player getCurrentPlayer() {
         return players[currentPlayer];
+    }
+
+    public Dice getDice() {
+        return dice;
+    }
+
+    public ArrayList<Player> getWinningPlayers() {
+        return winningPlayers;
+    }
+
+    public Player[] getPlayers() {
+        return players;
     }
 }

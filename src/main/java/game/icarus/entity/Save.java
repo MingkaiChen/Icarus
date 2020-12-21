@@ -10,7 +10,7 @@ public class Save {
     private Piece[] pieces;
     private Player[] players;
     private int currentPlayer;
-    private Map<String, Object> diceResult;
+    private DiceResult diceResult;
     private boolean hasDiceResult = true;
     private Piece selectedPiece;
 
@@ -19,7 +19,7 @@ public class Save {
         this.hasDiceResult = false;
     }
 
-    public Save(String name, Piece[] pieces, Player[] players, int currentPlayer, Map<String, Object> diceResult) {
+    public Save(String name, Piece[] pieces, Player[] players, int currentPlayer, DiceResult diceResult) {
         this.pieces = pieces;
         this.players = players;
         this.currentPlayer = currentPlayer;
@@ -35,11 +35,11 @@ public class Save {
         this.pieces = pieces;
     }
 
-    public Map<String, Object> getDiceResult() {
+    public DiceResult getDiceResult() {
         return diceResult;
     }
 
-    public void setDiceResult(Map<String, Object> diceResult) {
+    public void setDiceResult(DiceResult diceResult) {
         this.diceResult = diceResult;
     }
 

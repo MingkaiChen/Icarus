@@ -4,6 +4,7 @@ module game.icarus {
     requires javafx.graphics;
     requires fastjson;
     requires java.sql;
+    requires javafx.media;
 
     opens game.icarus to fastjson, javafx.fxml;
     opens game.icarus.view to javafx.fxml;
