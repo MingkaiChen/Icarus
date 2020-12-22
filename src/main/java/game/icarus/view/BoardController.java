@@ -183,7 +183,8 @@ public class BoardController implements Initializable {
 
     public void restart() {
         App.endGame();
-        controller = App.startGame();
+        controller = null;
+        App.isLoad = false;
         controller.isGameChanged().addListener((observable, oldValue, newValue) -> {
             if (newValue) resize();
         });
@@ -428,13 +429,13 @@ public class BoardController implements Initializable {
                 myPieces.add(new MyPiece(x + tmpSize / 2, y, tmpSize, image, pieces.get(1)));
                 break;
             case 3:
-                tmpSize *= 0.5;
+                tmpSize *= 0.75;
                 myPieces.add(new MyPiece(x - tmpSize / 2, y - tmpSize / 2, tmpSize, image, pieces.get(0)));
                 myPieces.add(new MyPiece(x + tmpSize / 2, y - tmpSize / 2, tmpSize, image, pieces.get(1)));
                 myPieces.add(new MyPiece(x, y + tmpSize / 2, tmpSize, image, pieces.get(2)));
                 break;
             case 4:
-                tmpSize *= 0.5;
+                tmpSize *= 0.75;
                 myPieces.add(new MyPiece(x - pieceSize / 2, y - pieceSize / 2, tmpSize, image, pieces.get(0)));
                 myPieces.add(new MyPiece(x - pieceSize / 2, y + pieceSize / 2, tmpSize, image, pieces.get(1)));
                 myPieces.add(new MyPiece(x + pieceSize / 2, y - pieceSize / 2, tmpSize, image, pieces.get(2)));
