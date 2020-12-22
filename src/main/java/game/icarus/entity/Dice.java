@@ -28,11 +28,6 @@ public class Dice {
 
     private HashSet<Integer> getAllAvailableResult(int[] numbers) {
         HashSet<Integer> ans = new HashSet<>();
-        if (debugMove) {
-            for (int i = 1; i <= amount * 6; i++) {
-                ans.add(i);
-            }
-        }
 
         if (amount >= 4) {
             for (int i = 1; i <= (1 << amount); i++) {
@@ -59,6 +54,11 @@ public class Dice {
                     break;
             }
         }
+        if (debugMove) {
+            for (int i = 1; i <= amount * 6; i++) {
+                ans.add(i);
+            }
+        }
         return (HashSet<Integer>) ans.stream().filter(i -> (0 < i && i <= getRange())).collect(Collectors.toSet());
     }
 
@@ -81,7 +81,7 @@ public class Dice {
             if (numbers[i] == 6) flag = true;
         }
         return new DiceResult(numbers,
-                new ArrayList<Integer>(getAllAvailableResult(numbers)),
+                new ArrayList<>(getAllAvailableResult(numbers)),
                 flag || debugTakeOver,
                 sum >= amount * 5 || debugLucky
         );

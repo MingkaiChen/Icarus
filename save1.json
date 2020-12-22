@@ -4,9 +4,8 @@
     "canTakeOff": true,
     "lucky": false,
     "raw": [
-      6,
-      2,
-      2
+      3,
+      3
     ],
     "result": [
       1,
@@ -20,121 +19,117 @@
       9,
       10,
       11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18
+      12
     ]
   },
-  "luckyCount": 0,
-  "movedPiecesUUID": [],
+  "luckyCount": 1,
+  "movedPiecesUUID": [
+    "4744dd62-83d7-4cde-9349-999c814cae08"
+  ],
   "name": "Game1",
   "pieces": [
     {
-      "cellType": "Normal",
-      "color": "Red",
-      "index": 8,
-      "uuid": "e9871417-eb6e-4602-b00f-ac8806bd722e"
-    },
-    {
       "cellType": "Takeoff",
       "color": "Red",
       "index": 0,
-      "uuid": "c034d3ae-42f7-42d4-958a-36c1fccb6e7f"
+      "uuid": "7eb2c150-1cfe-4acb-bfdf-316f23efa4eb"
+    },
+    {
+      "cellType": "Normal",
+      "color": "Red",
+      "index": 33,
+      "uuid": "4744dd62-83d7-4cde-9349-999c814cae08"
+    },
+    {
+      "cellType": "Normal",
+      "color": "Red",
+      "index": 43,
+      "uuid": "54fc89fe-1a5f-4338-aba8-a39ef474b615"
     },
     {
       "cellType": "ParkingApron",
       "color": "Red",
-      "index": 2,
-      "uuid": "67d185d8-26fe-45f0-b5c3-725c240b161e"
-    },
-    {
-      "cellType": "Takeoff",
-      "color": "Red",
-      "index": 0,
-      "uuid": "dc7807b9-8c8c-4b47-a32d-886b07baa9ca"
+      "index": 3,
+      "uuid": "88a8063e-0d1b-4e35-b5a1-197c9b261b83"
     },
     {
       "cellType": "Normal",
       "color": "Yellow",
-      "index": 9,
-      "uuid": "8a10fcff-0229-49b3-aafc-5a628d250bb5"
+      "index": 44,
+      "uuid": "af6056fa-907f-40fd-bff6-1ad5fd173176"
     },
     {
       "cellType": "ParkingApron",
       "color": "Yellow",
       "index": 1,
-      "uuid": "7e5ae26f-2759-4346-8c98-d9a73b0b32db"
+      "uuid": "a0ef8093-cd77-453b-8c33-173670eba9ae"
     },
     {
       "cellType": "ParkingApron",
       "color": "Yellow",
       "index": 2,
-      "uuid": "d397d3c2-535e-453d-a380-979fff686ced"
+      "uuid": "8efc0bb3-e2df-4a2a-b8f9-eb5b02d24f4b"
     },
     {
       "cellType": "Normal",
       "color": "Yellow",
-      "index": 9,
-      "uuid": "14e4b4f2-cf25-4f73-b2b4-800dbe354cd2"
+      "index": 48,
+      "uuid": "ce95728d-602b-469d-8db7-5bae7adb2572"
     },
     {
       "cellType": "ParkingApron",
       "color": "Blue",
       "index": 0,
-      "uuid": "8bf30fc1-a0cc-4917-b536-2dfdea0ea3a5"
+      "uuid": "2d714b21-c3eb-4c49-895f-d63137110111"
     },
     {
       "cellType": "ParkingApron",
       "color": "Blue",
       "index": 1,
-      "uuid": "de542a0f-e96b-4ce4-888f-f045dcbe8595"
+      "uuid": "e74c4c3f-d436-4130-8bc1-360faf13efb9"
     },
     {
       "cellType": "ParkingApron",
       "color": "Blue",
       "index": 2,
-      "uuid": "44b2e58b-2f6f-4718-9d02-759865e01f78"
+      "uuid": "4900d905-e2e1-4032-9293-0172f4bc2af3"
     },
     {
       "cellType": "ParkingApron",
       "color": "Blue",
       "index": 3,
-      "uuid": "0633faa2-81d1-4f32-841f-dfd2a5fb2220"
+      "uuid": "1b8ae93c-18bb-431b-a5ad-87a1ccdd8f50"
     },
     {
       "cellType": "ParkingApron",
       "color": "Green",
       "index": 0,
-      "uuid": "4222b798-5222-40a9-8eb4-a68d12e24b1e"
+      "uuid": "0b40fcb1-6733-4d33-94be-e2ccb1435f3a"
     },
     {
       "cellType": "ParkingApron",
       "color": "Green",
       "index": 1,
-      "uuid": "ba1cbc7f-f47c-41c2-97ca-42cf193b726b"
+      "uuid": "827a0fd6-8975-4538-b960-bc46b0522252"
     },
     {
       "cellType": "ParkingApron",
       "color": "Green",
       "index": 2,
-      "uuid": "0e2ee3d5-17d0-4567-b0a8-3c519f63ae52"
+      "uuid": "eaaa46ea-16e3-4fd2-a0a0-e57eadbe9001"
     },
     {
       "cellType": "ParkingApron",
       "color": "Green",
       "index": 3,
-      "uuid": "afe44753-6892-4389-9e79-7464ffbb2c83"
+      "uuid": "38c01f40-2225-4b2b-902f-f1003327e6a5"
     }
   ],
   "settings": {
     "battle": true,
-    "diceNumber": 3,
+    "diceNumber": 2,
     "playerNumber": 2,
     "stack": true
   },
-  "walkable": false
+  "walkable": true
 }

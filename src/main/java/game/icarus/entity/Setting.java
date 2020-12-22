@@ -53,4 +53,20 @@ public class Setting {
     public boolean isPlayerAI(int i) {
         return this.arePlayersAI[i];
     }
+
+    public boolean[] getArePlayersAI() {
+        return arePlayersAI;
+    }
+
+    public void setArePlayersAI(boolean[] arePlayersAI) {
+        this.arePlayersAI = arePlayersAI;
+    }
+
+    public void setBattle(boolean battle) {
+        isBattle = battle;
+    }
+
+    public void setStack(boolean stack) {
+        isStack = stack;
+    }
 }

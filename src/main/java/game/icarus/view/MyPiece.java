@@ -13,5 +13,6 @@ public class MyPiece extends ImageView {
         setFitHeight(size);
         setFitWidth(size);
         this.piece = piece;
+        setMouseTransparent(true);
     }
 }

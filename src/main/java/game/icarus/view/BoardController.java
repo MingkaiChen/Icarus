@@ -199,6 +199,9 @@ public class BoardController implements Initializable {
     }
 
     public void resize() {
+        if (controller.isGameEnded()) {
+            endGame();
+        }
         changePlayer();
         double maxHeight = Math.max(root.getHeight() * 0.875, root.getHeight() - 100);
         double length = Math.min(maxHeight, root.getWidth());
@@ -217,8 +220,11 @@ public class BoardController implements Initializable {
         drawBoard();
         addAllPieces();
         highlightCells();
-        if (controller.isGameEnded()) {
-            endGame();
+        if (controller.getDiceResult() != null) {
+            takeOff.setVisible(controller.getDiceResult().canTakeOff());
+            lucky.setVisible(controller.getDiceResult().isLucky());
+            luckyTime.setVisible(controller.getDiceResult().isLucky());
+            luckyTime.setText(String.valueOf(controller.getLuckyCount()));
         }
         controller.finishHandling();
     }
