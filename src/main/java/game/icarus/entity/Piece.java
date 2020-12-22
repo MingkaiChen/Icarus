@@ -3,7 +3,6 @@ package game.icarus.entity;
 import java.util.UUID;
 
 import game.icarus.attribute.Color;
-import game.icarus.map.ChessBoard;
 import game.icarus.map.ParkingApron;
 
 public class Piece {
@@ -29,10 +28,6 @@ public class Piece {
 
     public Boolean isMovable() {
         return (isOut && !isWin);
-    }
-
-    public void out() {
-        isOut = true;
     }
 
     public void move(Cell destination) {
@@ -71,11 +66,15 @@ public class Piece {
         return position;
     }
 
-    public boolean hasWin() {
-        return isWin;
-    }
-
     public Player getOwner() {
         return owner;
+    }
+
+    public UUID getPieceID() {
+        return pieceID;
+    }
+
+    public void setPieceID(UUID pieceID) {
+        this.pieceID = pieceID;
     }
 }

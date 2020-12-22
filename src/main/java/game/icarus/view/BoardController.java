@@ -9,6 +9,7 @@ import game.icarus.entity.Piece;
 import game.icarus.entity.Player;
 
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -23,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
@@ -64,7 +66,8 @@ public class BoardController implements Initializable {
     private Point2D midPoint;
     private boolean debugEnd = false;
     private double cellLength;
-    private final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN};
+    private double pieceSize;
+    private Color[] colors;
     AudioClip click = new AudioClip(this.getClass().getResource("/game/icarus/sound/click.mp3").toExternalForm());
     private static final Color HIGHLIGHTED_COLOR = new Color(1.0f, 0.84313726f, 0.0f, 0.2f);
 
@@ -83,15 +86,16 @@ public class BoardController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+         if (App.getTheme().isShowTile()) colors = new Color[]{Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN};
+         else colors = new Color[]{Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE};
         //Board
         //FIXME: ADD DICE NUMBER SELECTION
         board.setBackground(new Background(new BackgroundImage
-                (new Image("file:src/main/resources/game/icarus/timg.jfif"),
+                (new Image(App.getTheme().getBackGround()),
                         BackgroundRepeat.NO_REPEAT,
                         BackgroundRepeat.NO_REPEAT,
                         BackgroundPosition.CENTER, new BackgroundSize(1.0, 1.0, true, true, false, false))));
-        ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
-                resize();
+        ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) -> resize();
         root.heightProperty().addListener(stageSizeListener);
         root.widthProperty().addListener(stageSizeListener);
 
@@ -121,7 +125,6 @@ public class BoardController implements Initializable {
         //Controller
         controller = App.startGame();
         controller.isGameChanged().addListener((observable, oldValue, newValue) -> {
-            System.out.println("GameChanged");
             if (newValue) resize();
         });
         resize();
@@ -171,6 +174,15 @@ public class BoardController implements Initializable {
         endGame();
     }
 
+    public void restart() {
+        App.endGame();
+        controller = App.startGame();
+        controller.isGameChanged().addListener((observable, oldValue, newValue) -> {
+            if (newValue) resize();
+        });
+        resize();
+    }
+
     /**
      * PURE FRONTEND METHODS
      **/
@@ -181,10 +193,12 @@ public class BoardController implements Initializable {
 
     public void resize() {
         changePlayer();
-        double maxHeight = Math.max(root.getHeight() * 0.875, root.getHeight() - 70);
+        double maxHeight = Math.max(root.getHeight() * 0.875, root.getHeight() - 100);
         double length = Math.min(maxHeight, root.getWidth());
+        System.out.println(length);
         settingPane.setPrefWidth(length);
         cellLength = length / (13 * Math.sqrt(2));
+        pieceSize = cellLength * 0.75;
         board.setPrefHeight(length);
         board.setPrefWidth(length);
         midPoint = new Point2D(length / 2, length / 2);
@@ -271,16 +285,17 @@ public class BoardController implements Initializable {
         v[1] = tmp;
     }
 
-    private void drawCell(Point2D location, int[] vector, Color color, Block block, int index, AddToPaneOperation add) {
+    private void drawCell(Point2D location, Color color, Block block, int index, AddToPaneOperation add) {
         double x = location.getX();
         double y = location.getY();
         MyRect r = new MyRect(x - cellLength / 2, y - cellLength / 2, cellLength, cellLength);
         r.setRotate(45);
-        r.setFill(color);
+        if (App.getTheme().isShowTile()) r.setFill(color);
+        else r.setFill(Color.TRANSPARENT);
         r.setOnMouseClicked(mouseEvent -> cellHandler(block.getCell(index)));
         add.add(r);
         if (block.getCell(index).isOccupied()) {
-            pieces.addAll(drawPiece(x, y, vector, block.getCell(index).getOccupied()));
+            pieces.addAll(drawPiece(x, y, block.getCell(index).getOccupied()));
         }
         r.setCell(block.getCell(index));
         rectangleMap.put(block.getCell(index).getID(), r);
@@ -290,7 +305,8 @@ public class BoardController implements Initializable {
     private Point2D drawWhite(Point2D start, int[] vector) {
         MyRect r = new MyRect(start.getX() - cellLength / 2, start.getY() - cellLength / 2, cellLength, cellLength);
         r.setRotate(45);
-        r.setFill(Color.WHITE);
+        if (App.getTheme().isShowTile()) r.setFill(Color.WHITE);
+        else r.setFill(Color.TRANSPARENT);
         board.getChildren().add(r);
         return start.add(cellLength / Math.sqrt(2) * vector[0],
                 cellLength / Math.sqrt(2) * vector[1]);
@@ -299,7 +315,6 @@ public class BoardController implements Initializable {
     private Point2D drawNormalPathsCells(int num, Point2D start, int index, int[] vector) {
         for (int i = 0; i < num; i++) {
             drawCell(start,
-                    vector,
                     colors[index % 4],
                     controller.getChessBoard().getNormalPath(),
                     index,
@@ -317,7 +332,6 @@ public class BoardController implements Initializable {
             start = start.add(cellLength / Math.sqrt(2) * vector[0],
                     cellLength / Math.sqrt(2) * vector[1]);
             drawCell(start,
-                    vector,
                     colors[j],
                     controller.getChessBoard().getTerminalPaths()[j],
                     index,
@@ -371,7 +385,6 @@ public class BoardController implements Initializable {
         start = start.add(cellLength / Math.sqrt(2) * vector[0],
                 cellLength / Math.sqrt(2) * vector[1]);
         drawCell(start,
-                vector,
                 colors[color],
                 controller.getChessBoard().getTakeoffs()[color],
                 0,
@@ -380,7 +393,6 @@ public class BoardController implements Initializable {
                 cellLength * Math.sqrt(2) * (vector[0] + vector[1]) / 2);
         for (int i = 0; i < 4; i++) {
             drawCell(start,
-                    vector,
                     colors[color],
                     controller.getChessBoard().getParkingAprons()[color],
                     i,
@@ -392,27 +404,32 @@ public class BoardController implements Initializable {
 
     }
 
-    private ArrayList<MyPiece> drawPiece(double x, double y, int[] vector, ArrayList<Piece> pieces) {
-        //FIXME: Waiting for pieces
+    private ArrayList<MyPiece> drawPiece(double x, double y, ArrayList<Piece> pieces) {
+        Image image = new Image(App.getTheme().getPieceImages()[pieces.get(0).getColor().ordinal()],
+                pieceSize, pieceSize, true, true);
         ArrayList<MyPiece> myPieces = new ArrayList<>();
+        double tmpSize = pieceSize;
         switch (pieces.size()) {
             case 1:
-                myPieces.add(new MyPiece(x, y, 5, pieces.get(0)));
+                myPieces.add(new MyPiece(x, y, tmpSize, image, pieces.get(0)));
                 break;
             case 2:
-                myPieces.add(new MyPiece(x - 5, y, 5, pieces.get(0)));
-                myPieces.add(new MyPiece(x + 5, y, 5, pieces.get(0)));
+                tmpSize *= 0.75;
+                myPieces.add(new MyPiece(x - tmpSize / 2, y, tmpSize, image, pieces.get(0)));
+                myPieces.add(new MyPiece(x + tmpSize / 2, y, tmpSize, image, pieces.get(1)));
                 break;
             case 3:
-                myPieces.add(new MyPiece(x - 5, y - 5, 5, pieces.get(0)));
-                myPieces.add(new MyPiece(x + 5, y - 5, 5, pieces.get(0)));
-                myPieces.add(new MyPiece(x, y + 5, 5, pieces.get(0)));
+                tmpSize *= 0.5;
+                myPieces.add(new MyPiece(x - tmpSize / 2, y - tmpSize / 2, tmpSize, image, pieces.get(0)));
+                myPieces.add(new MyPiece(x + tmpSize / 2, y - tmpSize / 2, tmpSize, image, pieces.get(1)));
+                myPieces.add(new MyPiece(x, y + tmpSize / 2, tmpSize, image, pieces.get(2)));
                 break;
             case 4:
-                myPieces.add(new MyPiece(x - 5, y - 5, 5, pieces.get(0)));
-                myPieces.add(new MyPiece(x - 5, y + 5, 5, pieces.get(0)));
-                myPieces.add(new MyPiece(x + 5, y - 5, 5, pieces.get(0)));
-                myPieces.add(new MyPiece(x + 5, y + 5, 5, pieces.get(0)));
+                tmpSize *= 0.5;
+                myPieces.add(new MyPiece(x - pieceSize / 2, y - pieceSize / 2, pieceSize, image, pieces.get(0)));
+                myPieces.add(new MyPiece(x - pieceSize / 2, y + pieceSize / 2, pieceSize, image, pieces.get(1)));
+                myPieces.add(new MyPiece(x + pieceSize / 2, y - pieceSize / 2, pieceSize, image, pieces.get(2)));
+                myPieces.add(new MyPiece(x + pieceSize / 2, y + pieceSize / 2, pieceSize, image, pieces.get(3)));
                 break;
         }
         return myPieces;

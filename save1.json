@@ -1,1 +1,140 @@
-{"currentPlayer":3,"hasDiceResult":false,"pieces":[{"color":"Red","movable":false,"out":false,"owner":{"color":"Red","end":{"belongsto":{"endCell":{"$ref":".."},"owner":{"$ref":"$.pieces[0].owner"}},"color":"Red","iD":"9927af16-c6df-4760-8e64-d7e6fa012869","occupied":[]},"iD":"eb3c67d5-dd44-4444-a341-7f699d2ad95c","pieces":[{"color":"Red","movable":true,"out":true,"owner":{"$ref":"$.pieces[0].owner"},"position":{"belongsto":{"owner":{"$ref":"$.pieces[0].owner"}},"color":"Red","iD":"64533840-f430-4a20-bdd0-1ad962943eb6","occupied":[{"$ref":"$.pieces[0].owner.pieces[0]"}]},"win":false},{"color":"Red","movable":false,"out":false,"owner":{"$ref":"$.pieces[0].owner"},"position":{"belongsto":{"availableCell":{"belongsto":{"$ref":".."},"color":"Red","iD":"fca76f2f-7368-434d-8afc-5e01ca93ae32","occupied":[]},"owner":{"$ref":"$.pieces[0].owner"}},"color":"Red","iD":"bfcd72f9-2856-4868-a902-3a52b83a9111","occupied":[{"$ref":"$.pieces[0].owner.pieces[1]"}]},"win":false},{"color":"Red","movable":false,"out":false,"owner":{"$ref":"$.pieces[0].owner"},"position":{"belongsto":{"$ref":"$.pieces[0].owner.pieces[1].position.belongsto"},"color":"Red","iD":"7dc702ba-17c8-4a84-b0ee-749805cd9c71","occupied":[{"$ref":"$.pieces[0].owner.pieces[2]"}]},"win":false},{"color":"Red","movable":false,"out":false,"owner":{"$ref":"$.pieces[0].owner"},"position":{"belongsto":{"$ref":"$.pieces[0].owner.pieces[1].position.belongsto"},"color":"Red","iD":"e53ba646-558c-443e-b53e-c286b0e23535","occupied":[{"$ref":"$.pieces[0].owner.pieces[3]"}]},"win":false}],"toShortcut":{"belongsto":{},"color":"Red","iD":"bde0c81f-a0e1-4f1c-b916-f2cb56f73bc1","occupied":[]},"toTerminalPath":{"belongsto":{"$ref":"$.pieces[0].owner.toShortcut.belongsto"},"color":"Red","iD":"ae7eb44a-cf37-4854-91c0-47b362abfec4","occupied":[]},"win":false},"win":false},{"color":"Red","movable":false,"out":false,"owner":{"$ref":"$.pieces[0].owner"},"win":false},{"color":"Red","movable":false,"out":false,"owner":{"$ref":"$.pieces[0].owner"},"win":false},{"color":"Red","movable":false,"out":false,"owner":{"$ref":"$.pieces[0].owner"},"win":false},{"color":"Yellow","movable":false,"out":false,"owner":{"color":"Yellow","end":{"belongsto":{"endCell":{"$ref":".."},"owner":{"$ref":"$.pieces[4].owner"}},"color":"Yellow","iD":"0ebc3eae-c8a9-4d78-8573-5cf58cadb934","occupied":[]},"iD":"cc8656d0-62b8-4a9d-8937-79976b4d3f18","pieces":[{"color":"Yellow","movable":true,"out":true,"owner":{"$ref":"$.pieces[4].owner"},"position":{"belongsto":{"owner":{"$ref":"$.pieces[4].owner"}},"color":"Yellow","iD":"b1e7b820-3915-40d4-9dba-b7e91a684462","occupied":[{"$ref":"$.pieces[4].owner.pieces[0]"}]},"win":false},{"color":"Yellow","movable":false,"out":false,"owner":{"$ref":"$.pieces[4].owner"},"position":{"belongsto":{"availableCell":{"belongsto":{"$ref":".."},"color":"Yellow","iD":"c847dd2c-5f65-420a-bf32-eb610931d12d","occupied":[]},"owner":{"$ref":"$.pieces[4].owner"}},"color":"Yellow","iD":"3cccd677-aeee-452e-b57b-eb43e388a6a2","occupied":[{"$ref":"$.pieces[4].owner.pieces[1]"}]},"win":false},{"color":"Yellow","movable":false,"out":false,"owner":{"$ref":"$.pieces[4].owner"},"position":{"belongsto":{"$ref":"$.pieces[4].owner.pieces[1].position.belongsto"},"color":"Yellow","iD":"c9fbb2f5-6126-4a08-a448-aef71a0cfb93","occupied":[{"$ref":"$.pieces[4].owner.pieces[2]"}]},"win":false},{"color":"Yellow","movable":false,"out":false,"owner":{"$ref":"$.pieces[4].owner"},"position":{"belongsto":{"$ref":"$.pieces[4].owner.pieces[1].position.belongsto"},"color":"Yellow","iD":"f894890a-bdda-4c06-8266-06df6067814b","occupied":[{"$ref":"$.pieces[4].owner.pieces[3]"}]},"win":false}],"toShortcut":{"belongsto":{"$ref":"$.pieces[0].owner.toShortcut.belongsto"},"color":"Yellow","iD":"6716817e-5aa1-4be8-8bc8-aa297d7ec842","occupied":[]},"toTerminalPath":{"belongsto":{"$ref":"$.pieces[0].owner.toShortcut.belongsto"},"color":"Yellow","iD":"80137918-28aa-445a-920a-5ebbdbc79b5f","occupied":[]},"win":false},"win":false},{"color":"Yellow","movable":false,"out":false,"owner":{"$ref":"$.pieces[4].owner"},"win":false},{"color":"Yellow","movable":false,"out":false,"owner":{"$ref":"$.pieces[4].owner"},"win":false},{"color":"Yellow","movable":false,"out":false,"owner":{"$ref":"$.pieces[4].owner"},"win":false},{"color":"Blue","movable":false,"out":false,"owner":{"color":"Blue","end":{"belongsto":{"endCell":{"$ref":".."},"owner":{"$ref":"$.pieces[8].owner"}},"color":"Blue","iD":"a7905107-2d0f-4c79-bce8-73859cb44e06","occupied":[]},"iD":"b5977088-e46f-4db8-a38c-bd4143834db8","pieces":[{"color":"Blue","movable":true,"out":true,"owner":{"$ref":"$.pieces[8].owner"},"position":{"belongsto":{"owner":{"$ref":"$.pieces[8].owner"}},"color":"Blue","iD":"172fa688-3089-41d6-ad61-65c730d37f5a","occupied":[{"$ref":"$.pieces[8].owner.pieces[0]"}]},"win":false},{"color":"Blue","movable":false,"out":false,"owner":{"$ref":"$.pieces[8].owner"},"position":{"belongsto":{"availableCell":{"belongsto":{"$ref":".."},"color":"Blue","iD":"4907e3ea-40ec-47eb-83d0-00415b99994a","occupied":[]},"owner":{"$ref":"$.pieces[8].owner"}},"color":"Blue","iD":"332cb5cf-9602-4875-9b23-e4f0f3f7a055","occupied":[{"$ref":"$.pieces[8].owner.pieces[1]"}]},"win":false},{"color":"Blue","movable":false,"out":false,"owner":{"$ref":"$.pieces[8].owner"},"position":{"belongsto":{"$ref":"$.pieces[8].owner.pieces[1].position.belongsto"},"color":"Blue","iD":"c95a320f-5042-40cc-ac65-1aa4a2ff09da","occupied":[{"$ref":"$.pieces[8].owner.pieces[2]"}]},"win":false},{"color":"Blue","movable":false,"out":false,"owner":{"$ref":"$.pieces[8].owner"},"position":{"belongsto":{"$ref":"$.pieces[8].owner.pieces[1].position.belongsto"},"color":"Blue","iD":"99e64e9c-fe0f-408b-936b-ca954fbd832b","occupied":[{"$ref":"$.pieces[8].owner.pieces[3]"}]},"win":false}],"toShortcut":{"belongsto":{"$ref":"$.pieces[0].owner.toShortcut.belongsto"},"color":"Blue","iD":"6179f266-35f8-4d94-a702-1b7462e35d1f","occupied":[]},"toTerminalPath":{"belongsto":{"$ref":"$.pieces[0].owner.toShortcut.belongsto"},"color":"Blue","iD":"04480fbb-56cc-4466-873a-a5b2011ecf2c","occupied":[]},"win":false},"win":false},{"color":"Blue","movable":false,"out":false,"owner":{"$ref":"$.pieces[8].owner"},"win":false},{"color":"Blue","movable":false,"out":false,"owner":{"$ref":"$.pieces[8].owner"},"win":false},{"color":"Blue","movable":false,"out":false,"owner":{"$ref":"$.pieces[8].owner"},"win":false},{"color":"Green","movable":false,"out":false,"owner":{"color":"Green","end":{"belongsto":{"endCell":{"$ref":".."},"owner":{"$ref":"$.pieces[12].owner"}},"color":"Green","iD":"fa6a8954-426c-4191-9aff-b780899b0885","occupied":[]},"iD":"48e4f0d8-2abf-4a55-b1d9-5c1eba0a6a4c","pieces":[{"color":"Green","movable":false,"out":false,"owner":{"$ref":"$.pieces[12].owner"},"position":{"belongsto":{"owner":{"$ref":"$.pieces[12].owner"}},"color":"Green","iD":"d0ffd62c-6831-43b3-ae8d-e28020fa55e1","occupied":[{"$ref":"$.pieces[12].owner.pieces[0]"}]},"win":false},{"color":"Green","movable":false,"out":false,"owner":{"$ref":"$.pieces[12].owner"},"position":{"belongsto":{"$ref":"$.pieces[12].owner.pieces[0].position.belongsto"},"color":"Green","iD":"2c016ccb-c0eb-4a07-b116-d7cc5ff95751","occupied":[{"$ref":"$.pieces[12].owner.pieces[1]"}]},"win":false},{"color":"Green","movable":false,"out":false,"owner":{"$ref":"$.pieces[12].owner"},"position":{"belongsto":{"$ref":"$.pieces[12].owner.pieces[0].position.belongsto"},"color":"Green","iD":"9b3ac9a8-8caf-4ee1-b85f-76eb06fb7cc7","occupied":[{"$ref":"$.pieces[12].owner.pieces[2]"}]},"win":false},{"color":"Green","movable":false,"out":false,"owner":{"$ref":"$.pieces[12].owner"},"position":{"belongsto":{"$ref":"$.pieces[12].owner.pieces[0].position.belongsto"},"color":"Green","iD":"60da6e4b-ba00-4bec-91ca-e690bdfcc283","occupied":[{"$ref":"$.pieces[12].owner.pieces[3]"}]},"win":false}],"toShortcut":{"belongsto":{"$ref":"$.pieces[0].owner.toShortcut.belongsto"},"color":"Green","iD":"d9511f12-3007-4fcd-9ca6-c16f6131cae3","occupied":[]},"toTerminalPath":{"belongsto":{"$ref":"$.pieces[0].owner.toShortcut.belongsto"},"color":"Green","iD":"4b09ac1a-f453-46a4-aba5-698fc2766e65","occupied":[]},"win":false},"win":false},{"color":"Green","movable":false,"out":false,"owner":{"$ref":"$.pieces[12].owner"},"win":false},{"color":"Green","movable":false,"out":false,"owner":{"$ref":"$.pieces[12].owner"},"win":false},{"color":"Green","movable":false,"out":false,"owner":{"$ref":"$.pieces[12].owner"},"win":false}],"players":[{"$ref":"$.pieces[0].owner"},{"$ref":"$.pieces[4].owner"},{"$ref":"$.pieces[8].owner"},{"$ref":"$.pieces[12].owner"}],"saveTime":"2020-12-20T14:05:14.749505900"}
+{
+  "currentPlayer": 0,
+  "diceResult": {
+    "canTakeOff": true,
+    "lucky": false,
+    "raw": [
+      6,
+      2,
+      2
+    ],
+    "result": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ]
+  },
+  "luckyCount": 0,
+  "movedPiecesUUID": [],
+  "name": "Game1",
+  "pieces": [
+    {
+      "cellType": "Normal",
+      "color": "Red",
+      "index": 8,
+      "uuid": "e9871417-eb6e-4602-b00f-ac8806bd722e"
+    },
+    {
+      "cellType": "Takeoff",
+      "color": "Red",
+      "index": 0,
+      "uuid": "c034d3ae-42f7-42d4-958a-36c1fccb6e7f"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Red",
+      "index": 2,
+      "uuid": "67d185d8-26fe-45f0-b5c3-725c240b161e"
+    },
+    {
+      "cellType": "Takeoff",
+      "color": "Red",
+      "index": 0,
+      "uuid": "dc7807b9-8c8c-4b47-a32d-886b07baa9ca"
+    },
+    {
+      "cellType": "Normal",
+      "color": "Yellow",
+      "index": 9,
+      "uuid": "8a10fcff-0229-49b3-aafc-5a628d250bb5"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Yellow",
+      "index": 1,
+      "uuid": "7e5ae26f-2759-4346-8c98-d9a73b0b32db"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Yellow",
+      "index": 2,
+      "uuid": "d397d3c2-535e-453d-a380-979fff686ced"
+    },
+    {
+      "cellType": "Normal",
+      "color": "Yellow",
+      "index": 9,
+      "uuid": "14e4b4f2-cf25-4f73-b2b4-800dbe354cd2"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Blue",
+      "index": 0,
+      "uuid": "8bf30fc1-a0cc-4917-b536-2dfdea0ea3a5"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Blue",
+      "index": 1,
+      "uuid": "de542a0f-e96b-4ce4-888f-f045dcbe8595"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Blue",
+      "index": 2,
+      "uuid": "44b2e58b-2f6f-4718-9d02-759865e01f78"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Blue",
+      "index": 3,
+      "uuid": "0633faa2-81d1-4f32-841f-dfd2a5fb2220"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Green",
+      "index": 0,
+      "uuid": "4222b798-5222-40a9-8eb4-a68d12e24b1e"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Green",
+      "index": 1,
+      "uuid": "ba1cbc7f-f47c-41c2-97ca-42cf193b726b"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Green",
+      "index": 2,
+      "uuid": "0e2ee3d5-17d0-4567-b0a8-3c519f63ae52"
+    },
+    {
+      "cellType": "ParkingApron",
+      "color": "Green",
+      "index": 3,
+      "uuid": "afe44753-6892-4389-9e79-7464ffbb2c83"
+    }
+  ],
+  "settings": {
+    "battle": true,
+    "diceNumber": 3,
+    "playerNumber": 2,
+    "stack": true
+  },
+  "walkable": false
+}

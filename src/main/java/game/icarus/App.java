@@ -3,6 +3,7 @@ package game.icarus;
 import game.icarus.controller.GameController;
 import game.icarus.controller.GameSaver;
 import game.icarus.entity.Setting;
+import game.icarus.view.Theme;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,9 +30,25 @@ public class App extends Application {
     public static boolean isLoad = false;
     public static MediaPlayer bgmPlayer = new MediaPlayer(new Media(App.class.getResource("/game/icarus/sound/Machiavellian Bach.mp3").toExternalForm()));
     private static GameController controller;
+    private final static Theme[] themes = new Theme[2];
+    private static int useTheme = 0;
 
     @Override
     public void start(Stage stage) throws IOException {
+        themes[0] = new Theme("file:src/main/resources/game/icarus/maps/default.png",
+                new String[]{"file:src/main/resources/game/icarus/icons/yellowPiece.png",
+                        "file:src/main/resources/game/icarus/icons/greenPiece.png",
+                        "file:src/main/resources/game/icarus/icons/bluePiece.png",
+                        "file:src/main/resources/game/icarus/icons/redPiece.png"},
+                false
+        );
+        themes[1] = new Theme("file:src/main/resources/game/icarus/maps/empty.png",
+                new String[]{"file:src/main/resources/game/icarus/icons/redPiece.png",
+                        "file:src/main/resources/game/icarus/icons/yellowPiece.png",
+                        "file:src/main/resources/game/icarus/icons/bluePiece.png",
+                        "file:src/main/resources/game/icarus/icons/greenPiece.png"},
+                true
+        );
         App.stage = stage;
         setting = new Setting(4, 3, true, true);
         scene = new Scene(loadFXML("primary"), 640, 480);
@@ -43,6 +60,7 @@ public class App extends Application {
                 stage.setMinWidth(stage.getWidth());
             }
         });
+
         bgmPlayer.play();
         stage.show();
     }
@@ -85,5 +103,13 @@ public class App extends Application {
 
     public static GameController getController() {
         return controller;
+    }
+
+    public static Theme getTheme() {
+        return themes[useTheme];
+    }
+
+    public static void useTheme(int useTheme) {
+        App.useTheme = useTheme;
     }
 }

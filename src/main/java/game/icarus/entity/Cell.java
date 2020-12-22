@@ -8,11 +8,11 @@ import game.icarus.attribute.Color;
 
 public class Cell {
 
-    private UUID cellID;
-    private Color cellColor;
+    private final UUID cellID;
+    private final Color cellColor;
     // private CellType cellType;
     // private Color occupiedColor;
-    private ArrayList<Piece> occupiedPieces;
+    private final ArrayList<Piece> occupiedPieces;
     private Cell nextCell;
     private Cell forkCell;
     private Block belongsTo;
@@ -36,7 +36,7 @@ public class Cell {
         this.forkCell = new Cell(anotherCell.forkCell);
         this.belongsTo = anotherCell.belongsTo;
     }
-
+    /*
     public boolean isForkAvailable() {
         return this.getOccupied().get(0).getOwner().getColor().equals(this.forkCell.cellColor);
     }
@@ -51,7 +51,7 @@ public class Cell {
 
     public Cell getFork() {
         return this.forkCell;
-    }
+    }*/
 
     public Block getBelongsto() {
         return this.belongsTo;

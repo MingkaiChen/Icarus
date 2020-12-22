@@ -1,14 +1,12 @@
 package game.icarus.entity;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import game.icarus.attribute.Color;
 import game.icarus.map.ChessBoard;
 import game.icarus.map.ParkingApron;
 
 public class Player {
-    private final UUID playerID;
     private final Color playerColor;
     private final Piece[] playerPieces;
     private Cell toTerminalPath;
@@ -16,16 +14,21 @@ public class Player {
     private Cell end;
     private boolean isMachine;
 
+    public Color getPlayerColor() {
+        return playerColor;
+    }
+
     public Player(Color color) {
         // toShortcut = null;
         // toTerminalPath = null;
         // end = null;
-        this.playerID = UUID.randomUUID();
         this.playerColor = color;
         this.playerPieces = new Piece[4];
         for (int i = 0; i < this.playerPieces.length; i++)
             this.playerPieces[i] = new Piece(this);
     }
+
+
 
     public boolean setCells(ChessBoard chessBoard) {
         // switch (this.playerColor) {
@@ -38,7 +41,7 @@ public class Player {
     }
 
     public Player(Player anotherPlayer) {
-        this.playerID = anotherPlayer.playerID;
+        isMachine = anotherPlayer.isMachine;
         this.playerColor = anotherPlayer.playerColor;
         ArrayList<Piece> tempPieces = new ArrayList<Piece>();
         for (int i = 0; i < anotherPlayer.playerPieces.length; i++)
@@ -49,22 +52,17 @@ public class Player {
         this.end = new Cell(anotherPlayer.end);
     }
 
-    public static boolean initParkingApron(Player player, ParkingApron parkingApron) {
+    public static void initParkingApron(Player player, ParkingApron parkingApron) {
         for (int i = 0; i < player.playerPieces.length; i++)
             player.getPieces()[i].move(parkingApron.cells[i]);
-        return true;
     }
 
     public boolean equals(Player player) {
-        return this.playerID.equals(player.playerID);
-    }
-
-    public UUID getID() {
-        return this.playerID;
+        return playerColor.equals(player.getColor());
     }
 
     public Piece[] getPieces() {
-        return this.playerPieces;
+        return playerPieces;
     }
 
     public Color getColor() {

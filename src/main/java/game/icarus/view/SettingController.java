@@ -4,9 +4,9 @@ import game.icarus.App;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.input.DragEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 
 public class SettingController implements Initializable {
 
+    @FXML
+    public ChoiceBox<String> useTheme;
     @FXML
     CheckBox fullscreen;
     @FXML
@@ -35,6 +37,7 @@ public class SettingController implements Initializable {
         soundValue.setText(String.valueOf(App.soundVolume));
         debugMode.setSelected(App.isDebug);
         fullscreen.setSelected(App.isFullscreen);
+        useTheme.setValue((App.getTheme().isShowTile()) ? "Simple" : "Default");
         musicVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
             App.musicVolume = newValue.intValue();
             musicValue.setText(String.valueOf(newValue.intValue()));
@@ -44,13 +47,13 @@ public class SettingController implements Initializable {
             App.soundVolume = newValue.intValue();
             soundValue.setText(String.valueOf(newValue.intValue()));
         });
-        debugMode.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            App.isDebug = newValue;
-        });
+        debugMode.selectedProperty().addListener((observable, oldValue, newValue) -> App.isDebug = newValue);
         fullscreen.selectedProperty().addListener((observable, oldValue, newValue) -> {
             App.isFullscreen = newValue;
             App.fullscreen(newValue);
         });
+        useTheme.getSelectionModel().selectedIndexProperty().addListener(
+                (observable, oldValue, newValue) -> App.useTheme(newValue.intValue()));
     }
 
     public void back() throws IOException {

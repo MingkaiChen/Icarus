@@ -15,12 +15,15 @@
             <children>
                 <ToolBar maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="640.0">
                     <items>
+                  <Label text="Now:" />
+                  <Label fx:id="playerName" text="Red" />
                         <Button mnemonicParsing="false" onAction="#roll" text="Roll!" />
                         <Pane HBox.hgrow="ALWAYS" />
                         <MenuButton mnemonicParsing="false" text="Menu">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#saveGame" text="Save" />
                                 <MenuItem mnemonicParsing="false" onAction="#settings" text="Settings" />
+                                <MenuItem mnemonicParsing="false" onAction="#restart" text="Restart" />
                                 <MenuItem mnemonicParsing="false" onAction="#quit" text="Quit" />
                             </items>
                         </MenuButton>
@@ -47,7 +50,7 @@
                                  </font>
                               </Label>
                               <VBox fx:id="winnerId" prefHeight="200.0" prefWidth="100.0" />
-                              <Button onAction="#quit" mnemonicParsing="false" text="Quit" />
+                              <Button mnemonicParsing="false" onAction="#quit" text="Quit" />
                            </children>
                         </VBox>
                      </children></StackPane>
