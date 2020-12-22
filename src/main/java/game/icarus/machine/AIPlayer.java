@@ -1,7 +1,5 @@
 package game.icarus.machine;
 
-import java.time.temporal.Temporal;
-
 import game.icarus.attribute.Color;
 import game.icarus.entity.Action;
 import game.icarus.entity.Cell;
@@ -17,12 +15,14 @@ public class AIPlayer extends Player {
         this.algorithm = null;
     }
 
-    public Action takeAction() {
-
+    public Action takeAction(ChessBoard chessBoard, Action actions[]) {
+        if (this.algorithm == null)
+            return this.defaultAlgorithm(chessBoard, actions);
+        return null;
     }
 
     private Action defaultAlgorithm(ChessBoard chessBoard, Action actions[]) {
-        Action maxAction;
+        Action maxAction = null;
         int maxValue = 0;
         for (int i = 0; i < actions.length; i++) {
             if (!actions[i].getDestination().isOccupied()) {
@@ -47,13 +47,15 @@ public class AIPlayer extends Player {
                     maxAction = actions[i];
                     break;
                 }
-                // if (tempCell.equals(actions[i].getDestination()))
-                // break;
-                // else if (tempCell.equals(this.getToTerminalPath()))
-                // tempCell =
-                // tempCell = tempCell.nextCell();
+                if (tempCell.equals(actions[i].getDestination()))
+                    break;
+                else if (tempCell.equals(this.getToTerminalPath()))
+                    tempCell = chessBoard.getTerminalPath(this).getCell(0);
+                else
+                    tempCell = tempCell.nextCell();
             }
         }
+        return maxAction;
     }
 
 }
