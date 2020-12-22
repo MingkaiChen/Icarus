@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class GameSaver {
 
-    public static Slot[] getSlots() {
+    /*public static Slot[] getSlots() {
         Slot[] slots = new Slot[3];
         for (int i = 0; i < 3; i++) {
             Save tmp;
@@ -25,7 +25,7 @@ public class GameSaver {
             slots[i] = new Slot(tmp.getName(), tmp.getSaveTime());
         }
         return slots;
-    }
+    }*/
 
     public static void saveGame(Save s, String file) {
         String json = JSON.toJSONString(s);
@@ -47,10 +47,6 @@ public class GameSaver {
             json.append(scanner.nextLine());
         }
         return JSON.parseObject(String.valueOf(json), Save.class);
-    }
-
-    public static GameController loadGame(String file) throws FileNotFoundException {
-        return new GameController(loadSave(file));
     }
 
     public static class Slot {

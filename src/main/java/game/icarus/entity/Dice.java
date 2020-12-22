@@ -91,10 +91,6 @@ public class Dice {
         return random.nextInt(6) + 1;
     }
 
-    public int getAmount() {
-        return this.amount;
-    }
-
     public int getRange() {
         return this.amount * 6;
     }

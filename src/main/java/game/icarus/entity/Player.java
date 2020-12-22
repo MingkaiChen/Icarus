@@ -43,7 +43,7 @@ public class Player {
     public Player(Player anotherPlayer) {
         isMachine = anotherPlayer.isMachine;
         this.playerColor = anotherPlayer.playerColor;
-        ArrayList<Piece> tempPieces = new ArrayList<Piece>();
+        ArrayList<Piece> tempPieces = new ArrayList<>();
         for (int i = 0; i < anotherPlayer.playerPieces.length; i++)
             tempPieces.add(new Piece(anotherPlayer.playerPieces[i]));
         this.playerPieces = (Piece[]) tempPieces.toArray();
