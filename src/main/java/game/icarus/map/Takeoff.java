@@ -9,7 +9,7 @@ public class Takeoff extends Block {
         this.owner = owner;
         this.cells = new Cell[1];
         cells[0] = new Cell(owner.getColor(), this);
-        switch(owner.getColor()){
+        switch (owner.getColor()) {
             case Blue:
                 this.cells[0].setNextCell(target.getCell(5));
                 break;
@@ -27,9 +27,8 @@ public class Takeoff extends Block {
         }
     }
 
-    public Takeoff(Takeoff anotherTakeoff){
-        this.cells = anotherTakeoff.cells.clone();
-        this.owner = anotherTakeoff.owner;
+    public Takeoff(Takeoff anotherTakeoff) {
+        super(anotherTakeoff);
     }
 
     public static boolean initialize(Takeoff takeoff) {

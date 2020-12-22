@@ -32,8 +32,7 @@ public class NormalPath extends Block {
     }
 
     public NormalPath(NormalPath anotherNormalPath) {
-        this.cells = anotherNormalPath.cells.clone();
-        this.owner = anotherNormalPath.owner;
+        super(anotherNormalPath);
     }
 
     public static boolean initialize(NormalPath normalPath) {

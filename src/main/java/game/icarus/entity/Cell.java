@@ -41,6 +41,10 @@ public class Cell {
         return this.getOccupied().get(0).getOwner().getColor().equals(this.forkCell.cellColor);
     }
 
+    public boolean equals(Cell cell) {
+        return this.cellID.equals(cell.cellID);
+    }
+
     public boolean hasFork() {
         return this.forkCell != null;
     }

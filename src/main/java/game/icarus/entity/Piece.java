@@ -1,22 +1,27 @@
 package game.icarus.entity;
 
+import java.util.UUID;
+
 import game.icarus.attribute.Color;
 import game.icarus.map.ChessBoard;
 import game.icarus.map.ParkingApron;
 
 public class Piece {
     private final Player owner;
+    private UUID pieceID;
     private Cell position;
     private Boolean isOut = false;
     private Boolean isWin = false;
 
     public Piece(Player owner) {
         this.position = null;
+        this.pieceID = UUID.randomUUID();
         this.owner = owner;
     }
 
     public Piece(Piece piece) {
         this.owner = new Player(piece.owner);
+        this.pieceID = piece.pieceID;
         this.position = new Cell(piece.position);
         this.isOut = piece.isOut;
         this.isWin = piece.isWin;
@@ -40,6 +45,10 @@ public class Piece {
         destination.setOccupied(this);
         if (destination.getBelongsto() instanceof ParkingApron)
             isOut = false;
+    }
+
+    public boolean equals(Piece piece) {
+        return this.pieceID.equals(piece.pieceID);
     }
 
     public void win() {

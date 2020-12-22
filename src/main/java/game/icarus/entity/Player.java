@@ -55,6 +55,10 @@ public class Player {
         return true;
     }
 
+    public boolean equals(Player player) {
+        return this.playerID.equals(player.playerID);
+    }
+
     public UUID getID() {
         return this.playerID;
     }
