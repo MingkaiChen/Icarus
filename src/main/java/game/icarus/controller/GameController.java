@@ -15,7 +15,6 @@ import java.util.Map;
     3. player 1 select piece by selectPiece()
     4. player 1 select pos to move
     5. next player
-
  */
 
 public class GameController {
@@ -82,6 +81,22 @@ public class GameController {
             }
         }
         nextPlayer();
+        return false;
+    }
+
+    public boolean cellHandler(Cell cell) {
+        if (!isWalkable()) return false;
+        if (isSelected())
+            for (Cell c : getHighlightedCells()) {
+                if (cell.equals(c)) {
+                    movePiece(cell);
+                    return true;
+                }
+            }
+        if (cell.isOccupied()) {
+            return selectPiece(cell);
+        }
+        cancelSelection();
         return false;
     }
 
@@ -155,12 +170,12 @@ public class GameController {
             }
         }
         if (diceResult.isLucky()) {
-            if (luckyCount < 3) {
+            if (luckyCount < 2) {
                 luckyCount++;
                 movedPieces.addAll(selectedPieces);
-            }
-            else {
+            } else {
                 //FIXME: LUCKY COUNT IS IN PRACTICE && PIECES WONT RETURN TO PARKING
+                System.out.println(movedPieces);
                 luckyCount = 0;
                 for (Piece p : movedPieces)
                     p.move(chessBoard.getParkingApronByPlayer(p.getOwner()).getAvailableCell());
@@ -191,7 +206,7 @@ public class GameController {
         for (Player p : players) {
             if (p.isWin()) count++;
         }
-        if (count == playerNumber-1) {
+        if (count == playerNumber - 1) {
             isGameEnded = true;
             return;
         }
@@ -225,10 +240,10 @@ public class GameController {
                         highlightedCell = terminalPath.getCell(0);
                         int remain = result.getResult().get(i) - j;
                         if (remain > 6) {
-                            if(remain <= 12)
+                            if (remain <= 12)
                                 highlightedCell = terminalPath.getCell(6 - (remain - 6));
                             else
-                                highlightedCell = ChessBoard.getTakeoffCell(chessBoard, piece.getOwner()).nextCell(50-(remain-12));
+                                highlightedCell = ChessBoard.getTakeoffCell(chessBoard, piece.getOwner()).nextCell(50 - (remain - 12));
                             break;
                         } else {
                             highlightedCell = terminalPath.getCell(remain - 1);
@@ -251,7 +266,7 @@ public class GameController {
     }
 
     public static ArrayList<Action> getAvailableActions(ChessBoard chessBoard, Player player,
-            Map<String, Object> result) {
+                                                        Map<String, Object> result) {
         ArrayList<Action> availableActions = new ArrayList<>();
 
         // FIX ME ASAP!!!

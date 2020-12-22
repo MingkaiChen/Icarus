@@ -7,8 +7,8 @@ import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
 import game.icarus.entity.Player;
+
 import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -35,6 +35,10 @@ import java.util.*;
 
 public class BoardController implements Initializable {
 
+    /**
+     * FXML FIELDS
+     **/
+
     @FXML
     public StackPane settingPane;
     public Slider musicVolume;
@@ -48,87 +52,45 @@ public class BoardController implements Initializable {
     public StackPane endPane;
     public Button debugEndGame;
     public VBox winnerId;
-
-    public void settings() {
-        if (!App.isDebug) {
-            debugMove.setVisible(false);
-            debugTakeOff.setVisible(false);
-            debugLucky.setVisible(false);
-            debugEndGame.setVisible(false);
-        }
-        if (settingPane.isVisible()) {
-            settingPane.setVisible(false);
-            board.setEffect(null);
-        } else {
-            settingPane.setVisible(true);
-            setBoardBlur();
-        }
-
-    }
-
-    public void setBoardBlur() {
-        ColorAdjust adj = new ColorAdjust(0, 0, 0, -0.5);
-        GaussianBlur blur = new GaussianBlur(25); // 55 is just to show edge effect more clearly.
-        adj.setInput(blur);
-        board.setEffect(adj);
-    }
-
-    public void quit() throws IOException {
-        App.setRoot("primary");
-    }
-
-    public void endGameButtonHandler() {
-        debugEnd = true;
-        settings();
-        endGame();
-    }
-
-    interface AddToPaneOperation {
-        void add(Shape s);
-    }
-
-    private final Map<UUID, Rectangle> rectangleMap = new HashMap<>();
-    private final List<Rectangle> rectangles = new ArrayList<>();
-
-    private Point2D midPoint;
-
-    private boolean debugEnd = false;
-
-    AudioClip click = new AudioClip(this.getClass().getResource("/game/icarus/sound/click.mp3").toExternalForm());
-
-    private final List<MyPiece> pieces = new ArrayList<>();
-
-    private static final Color HIGHLIGHTED_COLOR = new Color(1.0f, 0.84313726f, 0.0f, 0.2f);
-
     @FXML
     private Pane board;
-
-    private GameController controller;
-
     @FXML
     private BorderPane root;
 
-    private double cellLength;
+    /**
+     * FRONTEND VARIABLES
+     **/
 
+    private final List<Rectangle> rectangles = new ArrayList<>();
+    private Point2D midPoint;
+    private boolean debugEnd = false;
+    private double cellLength;
     private final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN};
+    AudioClip click = new AudioClip(this.getClass().getResource("/game/icarus/sound/click.mp3").toExternalForm());
+    private static final Color HIGHLIGHTED_COLOR = new Color(1.0f, 0.84313726f, 0.0f, 0.2f);
+
+    /**
+     * HYBRID VARIABLES
+     **/
+
+    private final Map<UUID, Rectangle> rectangleMap = new HashMap<>();
+    private final List<MyPiece> pieces = new ArrayList<>();
+    private GameController controller;
+
+
+    /**
+     * ESSENTIAL METHODS
+     **/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //Board
         //FIXME: ADD DICE NUMBER SELECTION
         board.setBackground(new Background(new BackgroundImage
                 (new Image("file:src/main/resources/game/icarus/timg.jfif"),
                         BackgroundRepeat.NO_REPEAT,
                         BackgroundRepeat.NO_REPEAT,
                         BackgroundPosition.CENTER, new BackgroundSize(1.0, 1.0, true, true, false, false))));
-        if (App.isLoad) {
-            try {
-                controller = new GameController(GameSaver.loadSave("./save1.json"));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else controller = new GameController(App.getSetting());
-        System.out.println(App.getSetting().getPlayerNumber());
-        resize();
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
                 resize();
         root.heightProperty().addListener(stageSizeListener);
@@ -156,12 +118,75 @@ public class BoardController implements Initializable {
         debugMove.selectedProperty().addListener((observable, oldValue, newValue) -> controller.getDice().setDebugMove(newValue));
         debugTakeOff.selectedProperty().addListener((observable, oldValue, newValue) -> controller.getDice().setDebugTakeOver(newValue));
         debugLucky.selectedProperty().addListener((observable, oldValue, newValue) -> controller.getDice().setDebugLucky(newValue));
+
+        //Controller
+        if (App.isLoad) {
+            try {
+                controller = new GameController(GameSaver.loadSave("./save1.json"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else controller = new GameController(App.getSetting());
+        resize();
     }
+
+    /**
+     * FXML HANDLERS
+     **/
 
     public void saveGame() {
         GameSaver.saveGame(controller.saveGame("Game1"), "./save1.json");
     }
 
+    public void roll() {
+        if (controller.hasGameEnded()) return;
+        if (controller.isWalkable()) return;
+        if (!controller.rollDice()) changePlayer();
+        System.out.println(controller.getDiceResult().getResult().toString());
+        System.out.println(controller.getDiceResult().canTakeOff());
+    }
+
+    public void settings() {
+        if (!App.isDebug) {
+            debugMove.setVisible(false);
+            debugTakeOff.setVisible(false);
+            debugLucky.setVisible(false);
+            debugEndGame.setVisible(false);
+        }
+        if (settingPane.isVisible()) {
+            settingPane.setVisible(false);
+            board.setEffect(null);
+        } else {
+            settingPane.setVisible(true);
+            setBoardBlur();
+        }
+
+    }
+
+    public void quit() throws IOException {
+        App.setRoot("primary");
+    }
+
+    public void endGameButtonHandler() {
+        debugEnd = true;
+        settings();
+        endGame();
+    }
+
+    /**
+     * PURE FRONTEND METHODS
+     **/
+
+    interface AddToPaneOperation {
+        void add(Shape s);
+    }
+
+    public void setBoardBlur() {
+        ColorAdjust adj = new ColorAdjust(0, 0, 0, -0.5);
+        GaussianBlur blur = new GaussianBlur(25); // 55 is just to show edge effect more clearly.
+        adj.setInput(blur);
+        board.setEffect(adj);
+    }
 
     public void endGame() {
         endPane.setVisible(true);
@@ -173,8 +198,8 @@ public class BoardController implements Initializable {
             }
         } else winningPlayers = controller.getWinningPlayers();
         for (int i = 0; i < winningPlayers.size(); i++) {
-            String prefix = Integer.toString(i+1);
-            switch (i+1) {
+            String prefix = Integer.toString(i + 1);
+            switch (i + 1) {
                 case 1:
                     prefix += "st";
                     break;
@@ -198,33 +223,8 @@ public class BoardController implements Initializable {
         System.out.println("Now: " + controller.getCurrentPlayer().getColor());
     }
 
-    public void cellHandler(Cell cell) {
-        if (!controller.isWalkable()) return;
-        click.setVolume(App.soundVolume);
-        click.play();
-        if (controller.isSelected())
-            for (Cell c : controller.getHighlightedCells()) {
-                if (cell.equals(c)) {
-                    controller.movePiece(cell);
-                    changePlayer();
-                    resize();
-                    if (controller.hasGameEnded()) {
-                        endGame();
-                    }
-                    return;
-                }
-            }
-        if (cell.isOccupied()) {
-            resize();
-            boolean tmp = controller.selectPiece(cell);
-            if (tmp) highlightCells();
-            return;
-        }
-        controller.cancelSelection();
-        resize();
-    }
-
     public void highlightCells() {
+        System.out.println(controller.getHighlightedCells());
         for (Rectangle r : rectangles) {
             //r.setFill(Color.TRANSPARENT);
             //FIXME: Waiting for pictures
@@ -250,6 +250,7 @@ public class BoardController implements Initializable {
         pieces.clear();
         drawBoard();
         addAllPieces();
+        highlightCells();
     }
 
     private void addAllPieces() {
@@ -381,7 +382,6 @@ public class BoardController implements Initializable {
 
     }
 
-
     private ArrayList<MyPiece> drawPiece(double x, double y, ArrayList<Piece> pieces) {
         //FIXME: Waiting for pieces
         ArrayList<MyPiece> myPieces = new ArrayList<>();
@@ -408,11 +408,16 @@ public class BoardController implements Initializable {
         return myPieces;
     }
 
-    public void roll() {
-        if (controller.hasGameEnded()) return;
-        if (controller.isWalkable()) return;
-        if (!controller.rollDice()) changePlayer();
-        System.out.println(controller.getDiceResult().getResult().toString());
-        System.out.println(controller.getDiceResult().canTakeOff());
+    public void cellHandler(Cell cell) {
+        boolean isAction = controller.cellHandler(cell);
+        if (isAction) {
+            click.setVolume(App.soundVolume);
+            click.play();
+        }
+        changePlayer();
+        resize();
+        if (controller.hasGameEnded()) {
+            endGame();
+        }
     }
 }
