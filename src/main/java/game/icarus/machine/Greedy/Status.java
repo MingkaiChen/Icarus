@@ -20,26 +20,32 @@ public class Status {
 
     public Status(ChessBoard chessBoard, Player owner, Player[] opponents, DiceResult rollResult) {
         this.chessBoard = new ChessBoard(chessBoard);
-        this.owner = owner;
-        this.opponents = opponents;
+        this.owner = new Player(owner);
+        ArrayList<Player> tempOpponents = new ArrayList<Player>();
+        for (int i = 0; i < opponents.length; i++)
+            tempOpponents.add(new Player(opponents[i]));
+        this.opponents = (Player[]) tempOpponents.toArray();
         this.value = Status.calculateValue(this);
         this.rollResult = rollResult;
     }
 
-    public Status(Save gameSave, Player owner, Player[] opponents) {
-        this.chessBoard = new GameController(gameSave).getChessBoard();
-        this.owner = owner;
-        this.opponents = opponents;
+    public Status(ChessBoard chessBoard, Player owner, Player[] opponents) {
+        this.chessBoard = new ChessBoard(chessBoard);
+        this.owner = new Player(owner);
+        ArrayList<Player> tempOpponents = new ArrayList<Player>();
+        for (int i = 0; i < opponents.length; i++)
+            tempOpponents.add(new Player(opponents[i]));
+        this.opponents = (Player[]) tempOpponents.toArray();
         this.value = Status.calculateValue(this);
     }
 
     public Status(Status status, Action action) {
-        this.chessBoard = status.getChessBoard();
-        this.owner = status.getOwner();
-        this.opponents = status.opponents;
-        if (!action.getDestination().isOccupied()) {
-
-        }
+        this.chessBoard = new ChessBoard(status.getChessBoard());
+        this.owner = new Player(status.owner);
+        ArrayList<Player> tempOpponents = new ArrayList<Player>();
+        for (int i = 0; i < status.opponents.length; i++)
+            tempOpponents.add(new Player(status.opponents[i]));
+        this.opponents = (Player[]) tempOpponents.toArray();
         this.value = Status.calculateValue(this);
     }
 

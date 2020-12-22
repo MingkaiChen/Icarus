@@ -48,4 +48,21 @@ public abstract class Block {
         }
         return null;
     }
+
+    public int getIndex(UUID uuid) {
+        for (int i = 0; i <= this.cells.length; i++) {
+            if (this.cells[i].getID().equals(uuid))
+                return i;
+        }
+        return -1;
+    }
+
+    public int getIndex(Cell cell) {
+        for (int i = 0; i <= this.cells.length; i++) {
+            if (this.cells[i].equals(cell))
+                return i;
+        }
+        return -1;
+    }
+
 }
