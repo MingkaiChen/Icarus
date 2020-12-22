@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import game.icarus.controller.GameController;
+import game.icarus.entity.Dice;
+import game.icarus.entity.DiceResult;
 import game.icarus.entity.Player;
 import game.icarus.entity.Save;
 import game.icarus.map.ChessBoard;
@@ -13,9 +15,9 @@ public class Status {
     private ChessBoard chessBoard;
     private int value;
     private Player[] opponents;
-    private Map<String, Object> rollResult;
+    private DiceResult rollResult;
 
-    public Status(Save gameSave, Player owner, Player[] opponents, Map<String, Object> rollResult) {
+    public Status(Save gameSave, Player owner, Player[] opponents, DiceResult rollResult) {
         this.chessBoard = new GameController(gameSave).getChessBoard();
         this.owner = owner;
         this.opponents = opponents;
@@ -28,6 +30,18 @@ public class Status {
         this.owner = owner;
         this.opponents = opponents;
         this.value = Status.calculateValue(this);
+    }
+
+    public DiceResult getRollResult() {
+        return this.rollResult;
+    }
+
+    public ChessBoard getChessBoard() {
+        return this.chessBoard;
+    }
+
+    public Player getOwner() {
+        return this.owner;
     }
 
     public static int calculateValue(Status status) {

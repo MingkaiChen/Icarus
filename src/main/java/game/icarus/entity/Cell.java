@@ -28,9 +28,13 @@ public class Cell {
     public Cell(Cell anotherCell) {
         this.cellID = anotherCell.cellID;
         this.cellColor = anotherCell.cellColor;
-        this.occupiedPieces = (ArrayList<Piece>) anotherCell.occupiedPieces.clone();
+        ArrayList<Piece> tempPieces = new ArrayList<Piece>();
+        for (int i = 0; i < anotherCell.occupiedPieces.size(); i++)
+            tempPieces.add(new Piece(anotherCell.occupiedPieces.get(i)));
+        this.occupiedPieces = tempPieces;
         this.nextCell = new Cell(anotherCell.nextCell);
         this.forkCell = new Cell(anotherCell.forkCell);
+        this.belongsTo = anotherCell.belongsTo;
     }
 
     public boolean isForkAvailable() {
@@ -38,7 +42,7 @@ public class Cell {
     }
 
     public boolean hasFork() {
-        return this.forkCell!=null;
+        return this.forkCell != null;
     }
 
     public Cell getFork() {
@@ -103,7 +107,7 @@ public class Cell {
 
     public Cell nextCell(int steps) {
         Cell nextCell = this;
-        for(int i = 0; i < steps; i++){
+        for (int i = 0; i < steps; i++) {
             nextCell = nextCell.nextCell();
         }
         return nextCell;

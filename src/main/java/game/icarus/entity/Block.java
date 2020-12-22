@@ -1,5 +1,6 @@
 package game.icarus.entity;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class Block {
@@ -8,6 +9,18 @@ public abstract class Block {
 
     public static boolean initialize(Block block) {
         return false;
+    }
+
+    public Block() {
+
+    }
+
+    public Block(Block block) {
+        this.owner = new Player(block.getOwner());
+        ArrayList<Cell> tempCells = new ArrayList<Cell>();
+        for (int i = 0; i < block.cells.length; i++)
+            tempCells.add(new Cell(block.cells[i]));
+        this.cells = (Cell[]) tempCells.toArray();
     }
 
     public static boolean clear(Block block) {
@@ -24,13 +37,13 @@ public abstract class Block {
         }
     }
 
-    public Cell getCell(int index){
+    public Cell getCell(int index) {
         return this.cells[index];
     }
 
-    public Cell getCell(UUID uuid){
-        for(int i = 0; i <= this.cells.length; i++){
-            if(this.cells[i].getID().equals(uuid))
+    public Cell getCell(UUID uuid) {
+        for (int i = 0; i <= this.cells.length; i++) {
+            if (this.cells[i].getID().equals(uuid))
                 return this.cells[i];
         }
         return null;

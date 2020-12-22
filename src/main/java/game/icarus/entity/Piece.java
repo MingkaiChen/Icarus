@@ -15,22 +15,31 @@ public class Piece {
         this.owner = owner;
     }
 
+    public Piece(Piece piece) {
+        this.owner = new Player(piece.owner);
+        this.position = new Cell(piece.position);
+        this.isOut = piece.isOut;
+        this.isWin = piece.isWin;
+    }
+
     public Boolean isMovable() {
         return (isOut && !isWin);
     }
 
-     public void out() {
-         isOut = true;
-     }
+    public void out() {
+        isOut = true;
+    }
 
     public void move(Cell destination) {
         if (this.position != null) {
             this.position.removePiece(this);
-            if (this.position.getBelongsto() instanceof ParkingApron) isOut = true;
+            if (this.position.getBelongsto() instanceof ParkingApron)
+                isOut = true;
         }
         this.position = destination;
         destination.setOccupied(this);
-        if (destination.getBelongsto() instanceof ParkingApron) isOut = false;
+        if (destination.getBelongsto() instanceof ParkingApron)
+            isOut = false;
     }
 
     public void win() {

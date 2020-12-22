@@ -2,6 +2,7 @@ package game.icarus.map;
 
 import java.util.ArrayList;
 
+import game.icarus.entity.Block;
 import game.icarus.entity.Cell;
 import game.icarus.entity.Piece;
 import game.icarus.entity.Player;
@@ -28,6 +29,26 @@ public class ChessBoard {
         }
     }
 
+    public ChessBoard(ChessBoard chessBoard) {
+        this.normalPath = new NormalPath(chessBoard.normalPath);
+        ArrayList<Block> tempBlocks = new ArrayList<Block>();
+        tempBlocks.clear();
+        for (int i = 0; i < chessBoard.parkingAprons.length; i++) {
+            tempBlocks.add(new ParkingApron(chessBoard.parkingAprons[i]));
+        }
+        this.parkingAprons = (ParkingApron[]) tempBlocks.toArray();
+        tempBlocks.clear();
+        for (int i = 0; i < chessBoard.takeoffs.length; i++) {
+            tempBlocks.add(new Takeoff(chessBoard.takeoffs[i]));
+        }
+        this.takeoffs = (Takeoff[]) tempBlocks.toArray();
+        tempBlocks.clear();
+        for (int i = 0; i < chessBoard.terminalPaths.length; i++) {
+            tempBlocks.add(new TerminalPath(chessBoard.terminalPaths[i]));
+        }
+        this.terminalPaths = (TerminalPath[]) tempBlocks.toArray();
+    }
+
     public TerminalPath[] getTerminalPaths() {
         return this.terminalPaths;
     }
@@ -48,7 +69,7 @@ public class ChessBoard {
     }
 
     private boolean setForks(Player availablePlayer) {
-        switch(availablePlayer.getColor()){
+        switch (availablePlayer.getColor()) {
             case Blue:
                 this.normalPath.getCell(2).setForkCell(this.getTerminalPath(availablePlayer).getCell(0));
                 this.normalPath.getCell(22).setForkCell(this.normalPath.getCell(34));
@@ -100,7 +121,8 @@ public class ChessBoard {
 
     public ParkingApron getParkingApronByPlayer(Player player) {
         for (ParkingApron p : parkingAprons) {
-            if (p.getOwner().equals(player)) return p;
+            if (p.getOwner().equals(player))
+                return p;
         }
         return null;
     }

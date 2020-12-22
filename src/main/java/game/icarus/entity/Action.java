@@ -5,11 +5,17 @@ import game.icarus.attribute.ActionType;
 public class Action {
     private Piece piece;
     private Cell destination;
-    private ActionType type;
 
-    public Action(Piece piece, Cell destination, ActionType type){
+    public Action(Piece piece, Cell destination) {
         this.piece = piece;
         this.destination = destination;
-        this.type = type;
+    }
+
+    public Piece getPiece() {
+        return this.piece;
+    }
+
+    public Cell getDestination() {
+        return this.destination;
     }
 }

@@ -23,8 +23,7 @@ public class TerminalPath extends Block {
     }
 
     public TerminalPath(TerminalPath anotherTerminalPath) {
-        this.cells = anotherTerminalPath.cells.clone();
-        this.owner = anotherTerminalPath.owner;
+        super(anotherTerminalPath);
     }
 
     public static boolean initialize(TerminalPath terminalPath) {
@@ -38,7 +37,7 @@ public class TerminalPath extends Block {
     }
 
     public Cell getEndCell() {
-        return cells[cells.length-1];
+        return cells[cells.length - 1];
     }
 
 }
