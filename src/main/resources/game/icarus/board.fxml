@@ -9,97 +9,124 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.icarus.view.BoardController">
+<BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="game.icarus.view.BoardController">
     <center>
-        <GridPane gridLinesVisible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+        <GridPane gridLinesVisible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                  minHeight="-Infinity" minWidth="-Infinity">
             <children>
-                <ToolBar maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="640.0">
+                <ToolBar maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
+                         prefHeight="48.0" prefWidth="640.0">
                     <items>
-                  <Label text="Now:" />
-                  <Label fx:id="playerName" text="Red" />
-                        <Button mnemonicParsing="false" onAction="#roll" text="Roll!" />
-                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label text="Now:"/>
+                        <Label fx:id="playerName" text="Red" textFill="RED"/>
+                        <Button mnemonicParsing="false" onAction="#roll" text="Roll!"/>
+                        <Label text="     Dices:"/>
+                        <Label fx:id="diceRaws" text="Not roll yet!"/>
+                        <Label text="    Options: "/>
+                        <Label fx:id="diceResults" text="None"/>
+                        <Label fx:id="takeOff" text="Takeoff!"/>
+                        <Label fx:id="lucky" text="Lucky! Times: "/>
+                        <Label fx:id="luckyTime" text=""/>
+                        <Pane HBox.hgrow="ALWAYS"/>
                         <MenuButton mnemonicParsing="false" text="Menu">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#saveGame" text="Save" />
-                                <MenuItem mnemonicParsing="false" onAction="#settings" text="Settings" />
-                                <MenuItem mnemonicParsing="false" onAction="#restart" text="Restart" />
-                                <MenuItem mnemonicParsing="false" onAction="#quit" text="Quit" />
+                                <MenuItem mnemonicParsing="false" onAction="#saveGame" text="Save"/>
+                                <MenuItem mnemonicParsing="false" onAction="#settings" text="Settings"/>
+                                <MenuItem mnemonicParsing="false" onAction="#restart" text="Restart"/>
+                                <MenuItem mnemonicParsing="false" onAction="#quit" text="Quit"/>
                             </items>
                         </MenuButton>
                     </items>
                 </ToolBar>
-                <GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="640.0" GridPane.rowIndex="1">
+                <GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="640.0"
+                          GridPane.rowIndex="1">
                     <columnConstraints>
-                        <ColumnConstraints percentWidth="10.0" />
-                        <ColumnConstraints halignment="CENTER" percentWidth="80.0" />
-                        <ColumnConstraints percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="10.0"/>
+                        <ColumnConstraints halignment="CENTER" percentWidth="80.0"/>
+                        <ColumnConstraints percentWidth="10.0"/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <Pane fx:id="board" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="432.0" GridPane.columnIndex="1" />
-                        <StackPane fx:id="endPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #e4e6e820;" visible="false" GridPane.columnIndex="1">
-                     <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" text="You Win!">
-                                 <font>
-                                    <Font size="96.0" />
-                                 </font>
-                              </Label>
-                              <VBox fx:id="winnerId" prefHeight="200.0" prefWidth="100.0" />
-                              <Button mnemonicParsing="false" onAction="#quit" text="Quit" />
-                           </children>
-                        </VBox>
-                     </children></StackPane>
-                        <StackPane fx:id="settingPane" maxHeight="144.0" maxWidth="-Infinity" prefHeight="200.0" prefWidth="432.0" style="-fx-background-color: #e4e6e820;" visible="false" GridPane.columnIndex="1">
+                        <Pane fx:id="board" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                              minWidth="-Infinity" prefHeight="432.0" prefWidth="432.0" GridPane.columnIndex="1"/>
+                        <StackPane fx:id="endPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                   style="-fx-background-color: #e4e6e820;" visible="false" GridPane.columnIndex="1">
+                            <children>
+                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0"
+                                      StackPane.alignment="CENTER">
+                                    <children>
+                                        <Label alignment="CENTER" contentDisplay="CENTER" text="You Win!">
+                                            <font>
+                                                <Font size="96.0"/>
+                                            </font>
+                                        </Label>
+                                        <VBox fx:id="winnerId" prefHeight="200.0" prefWidth="100.0"/>
+                                        <Button mnemonicParsing="false" onAction="#quit" text="Quit"/>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </StackPane>
+                        <StackPane fx:id="settingPane" maxHeight="144.0" maxWidth="-Infinity" prefHeight="200.0"
+                                   prefWidth="432.0" style="-fx-background-color: #e4e6e820;" visible="false"
+                                   GridPane.columnIndex="1">
                             <children>
                                 <BorderPane prefHeight="200.0" prefWidth="200.0">
                                     <center>
                                         <VBox BorderPane.alignment="CENTER">
                                             <children>
-                                                <GridPane layoutX="113.0" layoutY="91.0" prefHeight="24.0" prefWidth="326.0" GridPane.rowIndex="0">
+                                                <GridPane layoutX="113.0" layoutY="91.0" prefHeight="24.0"
+                                                          prefWidth="326.0" GridPane.rowIndex="0">
                                                     <children>
-                                                        <Label prefHeight="24.0" prefWidth="128.0" text="Music" />
-                                                        <Slider fx:id="musicVolume" prefHeight="21.0" prefWidth="200.0" value="50" GridPane.columnIndex="1" />
-                                                        <Label fx:id="musicValue" prefHeight="24.0" prefWidth="128.0" text="50" GridPane.columnIndex="2" />
+                                                        <Label prefHeight="24.0" prefWidth="128.0" text="Music"/>
+                                                        <Slider fx:id="musicVolume" prefHeight="21.0" prefWidth="200.0"
+                                                                value="50" GridPane.columnIndex="1"/>
+                                                        <Label fx:id="musicValue" prefHeight="24.0" prefWidth="128.0"
+                                                               text="50" GridPane.columnIndex="2"/>
                                                     </children>
                                                     <columnConstraints>
-                                                        <ColumnConstraints />
-                                                        <ColumnConstraints />
-                                                        <ColumnConstraints />
+                                                        <ColumnConstraints/>
+                                                        <ColumnConstraints/>
+                                                        <ColumnConstraints/>
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints />
+                                                        <RowConstraints/>
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane layoutX="113.0" layoutY="91.0" prefHeight="24.0" prefWidth="326.0" GridPane.rowIndex="1">
+                                                <GridPane layoutX="113.0" layoutY="91.0" prefHeight="24.0"
+                                                          prefWidth="326.0" GridPane.rowIndex="1">
                                                     <children>
-                                                        <Label prefHeight="24.0" prefWidth="128.0" text="Sound Effect" />
-                                                        <Slider fx:id="soundVolume" prefHeight="21.0" prefWidth="200.0" value="50" GridPane.columnIndex="1" />
-                                                        <Label fx:id="soundValue" prefHeight="24.0" prefWidth="128.0" text="50" GridPane.columnIndex="2" />
+                                                        <Label prefHeight="24.0" prefWidth="128.0" text="Sound Effect"/>
+                                                        <Slider fx:id="soundVolume" prefHeight="21.0" prefWidth="200.0"
+                                                                value="50" GridPane.columnIndex="1"/>
+                                                        <Label fx:id="soundValue" prefHeight="24.0" prefWidth="128.0"
+                                                               text="50" GridPane.columnIndex="2"/>
                                                     </children>
                                                     <columnConstraints>
-                                                        <ColumnConstraints />
-                                                        <ColumnConstraints />
-                                                        <ColumnConstraints />
+                                                        <ColumnConstraints/>
+                                                        <ColumnConstraints/>
+                                                        <ColumnConstraints/>
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints />
+                                                        <RowConstraints/>
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <CheckBox fx:id="debugMove" mnemonicParsing="false" text="Debug: Move" />
-                                                <CheckBox fx:id="debugTakeOff" mnemonicParsing="false" text="Debug: TakeOff" />
-                                                <CheckBox fx:id="debugLucky" mnemonicParsing="false" text="Debug: Lucky" />
-                                                <CheckBox fx:id="fullscreen" mnemonicParsing="false" text="Fullscreen" />
-                                                <Button fx:id="debugEndGame" mnemonicParsing="false" onAction="#endGameButtonHandler" text="Debug: EndGame" />
+                                                <CheckBox fx:id="debugMove" mnemonicParsing="false" text="Debug: Move"/>
+                                                <CheckBox fx:id="debugTakeOff" mnemonicParsing="false"
+                                                          text="Debug: TakeOff"/>
+                                                <CheckBox fx:id="debugLucky" mnemonicParsing="false"
+                                                          text="Debug: Lucky"/>
+                                                <CheckBox fx:id="fullscreen" mnemonicParsing="false" text="Fullscreen"/>
+                                                <Button fx:id="debugEndGame" mnemonicParsing="false"
+                                                        onAction="#endGameButtonHandler" text="Debug: EndGame"/>
                                             </children>
                                         </VBox>
                                     </center>
                                     <bottom>
-                                        <Button onAction="#settings" text="Back" BorderPane.alignment="CENTER" />
+                                        <Button onAction="#settings" text="Back" BorderPane.alignment="CENTER"/>
                                     </bottom>
                                 </BorderPane>
                             </children>
@@ -108,11 +135,11 @@
                 </GridPane>
             </children>
             <columnConstraints>
-                <ColumnConstraints halignment="CENTER" percentWidth="100" />
+                <ColumnConstraints halignment="CENTER" percentWidth="100"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints percentHeight="10.0" />
-                <RowConstraints percentHeight="90.0" />
+                <RowConstraints percentHeight="10.0"/>
+                <RowConstraints percentHeight="90.0"/>
             </rowConstraints>
         </GridPane>
     </center>

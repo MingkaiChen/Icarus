@@ -9,145 +9,146 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.FXCollections?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="game.icarus.view.RoomController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.icarus.view.RoomController">
     <center>
         <GridPane gridLinesVisible="true" BorderPane.alignment="CENTER">
             <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <AnchorPane fx:id="player1Pane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                     <children>
                         <Label layoutX="32.0" layoutY="51.0" text="Player 1">
                             <font>
-                                <Font size="31.0"/>
+                                <Font size="31.0" />
                             </font>
                         </Label>
-                        <ToolBar fx:id="player1Toolbar" layoutX="13.0" layoutY="100.0" prefHeight="41.0"
-                                 prefWidth="275.0" visible="false">
+                        <ToolBar fx:id="player1Toolbar" layoutX="13.0" layoutY="100.0" prefHeight="41.0" prefWidth="275.0" visible="false">
                             <items>
-                                <Label text="Difficulty"/>
+                                <Label text="Difficulty" />
                                 <ChoiceBox fx:id="player1AIDifficulty" value="BASIC">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="BASIC"/>
-                                            <String fx:value="ADVANCED"/>
-                                            <String fx:value="EXPERT"/>
+                                            <String fx:value="BASIC" />
+                                            <String fx:value="ADVANCED" />
+                                            <String fx:value="EXPERT" />
                                         </FXCollections>
                                     </items>
                                 </ChoiceBox>
                             </items>
                         </ToolBar>
-                        <CheckBox fx:id="player1UseAI" layoutX="175.0" layoutY="58.0" mnemonicParsing="false"
-                                  text="Use AI"/>
+                        <CheckBox fx:id="player1UseAI" layoutX="175.0" layoutY="58.0" mnemonicParsing="false" text="Use AI" />
                     </children>
                 </AnchorPane>
-                <Button mnemonicParsing="false" onAction="#start" text="Start!" GridPane.columnIndex="1"
-                        GridPane.rowIndex="3"/>
-                <AnchorPane fx:id="player2Pane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
-                            GridPane.rowIndex="1">
+                <Button mnemonicParsing="false" onAction="#start" text="Start!" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <AnchorPane fx:id="player2Pane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
                         <Label layoutX="32.0" layoutY="51.0" text="Player 2">
                             <font>
-                                <Font size="31.0"/>
+                                <Font size="31.0" />
                             </font>
                         </Label>
-                        <ToolBar fx:id="player2Toolbar" layoutX="13.0" layoutY="100.0" prefHeight="41.0"
-                                 prefWidth="275.0" visible="false">
+                        <ToolBar fx:id="player2Toolbar" layoutX="13.0" layoutY="100.0" prefHeight="41.0" prefWidth="275.0" visible="false">
                             <items>
-                                <Label text="Difficulty"/>
+                                <Label text="Difficulty" />
                                 <ChoiceBox fx:id="player2AIDifficulty" value="BASIC">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="BASIC"/>
-                                            <String fx:value="ADVANCED"/>
-                                            <String fx:value="EXPERT"/>
+                                            <String fx:value="BASIC" />
+                                            <String fx:value="ADVANCED" />
+                                            <String fx:value="EXPERT" />
                                         </FXCollections>
                                     </items>
                                 </ChoiceBox>
                             </items>
                         </ToolBar>
-                        <CheckBox fx:id="player2UseAI" layoutX="175.0" layoutY="58.0" mnemonicParsing="false"
-                                  text="Use AI"/>
+                        <CheckBox fx:id="player2UseAI" layoutX="175.0" layoutY="58.0" mnemonicParsing="false" text="Use AI" />
                     </children>
                 </AnchorPane>
                 <AnchorPane fx:id="player3Pane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                     <children>
                         <Label layoutX="32.0" layoutY="51.0" text="Player 3">
                             <font>
-                                <Font size="31.0"/>
+                                <Font size="31.0" />
                             </font>
                         </Label>
-                        <ToolBar fx:id="player3Toolbar" layoutX="13.0" layoutY="100.0" prefHeight="41.0"
-                                 prefWidth="275.0" visible="false">
+                        <ToolBar fx:id="player3Toolbar" layoutX="13.0" layoutY="100.0" prefHeight="41.0" prefWidth="275.0" visible="false">
                             <items>
-                                <Label text="Difficulty"/>
+                                <Label text="Difficulty" />
                                 <ChoiceBox fx:id="player3AIDifficulty" value="BASIC">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="BASIC"/>
-                                            <String fx:value="ADVANCED"/>
-                                            <String fx:value="EXPERT"/>
+                                            <String fx:value="BASIC" />
+                                            <String fx:value="ADVANCED" />
+                                            <String fx:value="EXPERT" />
                                         </FXCollections>
                                     </items>
                                 </ChoiceBox>
                             </items>
                         </ToolBar>
-                        <CheckBox fx:id="player3UseAI" layoutX="175.0" layoutY="58.0" mnemonicParsing="false"
-                                  text="Use AI"/>
+                        <CheckBox fx:id="player3UseAI" layoutX="175.0" layoutY="58.0" mnemonicParsing="false" text="Use AI" />
                     </children>
                 </AnchorPane>
-                <AnchorPane fx:id="player4Pane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
-                            GridPane.rowIndex="2">
+                <AnchorPane fx:id="player4Pane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <children>
                         <Label layoutX="32.0" layoutY="51.0" text="Player 4">
                             <font>
-                                <Font size="31.0"/>
+                                <Font size="31.0" />
                             </font>
                         </Label>
-                        <ToolBar fx:id="player4Toolbar" layoutX="13.0" layoutY="100.0" prefHeight="41.0"
-                                 prefWidth="275.0" visible="false">
+                        <ToolBar fx:id="player4Toolbar" layoutX="13.0" layoutY="100.0" prefHeight="41.0" prefWidth="275.0" visible="false">
                             <items>
-                                <Label text="Difficulty"/>
+                                <Label text="Difficulty" />
                                 <ChoiceBox fx:id="player4AIDifficulty" value="BASIC">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="BASIC"/>
-                                            <String fx:value="ADVANCED"/>
-                                            <String fx:value="EXPERT"/>
+                                            <String fx:value="BASIC" />
+                                            <String fx:value="ADVANCED" />
+                                            <String fx:value="EXPERT" />
                                         </FXCollections>
                                     </items>
                                 </ChoiceBox>
                             </items>
                         </ToolBar>
-                        <CheckBox fx:id="player4UseAI" layoutX="175.0" layoutY="58.0" mnemonicParsing="false"
-                                  text="Use AI"/>
+                        <CheckBox fx:id="player4UseAI" layoutX="175.0" layoutY="58.0" mnemonicParsing="false" text="Use AI" />
                     </children>
                 </AnchorPane>
-                <Button mnemonicParsing="false" onAction="#back" text="Back" GridPane.rowIndex="3"/>
+                <Button mnemonicParsing="false" onAction="#back" text="Back" GridPane.rowIndex="3" />
                 <ToolBar prefHeight="40.0" prefWidth="200.0">
                     <items>
-                        <Label text="Player Number: "/>
+                        <Label text="Player Number: " />
                         <ChoiceBox fx:id="playerNumbers" prefWidth="150.0" value="4">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="2"/>
-                                    <String fx:value="3"/>
-                                    <String fx:value="4"/>
+                                    <String fx:value="2" />
+                                    <String fx:value="3" />
+                                    <String fx:value="4" />
                                 </FXCollections>
                             </items>
                         </ChoiceBox>
                     </items>
                 </ToolBar>
+            <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <items>
+                  <Label text="Dice Number: " />
+                  <ChoiceBox fx:id="diceNumber" prefWidth="150.0" value="2">
+                     <items>
+                        <FXCollections fx:factory="observableArrayList">
+                           <String fx:value="1" />
+                           <String fx:value="2" />
+                           <String fx:value="3" />
+                        </FXCollections>
+                     </items>
+                  </ChoiceBox>
+               </items>
+            </ToolBar>
             </children>
         </GridPane>
     </center>

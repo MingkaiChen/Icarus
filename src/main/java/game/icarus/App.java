@@ -50,7 +50,7 @@ public class App extends Application {
                 true
         );
         App.stage = stage;
-        setting = new Setting(4, 3, true, true);
+        setting = new Setting(4, 2, true, true);
         scene = new Scene(loadFXML("primary"), 640, 480);
         //scene = new Scene(loadFXML("board"), 640, 480);
         stage.setScene(scene);

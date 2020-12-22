@@ -43,6 +43,8 @@ public class RoomController implements Initializable {
     public AnchorPane player3Pane;
     @FXML
     public AnchorPane player4Pane;
+    @FXML
+    public ChoiceBox diceNumber;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -64,6 +66,7 @@ public class RoomController implements Initializable {
             System.out.println(newValue.intValue());
             App.getSetting().setPlayerNumber(newValue.intValue() + 2);
         });
+        diceNumber.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> App.getSetting().setDiceNumber(newValue.intValue() + 1));
         player1UseAI.selectedProperty().addListener((observable, oldValue, newValue) -> {
             App.getSetting().setPlayerAI(0, newValue);
             player1Toolbar.setVisible(newValue);

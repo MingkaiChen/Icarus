@@ -9,7 +9,6 @@ import game.icarus.entity.Piece;
 import game.icarus.entity.Player;
 
 import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -24,7 +23,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
@@ -53,6 +51,12 @@ public class BoardController implements Initializable {
     public StackPane endPane;
     public Button debugEndGame;
     public VBox winnerId;
+    public Label playerName;
+    public Label diceRaws;
+    public Label diceResults;
+    public Label takeOff;
+    public Label lucky;
+    public Label luckyTime;
     @FXML
     private Pane board;
     @FXML
@@ -62,7 +66,6 @@ public class BoardController implements Initializable {
      * FRONTEND VARIABLES
      **/
 
-    private final List<Rectangle> rectangles = new ArrayList<>();
     private Point2D midPoint;
     private boolean debugEnd = false;
     private double cellLength;
@@ -142,8 +145,12 @@ public class BoardController implements Initializable {
         if (controller.isGameEnded()) return;
         if (controller.isWalkable()) return;
         if (!controller.rollDice()) changePlayer();
-        System.out.println(controller.getDiceResult().getResult().toString());
-        System.out.println(controller.getDiceResult().canTakeOff());
+        diceRaws.setText(Arrays.toString(controller.getDiceResult().getRaw()));
+        diceResults.setText(controller.getDiceResult().getResult().toString());
+        takeOff.setVisible(controller.getDiceResult().canTakeOff());
+        lucky.setVisible(controller.getDiceResult().isLucky());
+        luckyTime.setVisible(controller.getDiceResult().isLucky());
+        luckyTime.setText(String.valueOf(controller.getLuckyCount()));
     }
 
     public void settings() {
@@ -257,15 +264,12 @@ public class BoardController implements Initializable {
     }
 
     public void changePlayer() {
-        System.out.println("Now: " + controller.getCurrentPlayer().getColor());
+        playerName.setText(controller.getCurrentPlayer().getColor().toString());
+        playerName.setTextFill(colors[controller.getCurrentPlayer().getColor().ordinal()]);
     }
 
     public void highlightCells() {
         System.out.println(controller.getHighlightedCells());
-        for (Rectangle r : rectangles) {
-            //r.setFill(Color.TRANSPARENT);
-            //FIXME: Waiting for pictures
-        }
         for (Cell c : controller.getHighlightedCells()) {
             Rectangle r = rectangleMap.get(c.getID());
             r.setFill(HIGHLIGHTED_COLOR);
@@ -299,7 +303,6 @@ public class BoardController implements Initializable {
         }
         r.setCell(block.getCell(index));
         rectangleMap.put(block.getCell(index).getID(), r);
-        rectangles.add(r);
     }
 
     private Point2D drawWhite(Point2D start, int[] vector) {
@@ -426,10 +429,10 @@ public class BoardController implements Initializable {
                 break;
             case 4:
                 tmpSize *= 0.5;
-                myPieces.add(new MyPiece(x - pieceSize / 2, y - pieceSize / 2, pieceSize, image, pieces.get(0)));
-                myPieces.add(new MyPiece(x - pieceSize / 2, y + pieceSize / 2, pieceSize, image, pieces.get(1)));
-                myPieces.add(new MyPiece(x + pieceSize / 2, y - pieceSize / 2, pieceSize, image, pieces.get(2)));
-                myPieces.add(new MyPiece(x + pieceSize / 2, y + pieceSize / 2, pieceSize, image, pieces.get(3)));
+                myPieces.add(new MyPiece(x - pieceSize / 2, y - pieceSize / 2, tmpSize, image, pieces.get(0)));
+                myPieces.add(new MyPiece(x - pieceSize / 2, y + pieceSize / 2, tmpSize, image, pieces.get(1)));
+                myPieces.add(new MyPiece(x + pieceSize / 2, y - pieceSize / 2, tmpSize, image, pieces.get(2)));
+                myPieces.add(new MyPiece(x + pieceSize / 2, y + pieceSize / 2, tmpSize, image, pieces.get(3)));
                 break;
         }
         return myPieces;

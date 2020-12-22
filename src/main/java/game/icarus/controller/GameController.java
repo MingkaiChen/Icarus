@@ -2,6 +2,7 @@ package game.icarus.controller;
 
 import game.icarus.attribute.Color;
 import game.icarus.entity.*;
+import game.icarus.machine.AIPlayer;
 import game.icarus.map.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -72,7 +73,8 @@ public class GameController {
         this.settings = settings;
         players = new Player[4];
         for (int i = 0; i < 4; i++) {
-            players[i] = new Player(Color.values()[i]);
+            if (settings.isPlayerAI(i)) players[i] = new AIPlayer(Color.values()[i]);
+            else players[i] = new Player(Color.values()[i]);
         }
         chessBoard = new ChessBoard(players);
         ChessBoard.initialize(chessBoard);
@@ -355,5 +357,9 @@ public class GameController {
 
     public void finishHandling() {
         isGameChanged.setValue(false);
+    }
+
+    public int getLuckyCount() {
+        return luckyCount;
     }
 }

@@ -34,6 +34,10 @@ public class Setting {
 
     public int getDiceNumber() { return diceNumber; }
 
+    public void setDiceNumber(int diceNumber) {
+        this.diceNumber = diceNumber;
+    }
+
     public boolean isBattle() {
         return isBattle;
     }
@@ -44,5 +48,9 @@ public class Setting {
 
     public void setPlayerAI(int i, boolean flag) {
         this.arePlayersAI[i] = flag;
+    }
+
+    public boolean isPlayerAI(int i) {
+        return this.arePlayersAI[i];
     }
 }
