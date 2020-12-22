@@ -27,7 +27,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -121,6 +120,10 @@ public class BoardController implements Initializable {
 
         //Controller
         controller = App.startGame();
+        controller.isGameChanged().addListener((observable, oldValue, newValue) -> {
+            System.out.println("GameChanged");
+            if (newValue) resize();
+        });
         resize();
     }
 
@@ -133,7 +136,7 @@ public class BoardController implements Initializable {
     }
 
     public void roll() {
-        if (controller.hasGameEnded()) return;
+        if (controller.isGameEnded()) return;
         if (controller.isWalkable()) return;
         if (!controller.rollDice()) changePlayer();
         System.out.println(controller.getDiceResult().getResult().toString());
@@ -176,11 +179,36 @@ public class BoardController implements Initializable {
         void add(Shape s);
     }
 
-    public void setBoardBlur() {
-        ColorAdjust adj = new ColorAdjust(0, 0, 0, -0.5);
-        GaussianBlur blur = new GaussianBlur(25); // 55 is just to show edge effect more clearly.
-        adj.setInput(blur);
-        board.setEffect(adj);
+    public void resize() {
+        changePlayer();
+        double maxHeight = Math.max(root.getHeight() * 0.875, root.getHeight() - 70);
+        double length = Math.min(maxHeight, root.getWidth());
+        settingPane.setPrefWidth(length);
+        cellLength = length / (13 * Math.sqrt(2));
+        board.setPrefHeight(length);
+        board.setPrefWidth(length);
+        midPoint = new Point2D(length / 2, length / 2);
+        ArrayList<Node> removeList = new ArrayList<>(board.getChildren());
+        for (Node n : removeList) {
+            board.getChildren().remove(n);
+        }
+        pieces.clear();
+        drawBoard();
+        addAllPieces();
+        highlightCells();
+        if (controller.isGameEnded()) {
+            endGame();
+        }
+        controller.finishHandling();
+    }
+
+    public void cellHandler(Cell cell) {
+        boolean isAction = controller.cellHandler(cell);
+        if (isAction) {
+            System.out.println("Action");
+            click.setVolume(App.soundVolume);
+            click.play();
+        }
     }
 
     public void endGame() {
@@ -230,23 +258,6 @@ public class BoardController implements Initializable {
         }
     }
 
-    public void resize() {
-        double maxHeight = Math.max(root.getHeight() * 0.875, root.getHeight() - 70);
-        double length = Math.min(maxHeight, root.getWidth());
-        settingPane.setPrefWidth(length);
-        cellLength = length / (13 * Math.sqrt(2));
-        board.setPrefHeight(length);
-        board.setPrefWidth(length);
-        midPoint = new Point2D(length / 2, length / 2);
-        ArrayList<Node> removeList = new ArrayList<>(board.getChildren());
-        for (Node n : removeList) {
-            board.getChildren().remove(n);
-        }
-        pieces.clear();
-        drawBoard();
-        addAllPieces();
-        highlightCells();
-    }
 
     private void addAllPieces() {
         for (MyPiece p : pieces) {
@@ -407,17 +418,10 @@ public class BoardController implements Initializable {
         return myPieces;
     }
 
-    public void cellHandler(Cell cell) {
-        boolean isAction = controller.cellHandler(cell);
-        if (isAction) {
-            click.setVolume(App.soundVolume);
-            click.play();
-        }
-        //FIXME: REMOVE AFTER LISTENER IS ADDED
-        changePlayer();
-        resize();
-        if (controller.hasGameEnded()) {
-            endGame();
-        }
+    public void setBoardBlur() {
+        ColorAdjust adj = new ColorAdjust(0, 0, 0, -0.5);
+        GaussianBlur blur = new GaussianBlur(25); // 55 is just to show edge effect more clearly.
+        adj.setInput(blur);
+        board.setEffect(adj);
     }
 }

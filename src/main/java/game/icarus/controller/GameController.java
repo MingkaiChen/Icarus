@@ -3,19 +3,12 @@ package game.icarus.controller;
 import game.icarus.attribute.Color;
 import game.icarus.entity.*;
 import game.icarus.map.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
-
-/* process:
-    1. start game by init GameController
-    2. player 1 roll dice
-    3. player 1 select piece by selectPiece()
-    4. player 1 select pos to move
-    5. next player
- */
 
 public class GameController {
     private final Player[] players;
@@ -34,7 +27,7 @@ public class GameController {
     private int luckyCount = 0;
     private final HashSet<Piece> movedPieces = new HashSet<>();
     private final ArrayList<Player> winningPlayers = new ArrayList<>();
-    private boolean isGameChanged = true;
+    private final BooleanProperty isGameChanged = new SimpleBooleanProperty(false);
 
     public GameController(Save s) {
         settings = s.getSetting();
@@ -87,14 +80,17 @@ public class GameController {
 
     public boolean cellHandler(Cell cell) {
         if (!isWalkable()) return false;
+        System.out.println((isSelected) ? "" : "Not " + "Selected");
         if (isSelected())
             for (Cell c : getHighlightedCells()) {
                 if (cell.equals(c)) {
+                    System.out.println("MovePiece");
                     movePiece(cell);
                     return true;
                 }
             }
         if (cell.isOccupied()) {
+            System.out.println("SelectPiece");
             return selectPiece(cell);
         }
         cancelSelection();
@@ -110,22 +106,20 @@ public class GameController {
         selectedPieces = pieces;
         isSelected = true;
         highlightedCells.addAll(getHighlightedCells(chessBoard, pieces.get(0), diceResult));
-        isGameChanged = true;
+        isGameChanged.setValue(true);
         return true;
     }
 
     public void cancelSelection() {
-        highlightedCells.clear();
-        //selectedPieces.clear();
+        selectedPieces = new ArrayList<>();
         isSelected = false;
+        highlightedCells.clear();
+        isGameChanged.setValue(true);
     }
 
-    private boolean isGameEnded() {
-        return isGameEnded;
-    }
-
-    public void movePieceOut() {
-        // selectedPieces.get(0).move();
+    private void finishOneTurn() {
+        walkable = false;
+        cancelSelection();
     }
 
     public void movePiece(Cell newPos) {
@@ -153,6 +147,7 @@ public class GameController {
                 }
                 if (selectedPieces.size() == 0) {
                     nextPlayer();
+                    finishOneTurn();
                     return;
                 }
             } else {
@@ -177,7 +172,6 @@ public class GameController {
                 movedPieces.addAll(selectedPieces);
             } else {
                 //FIXME: LUCKY COUNT IS IN PRACTICE && PIECES WONT RETURN TO PARKING
-                System.out.println(movedPieces);
                 luckyCount = 0;
                 for (Piece p : movedPieces)
                     p.move(chessBoard.getParkingApronByPlayer(p.getOwner()).getAvailableCell());
@@ -189,10 +183,7 @@ public class GameController {
             movedPieces.clear();
             nextPlayer();
         }
-        selectedPieces.clear();
-        isSelected = false;
-        walkable = false;
-        isGameChanged = true;
+        finishOneTurn();
     }
 
     public Save saveGame(String name) {
@@ -214,8 +205,6 @@ public class GameController {
             return;
         }
         currentPlayer = (currentPlayer + 1) % playerNumber;
-        selectedPieces.clear();
-        highlightedCells.clear();
         if (getCurrentPlayer().isWin()) nextPlayer();
     }
 
@@ -228,7 +217,7 @@ public class GameController {
     }
 
     public static HashSet<Cell> getHighlightedCells(ChessBoard chessBoard, Piece piece, DiceResult result) {
-        HashSet<Cell> highlightedCells = new HashSet<Cell>();
+        HashSet<Cell> highlightedCells = new HashSet<>();
         if (!piece.isOut()) {
             if (result.canTakeOff()) {
                 highlightedCells.add(ChessBoard.getTakeoffCell(chessBoard, piece.getOwner()));
@@ -240,18 +229,17 @@ public class GameController {
                 for (int j = 0; j < result.getResult().get(i); j++) {
                     if (highlightedCell.equals(piece.getOwner().getToTerminalPath())) {
                         TerminalPath terminalPath = chessBoard.getTerminalPath(piece.getOwner());
-                        highlightedCell = terminalPath.getCell(0);
+                        //highlightedCell = terminalPath.getCell(0);
                         int remain = result.getResult().get(i) - j;
                         if (remain > 6) {
                             if (remain <= 12)
                                 highlightedCell = terminalPath.getCell(6 - (remain - 6));
                             else
                                 highlightedCell = ChessBoard.getTakeoffCell(chessBoard, piece.getOwner()).nextCell(50 - (remain - 12));
-                            break;
                         } else {
                             highlightedCell = terminalPath.getCell(remain - 1);
-                            break;
                         }
+                        break;
                     } else if (j == result.getResult().get(i) - 1) {
                         if (highlightedCell.nextCell().equals(piece.getOwner().getToShortcut())) {
                             highlightedCells.add(highlightedCell.nextCell(13));
@@ -306,7 +294,7 @@ public class GameController {
         return diceResult;
     }
 
-    public boolean hasGameEnded() {
+    public boolean isGameEnded() {
         if (isGameEnded) {
             for (Player p : players) {
                 if (!winningPlayers.contains(p)) {
@@ -342,11 +330,11 @@ public class GameController {
         return players;
     }
 
-    public boolean isGameChanged() {
+    public BooleanProperty isGameChanged() {
         return isGameChanged;
     }
 
     public void finishHandling() {
-        isGameChanged = false;
+        isGameChanged.setValue(false);
     }
 }
