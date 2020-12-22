@@ -16,4 +16,5 @@ module game.icarus {
     exports game.icarus.map;
     exports game.icarus.attribute;
     exports game.icarus.view;
+    exports game.icarus.controller;
 }

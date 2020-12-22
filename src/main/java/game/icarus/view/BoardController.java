@@ -120,13 +120,7 @@ public class BoardController implements Initializable {
         debugLucky.selectedProperty().addListener((observable, oldValue, newValue) -> controller.getDice().setDebugLucky(newValue));
 
         //Controller
-        if (App.isLoad) {
-            try {
-                controller = new GameController(GameSaver.loadSave("./save1.json"));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else controller = new GameController(App.getSetting());
+        controller = App.startGame();
         resize();
     }
 
@@ -164,6 +158,7 @@ public class BoardController implements Initializable {
     }
 
     public void quit() throws IOException {
+        App.endGame();
         App.setRoot("primary");
     }
 
@@ -265,7 +260,7 @@ public class BoardController implements Initializable {
         v[1] = tmp;
     }
 
-    private void drawCell(Point2D location, Color color, Block block, int index, AddToPaneOperation add) {
+    private void drawCell(Point2D location, int[] vector, Color color, Block block, int index, AddToPaneOperation add) {
         double x = location.getX();
         double y = location.getY();
         MyRect r = new MyRect(x - cellLength / 2, y - cellLength / 2, cellLength, cellLength);
@@ -274,7 +269,7 @@ public class BoardController implements Initializable {
         r.setOnMouseClicked(mouseEvent -> cellHandler(block.getCell(index)));
         add.add(r);
         if (block.getCell(index).isOccupied()) {
-            pieces.addAll(drawPiece(x, y, block.getCell(index).getOccupied()));
+            pieces.addAll(drawPiece(x, y, vector, block.getCell(index).getOccupied()));
         }
         r.setCell(block.getCell(index));
         rectangleMap.put(block.getCell(index).getID(), r);
@@ -293,6 +288,7 @@ public class BoardController implements Initializable {
     private Point2D drawNormalPathsCells(int num, Point2D start, int index, int[] vector) {
         for (int i = 0; i < num; i++) {
             drawCell(start,
+                    vector,
                     colors[index % 4],
                     controller.getChessBoard().getNormalPath(),
                     index,
@@ -310,6 +306,7 @@ public class BoardController implements Initializable {
             start = start.add(cellLength / Math.sqrt(2) * vector[0],
                     cellLength / Math.sqrt(2) * vector[1]);
             drawCell(start,
+                    vector,
                     colors[j],
                     controller.getChessBoard().getTerminalPaths()[j],
                     index,
@@ -363,6 +360,7 @@ public class BoardController implements Initializable {
         start = start.add(cellLength / Math.sqrt(2) * vector[0],
                 cellLength / Math.sqrt(2) * vector[1]);
         drawCell(start,
+                vector,
                 colors[color],
                 controller.getChessBoard().getTakeoffs()[color],
                 0,
@@ -371,6 +369,7 @@ public class BoardController implements Initializable {
                 cellLength * Math.sqrt(2) * (vector[0] + vector[1]) / 2);
         for (int i = 0; i < 4; i++) {
             drawCell(start,
+                    vector,
                     colors[color],
                     controller.getChessBoard().getParkingAprons()[color],
                     i,
@@ -382,7 +381,7 @@ public class BoardController implements Initializable {
 
     }
 
-    private ArrayList<MyPiece> drawPiece(double x, double y, ArrayList<Piece> pieces) {
+    private ArrayList<MyPiece> drawPiece(double x, double y, int[] vector, ArrayList<Piece> pieces) {
         //FIXME: Waiting for pieces
         ArrayList<MyPiece> myPieces = new ArrayList<>();
         switch (pieces.size()) {
@@ -414,6 +413,7 @@ public class BoardController implements Initializable {
             click.setVolume(App.soundVolume);
             click.play();
         }
+        //FIXME: REMOVE AFTER LISTENER IS ADDED
         changePlayer();
         resize();
         if (controller.hasGameEnded()) {

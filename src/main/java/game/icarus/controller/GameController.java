@@ -34,6 +34,7 @@ public class GameController {
     private int luckyCount = 0;
     private final HashSet<Piece> movedPieces = new HashSet<>();
     private final ArrayList<Player> winningPlayers = new ArrayList<>();
+    private boolean isGameChanged = true;
 
     public GameController(Save s) {
         settings = s.getSetting();
@@ -109,6 +110,7 @@ public class GameController {
         selectedPieces = pieces;
         isSelected = true;
         highlightedCells.addAll(getHighlightedCells(chessBoard, pieces.get(0), diceResult));
+        isGameChanged = true;
         return true;
     }
 
@@ -190,6 +192,7 @@ public class GameController {
         selectedPieces.clear();
         isSelected = false;
         walkable = false;
+        isGameChanged = true;
     }
 
     public Save saveGame(String name) {
@@ -337,5 +340,13 @@ public class GameController {
 
     public Player[] getPlayers() {
         return players;
+    }
+
+    public boolean isGameChanged() {
+        return isGameChanged;
+    }
+
+    public void finishHandling() {
+        isGameChanged = false;
     }
 }

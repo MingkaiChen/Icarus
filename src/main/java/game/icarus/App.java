@@ -1,5 +1,7 @@
 package game.icarus;
 
+import game.icarus.controller.GameController;
+import game.icarus.controller.GameSaver;
 import game.icarus.entity.Setting;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +11,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -25,6 +28,7 @@ public class App extends Application {
     private static Setting setting;
     public static boolean isLoad = false;
     public static MediaPlayer bgmPlayer = new MediaPlayer(new Media(App.class.getResource("/game/icarus/sound/Machiavellian Bach.mp3").toExternalForm()));
+    private static GameController controller;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -62,5 +66,24 @@ public class App extends Application {
 
     public static Setting getSetting() {
         return setting;
+    }
+
+    public static GameController startGame() {
+        if (App.isLoad) {
+            try {
+                controller = new GameController(GameSaver.loadSave("./save1.json"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else controller = new GameController(App.getSetting());
+        return controller;
+    }
+
+    public static void endGame() {
+        controller = null;
+    }
+
+    public static GameController getController() {
+        return controller;
     }
 }
