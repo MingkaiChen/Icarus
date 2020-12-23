@@ -12,7 +12,7 @@ public class Player {
     private Cell toTerminalPath;
     private Cell toShortcut;
     private Cell end;
-    private boolean isMachine;
+    protected boolean isMachine;
 
     public Color getPlayerColor() {
         return playerColor;
@@ -27,8 +27,6 @@ public class Player {
         for (int i = 0; i < this.playerPieces.length; i++)
             this.playerPieces[i] = new Piece(this);
     }
-
-
 
     public boolean setCells(ChessBoard chessBoard) {
         // switch (this.playerColor) {
@@ -50,6 +48,47 @@ public class Player {
         this.toTerminalPath = new Cell(anotherPlayer.toTerminalPath);
         this.toShortcut = new Cell(anotherPlayer.toShortcut);
         this.end = new Cell(anotherPlayer.end);
+    }
+
+    public Action takeAction(ChessBoard chessBoard, ArrayList<Action> actions) {
+        return this.defaultAlgorithm(chessBoard, actions);
+    }
+
+    private Action defaultAlgorithm(ChessBoard chessBoard, ArrayList<Action> actions) {
+        Action maxAction = null;
+        int maxValue = 0;
+        for (int i = 0; i < actions.size(); i++) {
+            if (!actions.get(i).getDestination().isOccupied()) {
+                if (actions.get(i).getDestination().equals(this.getEnd()))
+                    return actions.get(i);
+                else if (!actions.get(i).getPiece().isOut())
+                    return actions.get(i);
+            }
+        }
+        for (int i = 0; i < actions.size(); i++) {
+            if (actions.get(i).getDestination().getOccupied().get(0).getOwner().equals(this))
+                return actions.get(i);
+            else if (actions.get(i).getDestination().getOccupied().size() == 1)
+                return actions.get(i);
+        }
+        for (int i = 0; i < actions.size(); i++) {
+            int tempValue = 0;
+            Cell tempCell = actions.get(i).getPiece().getPosition();
+            while (true) {
+                tempValue++;
+                if (tempValue > maxValue) {
+                    maxAction = actions.get(i);
+                    break;
+                }
+                if (tempCell.equals(actions.get(i).getDestination()))
+                    break;
+                else if (tempCell.equals(this.getToTerminalPath()))
+                    tempCell = chessBoard.getTerminalPath(this).getCell(0);
+                else
+                    tempCell = tempCell.nextCell();
+            }
+        }
+        return maxAction;
     }
 
     public static void initParkingApron(Player player, ParkingApron parkingApron) {
@@ -111,5 +150,9 @@ public class Player {
     @Override
     public String toString() {
         return playerColor.toString();
+    }
+
+    public Action takeAction() {
+        return null;
     }
 }

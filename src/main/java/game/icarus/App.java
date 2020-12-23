@@ -4,6 +4,7 @@ import game.icarus.controller.GameController;
 import game.icarus.controller.GameSaver;
 import game.icarus.entity.Setting;
 import game.icarus.view.Theme;
+import game.icarus.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,7 +29,8 @@ public class App extends Application {
     public static boolean isFullscreen = false;
     private static Setting setting;
     public static boolean isLoad = false;
-    public static MediaPlayer bgmPlayer = new MediaPlayer(new Media(App.class.getResource("/game/icarus/sound/Machiavellian Bach.mp3").toExternalForm()));
+    public static MediaPlayer bgmPlayer = new MediaPlayer(
+            new Media(App.class.getResource("/game/icarus/sound/Machiavellian Bach.mp3").toExternalForm()));
     private static GameController controller;
     private final static Theme[] themes = new Theme[2];
     private static int useTheme = 0;
@@ -36,23 +38,21 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         themes[0] = new Theme("file:src/main/resources/game/icarus/maps/default.png",
-                new String[]{"file:src/main/resources/game/icarus/icons/yellowPiece.png",
+                new String[] { "file:src/main/resources/game/icarus/icons/yellowPiece.png",
                         "file:src/main/resources/game/icarus/icons/greenPiece.png",
                         "file:src/main/resources/game/icarus/icons/bluePiece.png",
-                        "file:src/main/resources/game/icarus/icons/redPiece.png"},
-                false
-        );
+                        "file:src/main/resources/game/icarus/icons/redPiece.png" },
+                false);
         themes[1] = new Theme("file:src/main/resources/game/icarus/maps/empty.png",
-                new String[]{"file:src/main/resources/game/icarus/icons/redPiece.png",
+                new String[] { "file:src/main/resources/game/icarus/icons/redPiece.png",
                         "file:src/main/resources/game/icarus/icons/yellowPiece.png",
                         "file:src/main/resources/game/icarus/icons/bluePiece.png",
-                        "file:src/main/resources/game/icarus/icons/greenPiece.png"},
-                true
-        );
+                        "file:src/main/resources/game/icarus/icons/greenPiece.png" },
+                true);
         App.stage = stage;
         setting = new Setting(4, 2, true, true);
         scene = new Scene(loadFXML("primary"), 640, 480);
-        //scene = new Scene(loadFXML("board"), 640, 480);
+        // scene = new Scene(loadFXML("board"), 640, 480);
         stage.setScene(scene);
         stage.showingProperty().addListener((observable, oldValue, showing) -> {
             if (showing) {
@@ -93,7 +93,8 @@ public class App extends Application {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        } else controller = new GameController(App.getSetting());
+        } else
+            controller = new GameController(App.getSetting());
         return controller;
     }
 
